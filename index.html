@@ -6,7 +6,7 @@
   <title>Rellotge Automàtic i Calendari Mensual - Tissot PRS 516</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Bricolage+Grotesque:wght@400;600&family=Hanken+Grotesk:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -205,7 +205,7 @@
       right: 4%;
       bottom: 4%;
       border-radius: 50%;
-      border: 0.9px solid rgba(181,181,185,0.6);
+      border: 0.9px solid rgba(20,20,20,0.55);
       pointer-events: none;
     }
 
@@ -225,8 +225,8 @@
       left: 50%;
       transform: translateX(-50%);
       width: 0.22cqw;
-      height: 2.514cqw;
-      background-color: #b5b5b9;
+      height: 2.2cqw;
+      background-color: #141414;
     }
 
     /* Branding Tissot: cada línia posicionada de manera independent (1u = 8,38cqw, top% = 50 + Xu*10 mesurat des de l'eix; per sobre del centre, top% = Xu*10 mesurat des de la vora) */
@@ -246,11 +246,12 @@
       left: 0;
       width: 100%;
       text-align: center;
-      font-family: 'Varela Round', ui-rounded, -apple-system, 'SF Pro Rounded', system-ui, sans-serif;
+      font-family: 'Bricolage Grotesque', 'Hanken Grotesk', ui-rounded, -apple-system, system-ui, sans-serif;
       font-size: 5.39cqw;
-      font-weight: 400;
-      letter-spacing: 1.93cqw;
+      font-weight: 600;
+      letter-spacing: 0.85cqw;
       line-height: 1;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.65), 0 -1px 1px rgba(0,0,0,0.4);
     }
 
     .brand-subtitle {
@@ -292,18 +293,19 @@
 
     .model-title span {
       color: #d32f2f;
+      margin-left: 0.4cqw;
     }
 
     .model-subtitle-automatic {
       position: absolute;
-      top: 72%;
+      top: 73.6%;
       left: 0;
       width: 100%;
       text-align: center;
       font-family: Verdana, Geneva, sans-serif;
-      font-size: 2.3cqw;
+      font-size: 2.6cqw;
       font-weight: 400;
-      letter-spacing: 0.3cqw;
+      letter-spacing: 0.18cqw;
       color: #444;
     }
 
@@ -313,7 +315,7 @@
       left: 0;
       width: 100%;
       text-align: center;
-      font-size: 2.6cqw;
+      font-size: 2.4cqw;
       font-weight: 600;
       color: #444;
     }
@@ -352,8 +354,8 @@
       top: 50%;
       transform: translateY(-50%);
       background: #ffffff;
-      border: 1px solid #b5b5b9;
-      outline: 1.1px solid #b5b5b9;
+      border: 1.6px solid #1a1a1a;
+      outline: 1.6px solid #1a1a1a;
       outline-offset: 0.6px;
       box-shadow:
         inset 0 2px 4px rgba(0,0,0,0.55),
@@ -378,7 +380,7 @@
     }
 
     .calendar-day {
-      border-right: 1.2px solid #b5b5b9;
+      border-right: 1.8px solid #1a1a1a;
       min-width: 6.67cqw;
       background: linear-gradient(180deg, #f0f0f0, #fcfcfc);
     }
@@ -412,15 +414,15 @@
       top: 1.5%;
       left: 50%;
       transform: translateX(-50%);
-      width: 3.176cqw;
+      width: 2.682cqw;
       height: 9.218cqw;
       background:
         linear-gradient(90deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(0,0,0,0.28) 100%),
         linear-gradient(to bottom, #e3efd0 0%, #d7e8bc 50%, #a8b593 100%);
-      border-top: 1px solid #b5b5b9;
-      border-bottom: 1px solid #b5b5b9;
-      border-left: 0.838cqw solid #b5b5b9;
-      border-right: 0.838cqw solid #b5b5b9;
+      border-top: 1px solid #8a8a8f;
+      border-bottom: 1px solid #8a8a8f;
+      border-left: 0.838cqw solid #8a8a8f;
+      border-right: 0.838cqw solid #8a8a8f;
       box-shadow: 0 1px 3px rgba(0,0,0,0.35);
       border-radius: 1px;
     }
@@ -454,7 +456,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: #b5b5b9;
+      background: #8a8a8f;
       box-shadow: 1px 2px 3px rgba(0,0,0,0.4);
     }
 
@@ -464,7 +466,7 @@
       left: 0;
       right: 0;
       background: linear-gradient(100deg, #d7e8bc 0%, #e3efd0 45%, #a8b593 100%);
-      border: 0.24cqw solid #b5b5b9;
+      border: 0.24cqw solid #8a8a8f;
       box-shadow: 1px 2px 4px rgba(0,0,0,0.35);
     }
 
@@ -475,7 +477,7 @@
       bottom: 0;
       width: 0.42cqw;
       transform: translateX(-50%);
-      background: #b5b5b9;
+      background: #8a8a8f;
       box-shadow: 1px 2px 3px rgba(0,0,0,0.4);
     }
 
@@ -486,7 +488,7 @@
       top: 0;
       width: 0.42cqw;
       transform: translateX(-50%);
-      background: #b5b5b9;
+      background: #8a8a8f;
       box-shadow: 1px 2px 3px rgba(0,0,0,0.4);
     }
 
@@ -883,7 +885,7 @@
                 </div>
 
                 <div class="model-container">
-                  <div class="model-title">PRS<span>516</span></div>
+                  <div class="model-title">PRS <span>516</span></div>
                   <div class="model-subtitle-automatic">automatic</div>
                   <div class="model-subtitle-water">100m / 330ft</div>
                 </div>
@@ -930,11 +932,18 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
-                <g id="mondaine-brand-logo" filter="url(#mondaineSoftShadow)">
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
+                </g>
+                <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
                   <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
