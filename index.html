@@ -4,10 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Rellotge Automàtic i Calendari Mensual - Tissot PRS 516</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Bricolage+Grotesque:wght@400;600&family=Hanken+Grotesk:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    /* Bricolage Grotesque 600 (SIL Open Font License), reduïda només a les
+       lletres de "TISSOT" i incrustada: es veu igual sense connexió. */
+    @font-face {
+      font-family: 'TissotBricolage';
+      font-weight: 600;
+      font-style: normal;
+      src: url(data:font/woff2;base64,d09GMgABAAAAAAP8ABAAAAAACCwAAAOgAAEAQgAAAAAAAAAAAAAAAAAAAAAAAAAAGhYbgSQcKgZgP1NUQVRWAEQRCAqCSII0ATYCJAMUCwwABCAFhigHIAwHG/YGIxE2g1GaSfFXCTYYU3u4XwCTSQjG2BYtDR/rNlCEX08uRy5CoQsn5zwnMx76/Pv/dtXpez+JMZFJyiDHsyZ6HQANOyu/rzz5h99fgm0NPlrv8+7e54RQl9gqlNL6+mMx9d3/XE5vLLwDG1P4wM5sjdbHBkdrept6HoWQJrTG84CPLBA5CsTTTUUG6bPDZwQnEkpOM0mgOyCFUIRAV+PNles3brmjnkfud+LReipQq0AccdDxR+uMQCi66Cx0FhKdpcUK1tpW0QJB/RcAqB1d6/+of9en2JRYdUgNc1AopuaJJtODS3J/yd65qxZ5ee6KLT6ZGHubG0vJbu1WKSkLAgDW7Ljl9l7fzI7NnR0pl8a1CMhueSNG6yGEzhr012C6PObYE04PnHLgiYdGilMOOfTECKmtr5ECopueCCGjnwMRkuiUu4JEnYs4rJiNzjpLbGYbO9Z6kB1usT5frQgAIWrVC7RAV7RxMG4GCiCkkKVfn4WldGt1K/tlcfnnqY/zvvii2xWfsc79FHaWQZxXQdfLScO5n73xWbM8dpfXN+r2A3lt99XPF7477Rqz4/2Tr747Yd5/uP7KZwuekTk3fpbDo5etbzz3Rgd13/QYba6mvC7y+ccrttgtCjW5mvpuhx1UN/kapYkAZ8amQNNZ5SzncNpyNiWRdW03ftaysK77moN2YhZpZvmY0Zu2HmE2hrZ39g4fNg786rrnkLRaE7F63DXGUMjzumDzgDkWBigoVr79tyf433rr7/6dhySVmpjN5a1f6he+uvGcG9dOJjeOAEGs3eF32/bptfy/c9P8iW96bHEX/Pjdvtdg7dtsrkJHW4JgMdH4DtNxy5aQ79LKa20dw22dHyzIS8zKuQYItBygbRdtAQAagR7ubETpgrcRJezsbSX1jKFK4+CYvF6aSsvOcbXctm38OhIMzvmhhO65pZK65q5KJ71zf6WbznnN8dBvdKzTw5A6Z3AU4wQmg8kkqGBAEGLwMZwO0QKNVyBHGizNB15AidxY940HeQ6DDCtQYBxHsS69HsU5jB/pxnCmH3JgigOGY/DhuX7ksxmlY8Npo+y46FmDGYYemBSTZTDDASXUUF6cFsaoMxiM7mAlU3LfnwUfs2CsRWufMiwO54L430IRDsIp2zbonDqzWTcBJw41ajA5gdGJdF1z+b6jRYc5gfXkBaiDLVmExyfcdEXNaDm53DZSNBtOl6G+MmX/81EverxcBQAA) format('woff2');
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -34,6 +40,11 @@
       --today-btn-border: #4a4a52;
       --theme-btn-bg: #2a2a30;
       --theme-btn-border: #4a4a52;
+      --accent: #d7e8bc;
+      --btn-hover-bg: #35353c;
+      --today-ring: #d7e8bc;
+      --today-ring-glow: rgba(215, 232, 188, 0.75);
+      --watch-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8);
     }
 
     html[data-theme="day"] {
@@ -54,6 +65,11 @@
       --today-btn-border: #c7cdd6;
       --theme-btn-bg: #ffffff;
       --theme-btn-border: #c7cdd6;
+      --accent: #4e6b1f;
+      --btn-hover-bg: #eef3e3;
+      --today-ring: #7f9d48;
+      --today-ring-glow: rgba(127, 157, 72, 0.45);
+      --watch-shadow: 0 14px 34px rgba(30, 40, 60, 0.45), 0 0 18px rgba(30, 40, 60, 0.25);
     }
 
     html, body {
@@ -77,7 +93,7 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
-      gap: 60px;
+      gap: clamp(20px, 4vw, 60px);
     }
 
     /* Secció Esquerra: Rellotge */
@@ -97,11 +113,11 @@
 
     .watch-container {
       position: relative;
-      width: clamp(180px, min(92vw, 82dvh), 560px);
-      height: clamp(180px, min(92vw, 82dvh), 560px);
+      width: clamp(180px, min(50vw, 82dvh), 560px);
+      height: clamp(180px, min(50vw, 82dvh), 560px);
       aspect-ratio: 1 / 1;
       border-radius: 50%;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0,0,0,0.8);
+      box-shadow: var(--watch-shadow);
       container-type: inline-size;
       container-name: watch;
       transform-style: preserve-3d;
@@ -289,7 +305,7 @@
       left: 0;
       width: 100%;
       text-align: center;
-      font-family: 'Bricolage Grotesque', 'Hanken Grotesk', ui-rounded, -apple-system, system-ui, sans-serif;
+      font-family: 'TissotBricolage', ui-rounded, -apple-system, system-ui, sans-serif;
       font-size: 5.39cqw;
       font-weight: 600;
       letter-spacing: 0.85cqw;
@@ -450,22 +466,27 @@
       left: 0;
     }
 
-    /* Marca horària rectangular: 0,4u d'ample constant */
+    /* Marca horària rectangular: perfil gris 0,1u + verd 0,1u + perfil gris 0,1u
+       (0,3u en total). Els perfils es dibuixen amb degradat en lloc de vores
+       perquè les vores s'arrodoneixen a píxels sencers i l'amplada del verd
+       variava segons la pantalla. */
     .hour-index::before {
       content: '';
       position: absolute;
       top: 1.5%;
       left: 50%;
       transform: translateX(-50%);
-      width: 1.844cqw;
+      width: 2.514cqw;
       height: 9.218cqw;
       background:
-        linear-gradient(90deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(0,0,0,0.28) 100%),
+        linear-gradient(90deg,
+          #8a8a8f 0, #8a8a8f 0.838cqw,
+          transparent 0.838cqw, transparent calc(100% - 0.838cqw),
+          #8a8a8f calc(100% - 0.838cqw), #8a8a8f 100%),
+        linear-gradient(90deg, rgba(255,255,255,0.4) 33%, rgba(255,255,255,0) 45%, rgba(255,255,255,0) 55%, rgba(0,0,0,0.28) 67%),
         linear-gradient(to bottom, #e3efd0 0%, #d7e8bc 50%, #a8b593 100%);
       border-top: 1px solid #8a8a8f;
       border-bottom: 1px solid #8a8a8f;
-      border-left: 0.838cqw solid #8a8a8f;
-      border-right: 0.838cqw solid #8a8a8f;
       box-shadow: 0 1px 3px rgba(0,0,0,0.35);
       border-radius: 1px;
     }
@@ -672,7 +693,7 @@
       appearance: none;
       border: 1px solid var(--today-btn-border);
       background: var(--today-btn-bg);
-      color: #d7e8bc;
+      color: var(--accent);
       font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.3px;
@@ -684,17 +705,39 @@
     }
 
     .theme-toggle-btn {
-      padding: 4px 8px;
-      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
       line-height: 1;
+    }
+
+    /* Icones de línia (sol / lluna) amb el color d'accent del tema */
+    .theme-icon {
+      width: 0.95rem;
+      height: 0.95rem;
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .calendar-today-btn:hover,
     .calendar-today-btn:active,
     .theme-toggle-btn:hover,
     .theme-toggle-btn:active {
-      background: #35353c;
-      border-color: #d7e8bc;
+      background: var(--btn-hover-bg);
+      border-color: var(--accent);
+    }
+
+    /* Petita "A" que indica que el tema canvia sol amb la sortida i la posta de sol */
+    .theme-auto-badge {
+      font-size: 0.55rem;
+      font-weight: 800;
+      margin-left: 2px;
+      vertical-align: super;
+      color: var(--accent);
     }
 
     .calendar-grid {
@@ -725,6 +768,13 @@
 
     .calendar-day-cell.empty {
       visibility: hidden;
+    }
+
+    /* Dies dels mesos veïns que omplen la graella fixa de 6 setmanes */
+    .calendar-day-cell.other-month {
+      color: var(--weekday-color);
+      opacity: 0.4;
+      font-weight: 400;
     }
 
     /* Cap de setmana: dissabtes i diumenges, un to fred discret sense cercle */
@@ -765,8 +815,8 @@
       z-index: 1;
       inset: 8%;
       border-radius: 50%;
-      border: 2px solid #d7e8bc;
-      box-shadow: 0 0 7px rgba(215, 232, 188, 0.75);
+      border: 2px solid var(--today-ring);
+      box-shadow: 0 0 7px var(--today-ring-glow);
       pointer-events: none;
     }
 
@@ -855,6 +905,7 @@
       }
 
       .calendar-section {
+        flex: 0 1 auto;
         padding: 12px 14px;
         max-width: 260px;
       }
@@ -912,7 +963,32 @@
       }
     }
 
-    @media (orientation: landscape) and (max-width: 1400px) {
+    /* Tauleta en vertical: rellotge a dalt i calendari a sota, en mida gran */
+    @media (orientation: portrait) and (min-width: 721px) and (max-width: 1100px) {
+      .app-container {
+        flex-direction: column;
+        justify-content: center;
+        gap: 24px;
+      }
+
+      .watch-section {
+        flex: 0 0 auto;
+      }
+
+      .watch-container {
+        width: clamp(260px, min(72vw, 50dvh), 540px);
+        height: clamp(260px, min(72vw, 50dvh), 540px);
+      }
+
+      .calendar-section {
+        flex: 0 1 auto;
+        max-width: 440px;
+      }
+    }
+
+    /* Mòbil apaïsat (pantalla baixa): versió compacta. Abans s'aplicava a
+       qualsevol pantalla horitzontal de fins a 1400 px i encongia els portàtils. */
+    @media (orientation: landscape) and (max-height: 620px) {
       .app-container {
         flex-direction: row;
         align-items: center;
@@ -1102,7 +1178,7 @@
       <div class="calendar-header">
         <div class="month-year-title" id="month-year-title" title="Toca 2 cops per tornar al mes actual">Agost 2026</div>
         <div class="calendar-header-actions">
-          <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Canvia entre tema diürn i nocturn">🌙</button>
+          <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Canvia entre tema diürn i nocturn" aria-label="Tema diürn o nocturn"></button>
           <button type="button" class="calendar-today-btn" id="calendar-today-btn">Avui</button>
         </div>
       </div>
@@ -1136,7 +1212,7 @@
             <span class="data-value" id="data-humidity">—</span>
           </div>
           <div class="data-item">
-            <span class="data-label">Precip.</span>
+            <span class="data-label">Precip. 6 h</span>
             <span class="data-value" id="data-precip">—</span>
           </div>
           <div class="data-item">
@@ -1230,146 +1306,286 @@
 
     const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-    // Moviment del rellotge en temps real
+    function pad2(n) { return String(n).padStart(2, '0'); }
+    function isoOf(date) { return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`; }
+    function normName(name) {
+      return String(name || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().trim();
+    }
+
+    // ------------------------------------------------------------------
+    // Festius: UNA sola font per al calendari i per a les finestretes de
+    // data del Tissot i del Mondaine.
+    //  1. Dades obertes de la Generalitat (festius estatals i catalans +
+    //     festes locals del municipi on ets, per defecte Barcelona).
+    //  2. Si l'API falla o encara no ha publicat l'any, càlcul local a
+    //     partir de regles fixes i de la data de Pasqua, i es reintenta
+    //     al cap d'una hora.
+    // ------------------------------------------------------------------
+    const HOLIDAYS_CACHE_KEY = 'tissot_holidays_cache_v2';
+    const HOLIDAYS_TTL_MS = 24 * 60 * 60 * 1000;   // dades de l'API: refresc diari
+    const HOLIDAYS_RETRY_MS = 60 * 60 * 1000;      // reserva local: reintent cada hora
+    const DEFAULT_MUNICIPALITY = 'Barcelona';
+
+    let holidayMunicipality = DEFAULT_MUNICIPALITY;
+    const holidayMemory = new Map();   // "any|MUNICIPI" -> Set de dates ISO
+    const holidayPending = new Map();  // "any|MUNICIPI" -> Promise en curs
+
+    function holidayKey(year, muni) { return `${year}|${normName(muni)}`; }
+
+    function readHolidayCache() {
+      try { return JSON.parse(localStorage.getItem(HOLIDAYS_CACHE_KEY)) || {}; }
+      catch (e) { return {}; }
+    }
+
+    function writeHolidayCache(cache) {
+      const limit = Date.now() - 30 * 24 * 60 * 60 * 1000;
+      Object.keys(cache).forEach(k => { if (cache[k].expiresAt < limit) delete cache[k]; });
+      try { localStorage.setItem(HOLIDAYS_CACHE_KEY, JSON.stringify(cache)); } catch (e) {}
+    }
+
+    function easterSunday(year) {
+      // Algorisme de Meeus/Jones/Butcher (calendari gregorià)
+      const a = year % 19, b = Math.floor(year / 100), c = year % 100;
+      const d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+      const g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+      const i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7;
+      const m = Math.floor((a + 11 * h + 22 * l) / 451);
+      const month = Math.floor((h + l - 7 * m + 114) / 31);
+      const day = ((h + l - 7 * m + 114) % 31) + 1;
+      return new Date(year, month - 1, day);
+    }
+
+    function addDays(date, days) { const d = new Date(date); d.setDate(d.getDate() + days); return d; }
+
+    // Festes locals conegudes per al càlcul de reserva (només Barcelona)
+    function localMunicipalFallback(year, muni) {
+      if (normName(muni) !== normName(DEFAULT_MUNICIPALITY)) return [];
+      return [isoOf(addDays(easterSunday(year), 50)), `${year}-09-24`]; // Pasqua Granada, La Mercè
+    }
+
+    function computeLocalHolidays(year, muni) {
+      const set = new Set();
+      [[1, 1], [1, 6], [5, 1], [8, 15], [10, 12], [11, 1], [12, 6], [12, 8], [12, 25], // estatals
+       [6, 24], [9, 11], [12, 26]]                                                     // catalans
+        .forEach(([m, d]) => set.add(`${year}-${pad2(m)}-${pad2(d)}`));
+      const easter = easterSunday(year);
+      set.add(isoOf(addDays(easter, -2))); // Divendres Sant
+      set.add(isoOf(addDays(easter, 1)));  // Dilluns de Pasqua Florida
+      localMunicipalFallback(year, muni).forEach(iso => set.add(iso));
+      return set;
+    }
+
+    async function fetchJsonArray(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error('Resposta inesperada');
+      return data;
+    }
+
+    function localHolidaysUrl(year, muni) {
+      const where = `upper(ajuntament_o_nucli_municipal)='${normName(muni).replace(/'/g, "''")}'`;
+      return `https://analisi.transparenciacatalunya.cat/resource/b4eh-r8up.json?any_calendari=${year}&$where=${encodeURIComponent(where)}`;
+    }
+
+    // Retorna immediatament el millor conjunt disponible (memòria, caché o càlcul local)
+    function getHolidaysSync(year) {
+      const key = holidayKey(year, holidayMunicipality);
+      if (holidayMemory.has(key)) return holidayMemory.get(key);
+      const cached = readHolidayCache()[key];
+      if (cached) {
+        const set = new Set(cached.dates);
+        holidayMemory.set(key, set);
+        return set;
+      }
+      return computeLocalHolidays(year, holidayMunicipality);
+    }
+
+    function loadHolidays(year) {
+      const muni = holidayMunicipality;
+      const key = holidayKey(year, muni);
+      const cache = readHolidayCache();
+      const entry = cache[key];
+      if (entry && entry.expiresAt > Date.now()) {
+        const set = new Set(entry.dates);
+        holidayMemory.set(key, set);
+        return Promise.resolve(set);
+      }
+      if (holidayPending.has(key)) return holidayPending.get(key);
+
+      const promise = (async () => {
+        let dates;
+        let ttl = HOLIDAYS_TTL_MS;
+        try {
+          const regionalUrl = `https://analisi.transparenciacatalunya.cat/resource/yf2b-mjr6.json?any_calendari=${year}`;
+          const [regional, local] = await Promise.all([
+            fetchJsonArray(regionalUrl),
+            fetchJsonArray(localHolidaysUrl(year, muni))
+          ]);
+          if (regional.length === 0) throw new Error(`Calendari ${year} encara no publicat`);
+          dates = new Set();
+          regional.forEach(r => { if (r.data) dates.add(r.data.slice(0, 10)); });
+          let localRows = local;
+          // Si el nom del municipi no coincideix amb el de les dades obertes, fem servir Barcelona
+          if (localRows.length === 0 && normName(muni) !== normName(DEFAULT_MUNICIPALITY)) {
+            localRows = await fetchJsonArray(localHolidaysUrl(year, DEFAULT_MUNICIPALITY));
+          }
+          localRows.forEach(r => { if (r.data) dates.add(r.data.slice(0, 10)); });
+          if (localRows.length === 0) localMunicipalFallback(year, muni).forEach(iso => dates.add(iso));
+        } catch (err) {
+          console.warn(`Festius ${year}: es fa servir el càlcul local (${err.message})`);
+          dates = entry ? new Set(entry.dates) : computeLocalHolidays(year, muni);
+          ttl = HOLIDAYS_RETRY_MS;
+        }
+        const fresh = readHolidayCache();
+        fresh[key] = { dates: Array.from(dates), expiresAt: Date.now() + ttl };
+        writeHolidayCache(fresh);
+        holidayMemory.set(key, dates);
+        return dates;
+      })();
+
+      holidayPending.set(key, promise);
+      promise.finally(() => holidayPending.delete(key));
+      return promise;
+    }
+
+    // Canvia el municipi dels festius locals (segons la geolocalització)
+    function setHolidayMunicipality(name) {
+      if (!name || normName(name) === normName(holidayMunicipality)) return;
+      holidayMunicipality = name;
+      lastDateKey = '';
+      renderCalendar();
+      loadHolidays(new Date().getFullYear()).then(() => { lastDateKey = ''; });
+    }
+
+    // Color de la data a les finestretes: diumenge o festiu en dia feiner,
+    // vermell granat; dissabte, verd fosc; dia feiner normal, null.
+    function getFestiuColor(now) {
+      const dow = now.getDay();
+      if (dow === 0) return '#a50044';
+      if (dow === 6) return '#1a5c2e';
+      if (getHolidaysSync(now.getFullYear()).has(isoOf(now))) return '#a50044';
+      return null;
+    }
+
+    // ------------------------------------------------------------------
+    // Finestretes de dia i data (Tissot i Mondaine): només s'actualitzen
+    // quan canvia el dia, no a cada fotograma.
+    // ------------------------------------------------------------------
+    const tissotDayEl = document.getElementById('day');
+    const tissotDateEl = document.getElementById('date');
+    const mondaineDayEl = document.getElementById('mondaine-day-abbr');
+    const mondaineDateEl = document.getElementById('mondaine-date-num');
+    let lastDateKey = '';
+
+    function refreshDateWindows(now) {
+      const festiuColor = getFestiuColor(now);
+      tissotDayEl.textContent = daysOfWeek[now.getDay()];
+      tissotDateEl.textContent = pad2(now.getDate());
+      tissotDayEl.style.color = festiuColor || '';
+      tissotDateEl.style.color = festiuColor || '';
+      mondaineDayEl.textContent = daysOfWeek[now.getDay()];
+      mondaineDateEl.textContent = now.getDate();
+      mondaineDayEl.setAttribute('fill', festiuColor || '#1c1c1c');
+      mondaineDateEl.setAttribute('fill', festiuColor || '#1c1c1c');
+    }
+
+    function checkDateChange(now) {
+      const key = isoOf(now);
+      if (key !== lastDateKey) {
+        lastDateKey = key;
+        refreshDateWindows(now);
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // Moviment del Tissot. Un automàtic no escombra de manera contínua:
+    // la segonera fa petits salts, 8 per segon en un calibre de 28.800
+    // alternances/hora.
+    // ------------------------------------------------------------------
+    const BEATS_PER_SECOND = 8;
+    const secondHandEl = document.getElementById('second-hand');
+    const minuteHandEl = document.getElementById('minute-hand');
+    const hourHandEl = document.getElementById('hour-hand');
+    let lastSecondStep = -1;
+
     function updateWatch() {
       const now = new Date();
-
       const ms = now.getMilliseconds();
-      const seconds = now.getSeconds() + ms / 1000;
-      const minutes = now.getMinutes() + seconds / 60;
-      const hours = (now.getHours() % 12) + minutes / 60;
+      const step = now.getSeconds() * BEATS_PER_SECOND + Math.floor(ms * BEATS_PER_SECOND / 1000);
 
-      const secondDeg = seconds * 6;
-      const minuteDeg = minutes * 6;
-      const hourDeg = hours * 30;
-
-      document.getElementById('second-hand').style.transform = `rotate(${secondDeg}deg)`;
-      document.getElementById('minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
-      document.getElementById('hour-hand').style.transform = `rotate(${hourDeg}deg)`;
-
-      const dayEl = document.getElementById('day');
-      const dateEl = document.getElementById('date');
-      dayEl.innerText = daysOfWeek[now.getDay()];
-      dateEl.innerText = String(now.getDate()).padStart(2, '0');
-
-      // Dissabte en verd fosc, diumenge o festiu (Catalunya/Barcelona) en
-      // vermell granat, dia feiner normal en negre.
-      const festiuColor = getFestiuColor(now);
-      dayEl.style.color = festiuColor || '';
-      dateEl.style.color = festiuColor || '';
+      if (step !== lastSecondStep) {
+        lastSecondStep = step;
+        const seconds = step / BEATS_PER_SECOND;
+        const minutes = now.getMinutes() + (now.getSeconds() + ms / 1000) / 60;
+        const hours = (now.getHours() % 12) + minutes / 60;
+        secondHandEl.style.transform = `rotate(${seconds * 6}deg)`;
+        minuteHandEl.style.transform = `rotate(${minutes * 6}deg)`;
+        hourHandEl.style.transform = `rotate(${hours * 30}deg)`;
+        checkDateChange(now);
+      }
 
       requestAnimationFrame(updateWatch);
     }
 
     // ------------------------------------------------------------------
-    // Festius oficials: cerca periòdica a les dades obertes de la
-    // Generalitat de Catalunya (festius estatals/autonòmics + festes
-    // locals de Barcelona), amb memòria cau local renovada cada dia.
+    // Calendari mensual
     // ------------------------------------------------------------------
-    const HOLIDAYS_CACHE_KEY = 'tissot_holidays_cache_v1';
-    const HOLIDAYS_TTL_MS = 24 * 60 * 60 * 1000; // refresc diari
+    let calendarMonthOffset = 0;
+    let calendarRenderToken = 0;
+    const monthNames = [
+      'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny',
+      'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'
+    ];
 
-    async function fetchHolidaysForYear(year) {
-      let cache = {};
-      try {
-        cache = JSON.parse(localStorage.getItem(HOLIDAYS_CACHE_KEY)) || {};
-      } catch (e) {
-        cache = {};
-      }
-
-      const entry = cache[year];
-      if (entry && (Date.now() - entry.fetchedAt) < HOLIDAYS_TTL_MS) {
-        return new Set(entry.dates);
-      }
-
-      try {
-        const regionalUrl = `https://analisi.transparenciacatalunya.cat/resource/yf2b-mjr6.json?any_calendari=${year}`;
-        const localUrl = `https://analisi.transparenciacatalunya.cat/resource/b4eh-r8up.json?any_calendari=${year}&$where=${encodeURIComponent("upper(ajuntament_o_nucli_municipal)='BARCELONA'")}`;
-
-        const [regionalRes, localRes] = await Promise.all([fetch(regionalUrl), fetch(localUrl)]);
-        const regional = await regionalRes.json();
-        const local = await localRes.json();
-
-        const dates = new Set();
-        regional.forEach(r => { if (r.data) dates.add(r.data.slice(0, 10)); });
-        local.forEach(r => { if (r.data) dates.add(r.data.slice(0, 10)); });
-
-        cache[year] = { dates: Array.from(dates), fetchedAt: Date.now() };
-        localStorage.setItem(HOLIDAYS_CACHE_KEY, JSON.stringify(cache));
-        return dates;
-      } catch (err) {
-        console.warn('No s\'han pogut obtenir els festius oficials:', err);
-        return entry ? new Set(entry.dates) : new Set();
-      }
+    function makeDayCell(text, extraClass) {
+      const cell = document.createElement('div');
+      cell.className = extraClass ? `calendar-day-cell ${extraClass}` : 'calendar-day-cell';
+      cell.textContent = text;
+      return cell;
     }
 
-    // Desplaçament de mesos respecte del mes en curs, sense límit, navegable lliscant
-    let calendarMonthOffset = 0;
-
-    // Renderitzar el calendari del mes seleccionat (mes en curs + calendarMonthOffset)
+    // Construeix la graella fora del document i la substitueix d'un sol cop.
+    // Si mentrestant s'ha demanat un altre mes, aquest render es descarta,
+    // així no es poden barrejar ni duplicar caselles.
     async function renderCalendar() {
+      const token = ++calendarRenderToken;
       const real = new Date();
       const target = new Date(real.getFullYear(), real.getMonth() + calendarMonthOffset, 1);
       const year = target.getFullYear();
       const month = target.getMonth();
-      const isCurrentMonth = calendarMonthOffset === 0;
-      const todayDate = real.getDate();
+      const isCurrentMonth = year === real.getFullYear() && month === real.getMonth();
 
-      const monthNames = [
-        'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny',
-        'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'
-      ];
+      const holidays = await loadHolidays(year);
+      if (token !== calendarRenderToken) return;
 
-      document.getElementById('month-year-title').innerText = `${monthNames[month]} ${year}`;
-
-      const daysContainer = document.getElementById('days-container');
-      daysContainer.innerHTML = '';
-
-      const firstDayOfMonth = new Date(year, month, 1);
-      let startingDay = firstDayOfMonth.getDay() - 1;
+      const frag = document.createDocumentFragment();
+      let startingDay = new Date(year, month, 1).getDay() - 1;
       if (startingDay === -1) startingDay = 6;
-
       const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
+      const prevMonthLast = new Date(year, month, 0).getDate();
 
+      // Darrers dies del mes anterior
       for (let i = 0; i < startingDay; i++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.className = 'calendar-day-cell empty';
-        daysContainer.appendChild(emptyCell);
+        frag.appendChild(makeDayCell(prevMonthLast - startingDay + 1 + i, 'other-month'));
       }
-
-      const holidays = await fetchHolidaysForYear(year);
 
       for (let day = 1; day <= lastDateOfMonth; day++) {
-        const dayCell = document.createElement('div');
-        dayCell.className = 'calendar-day-cell';
-        dayCell.innerText = day;
-
-        const dow = new Date(year, month, day).getDay(); // 0 = diumenge, 6 = dissabte
-        const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-        if (dow === 0 || dow === 6) {
-          dayCell.classList.add('weekend');
-        }
-
-        if (holidays.has(iso)) {
-          dayCell.classList.add('holiday');
-        }
-
-        if (isCurrentMonth && day === todayDate) {
-          dayCell.classList.add('today');
-        }
-
-        daysContainer.appendChild(dayCell);
+        const cell = makeDayCell(day);
+        const dow = new Date(year, month, day).getDay();
+        if (dow === 0 || dow === 6) cell.classList.add('weekend');
+        if (holidays.has(`${year}-${pad2(month + 1)}-${pad2(day)}`)) cell.classList.add('holiday');
+        if (isCurrentMonth && day === real.getDate()) cell.classList.add('today');
+        frag.appendChild(cell);
       }
 
-      // Omplim fins a 42 cel·les (6 setmanes) sempre, perquè l'alçada del
-      // calendari sigui fixa independentment de les setmanes que ocupi el mes
-      const filledCells = startingDay + lastDateOfMonth;
-      for (let i = filledCells; i < 42; i++) {
-        const trailingCell = document.createElement('div');
-        trailingCell.className = 'calendar-day-cell empty';
-        daysContainer.appendChild(trailingCell);
+      // Primers dies del mes següent fins a 42 caselles (6 setmanes fixes)
+      for (let i = startingDay + lastDateOfMonth, next = 1; i < 42; i++, next++) {
+        frag.appendChild(makeDayCell(next, 'other-month'));
       }
+
+      document.getElementById('month-year-title').textContent = `${monthNames[month]} ${year}`;
+      document.getElementById('days-container').replaceChildren(frag);
     }
 
     // Anima el pas d'un mes a un altre lliscant els elements del calendari
@@ -1534,130 +1750,14 @@
       mondaineTicksContainer.appendChild(line);
     }
 
-    // ------------------------------------------------------------------
-    // Festius de Catalunya i Barcelona, calculats localment (sense API,
-    // i sense necessitat de consultar cap calendari publicat any rere any):
-    // estatals + catalans de data fixa, els mòbils lligats a la Pasqua
-    // (Divendres Sant, Dilluns de Pasqua Florida i Dilluns de Pasqua
-    // Granada) i les dues festes locals de Barcelona (La Mercè i la
-    // pròpia Pasqua Granada). Com que es recalculen any rere any a partir
-    // de regles fixes i de l'algorisme de la Pasqua, el rellotge es
-    // "renova" tot sol sense cap manteniment.
-    //
-    // A Catalunya, quan una festa cau en dissabte o diumenge NO es
-    // trasllada a cap altre dia (es perd aquell any, sense compensació),
-    // per això només es marca en vermell com a "festiu" quan cau en dia
-    // feiner; si ja cau en cap de setmana, simplement es manté el color
-    // habitual de dissabte o diumenge.
-    //
-    // Nota: l'Ajuntament de Barcelona podria triar algun any una festa
-    // local diferent de la Pasqua Granada; els darrers calendaris
-    // publicats (2019, 2026) l'han mantinguda, però no és impossible que
-    // canviï.
-    // ------------------------------------------------------------------
-    function easterSunday(year) {
-      // Algorisme de Meeus/Jones/Butcher (calendari gregorià)
-      const a = year % 19;
-      const b = Math.floor(year / 100);
-      const c = year % 100;
-      const d = Math.floor(b / 4);
-      const e = b % 4;
-      const f = Math.floor((b + 8) / 25);
-      const g = Math.floor((b - f + 1) / 3);
-      const h = (19 * a + b - d - g + 15) % 30;
-      const i = Math.floor(c / 4);
-      const k = c % 4;
-      const l = (32 + 2 * e + 2 * i - h - k) % 7;
-      const m = Math.floor((a + 11 * h + 22 * l) / 451);
-      const month = Math.floor((h + l - 7 * m + 114) / 31); // 3 = març, 4 = abril
-      const day = ((h + l - 7 * m + 114) % 31) + 1;
-      return new Date(year, month - 1, day);
-    }
-
-    function addDays(date, days) {
-      const d = new Date(date);
-      d.setDate(d.getDate() + days);
-      return d;
-    }
-
-    function dateKey(date) {
-      return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-    }
-
-    function buildHolidaySet(year) {
-      const set = new Set();
-      const add = (m, d) => set.add(`${year}-${m}-${d}`); // m: 0-indexat
-
-      // Festius estatals
-      add(0, 1);   // Cap d'Any
-      add(0, 6);   // Reis
-      add(4, 1);   // Festa del Treball
-      add(7, 15);  // Assumpció
-      add(9, 12);  // Festa Nacional d'Espanya
-      add(10, 1);  // Tots Sants
-      add(11, 6);  // Dia de la Constitució
-      add(11, 8);  // Immaculada Concepció
-      add(11, 25); // Nadal
-
-      // Festius de Catalunya
-      add(5, 24);  // Sant Joan
-      add(8, 11);  // Diada Nacional de Catalunya
-      add(11, 26); // Sant Esteve
-
-      // Festius mòbils, lligats a la Pasqua
-      const easter = easterSunday(year);
-      set.add(dateKey(addDays(easter, -2)));  // Divendres Sant
-      set.add(dateKey(addDays(easter, 1)));   // Dilluns de Pasqua Florida
-      set.add(dateKey(addDays(easter, 50)));  // Dilluns de Pasqua Granada (2a festa local de Barcelona)
-
-      // Festa local fixa de Barcelona
-      add(8, 24); // La Mercè
-
-      return set;
-    }
-
-    let holidayYear = new Date().getFullYear();
-    let holidaySet = buildHolidaySet(holidayYear);
-
-    function isHolidayToday(now) {
-      if (now.getFullYear() !== holidayYear) {
-        holidayYear = now.getFullYear();
-        holidaySet = buildHolidaySet(holidayYear);
-      }
-      return holidaySet.has(dateKey(now));
-    }
-
-    // Color de la data segons el dia: diumenge sempre vermell granat,
-    // dissabte sempre verd fosc (encara que aquell dia també sigui festiu,
-    // ja que a Catalunya un festiu en cap de setmana no es compensa), i
-    // vermell granat també per a un festiu de Catalunya/Barcelona que
-    // caigui en dia feiner. Retorna null en un dia feiner normal.
-    function getFestiuColor(now) {
-      const dow = now.getDay(); // 0 = diumenge ... 6 = dissabte
-      if (dow === 0) return '#a50044';
-      if (dow === 6) return '#1a5c2e';
-      if (isHolidayToday(now)) return '#a50044';
-      return null;
-    }
-
-    // Finestreta de dia i data del Mondaine: dia abreujat + número, amb el
-    // dissabte en verd fosc i el diumenge o festiu (Catalunya/Barcelona) en
-    // vermell granat.
-    const mondaineDayAbbrevs = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-    function updateMondaineDate(now) {
-      const dow = now.getDay();
-      const dateColor = getFestiuColor(now) || '#1c1c1c';
-      const dayAbbrEl = document.getElementById('mondaine-day-abbr');
-      const dateNumEl = document.getElementById('mondaine-date-num');
-      dayAbbrEl.textContent = mondaineDayAbbrevs[dow];
-      dayAbbrEl.setAttribute('fill', dateColor);
-      dateNumEl.textContent = now.getDate();
-      dateNumEl.setAttribute('fill', dateColor);
-    }
-
     // Moviment en temps real de les agulles del Mondaine, amb l'efecte "stop2go":
     // la segundera arriba a les 12 abans que acabi el minut i hi espera l'impuls
     // exacte del canvi de minut, com als rellotges d'estació suïssos.
+    // (La finestreta de data es refresca des de checkDateChange, un cop per dia.)
+    const mondaineHourEl = document.getElementById('mondaine-hour-hand');
+    const mondaineMinEl = document.getElementById('mondaine-min-hand');
+    const mondaineSecEl = document.getElementById('mondaine-sec-group');
+
     function updateMondaine() {
       const now = new Date();
       const h = now.getHours() % 12;
@@ -1669,10 +1769,9 @@
       const mAngle = m * 6;
       const hAngle = (h + m / 60) * 30;
 
-      document.getElementById('mondaine-hour-hand').setAttribute('transform', `rotate(${hAngle} 100 100)`);
-      document.getElementById('mondaine-min-hand').setAttribute('transform', `rotate(${mAngle} 100 100)`);
-      document.getElementById('mondaine-sec-group').setAttribute('transform', `rotate(${sAngle} 100 100)`);
-      updateMondaineDate(now);
+      mondaineHourEl.setAttribute('transform', `rotate(${hAngle} 100 100)`);
+      mondaineMinEl.setAttribute('transform', `rotate(${mAngle} 100 100)`);
+      mondaineSecEl.setAttribute('transform', `rotate(${sAngle} 100 100)`);
 
       requestAnimationFrame(updateMondaine);
     }
@@ -1706,23 +1805,112 @@
       });
     })();
 
-    // Iniciar
+    // ------------------------------------------------------------------
+    // Iniciar rellotges i calendari
+    // ------------------------------------------------------------------
     renderCalendar();
-    setInterval(renderCalendar, 60 * 60 * 1000); // repinta cada hora (canvi de dia i refresc periòdic de festius)
+    loadHolidays(new Date().getFullYear()).then(() => { lastDateKey = ''; });
+    setInterval(renderCalendar, 60 * 60 * 1000); // refresc periòdic dels festius
+
+    // Repinta el calendari just després de mitjanit perquè l'anell d'avui canviï de dia a l'hora
+    (function scheduleMidnightRefresh() {
+      const now = new Date();
+      const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 2);
+      setTimeout(() => {
+        renderCalendar();
+        scheduleMidnightRefresh();
+      }, nextMidnight - now);
+    })();
+
     requestAnimationFrame(updateWatch);
     requestAnimationFrame(updateMondaine);
 
     // ------------------------------------------------------------------
-    // Dades ambientals segons coordenades
+    // Tema diürn / nocturn
+    //  - Automàtic: segons la sortida i la posta de sol reals del lloc
+    //    (Open-Meteo); si encara no se saben, de 7 h a 20 h.
+    //  - Botó de 3 estats: automàtic → manual (l'altre tema) → manual
+    //    (el tema contrari) → torna a automàtic.
     // ------------------------------------------------------------------
+    const THEME_STORAGE_KEY = 'tissot_theme_override'; // 'day' | 'night' | absent = automàtic
 
+    // Icones de línia fina, en la línia gràfica del rellotge
+    const SUN_ICON = '<svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="4.2"/>' +
+      '<path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/>' +
+      '</svg>';
+    const MOON_ICON = '<svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8z"/>' +
+      '</svg>';
+    let sunTimes = null; // { sunrise: Date, sunset: Date }
+
+    function getStoredTheme() {
+      try {
+        const v = localStorage.getItem(THEME_STORAGE_KEY);
+        return v === 'day' || v === 'night' ? v : null;
+      } catch (e) { return null; }
+    }
+
+    function setStoredTheme(v) {
+      try {
+        if (v) localStorage.setItem(THEME_STORAGE_KEY, v);
+        else localStorage.removeItem(THEME_STORAGE_KEY);
+      } catch (e) {}
+    }
+
+    function autoTheme() {
+      const now = new Date();
+      if (sunTimes && isoOf(sunTimes.sunrise) === isoOf(now)) {
+        return now >= sunTimes.sunrise && now < sunTimes.sunset ? 'day' : 'night';
+      }
+      const h = now.getHours();
+      return h >= 7 && h < 20 ? 'day' : 'night';
+    }
+
+    function applyTheme() {
+      const stored = getStoredTheme();
+      const theme = stored || autoTheme();
+      document.documentElement.setAttribute('data-theme', theme);
+      const btn = document.getElementById('theme-toggle-btn');
+      if (btn) {
+        btn.innerHTML = (theme === 'day' ? SUN_ICON : MOON_ICON) + (stored ? '' : '<span class="theme-auto-badge">A</span>');
+        btn.title = stored
+          ? `Tema ${theme === 'day' ? 'diürn' : 'nocturn'} fix (toca per canviar)`
+          : 'Tema automàtic segons el sol (toca per fixar-lo)';
+      }
+    }
+
+    function cycleTheme() {
+      const stored = getStoredTheme();
+      const auto = autoTheme();
+      if (!stored) setStoredTheme(auto === 'day' ? 'night' : 'day'); // automàtic → l'altre tema
+      else if (stored !== auto) setStoredTheme(auto);                // → el tema contrari
+      else setStoredTheme(null);                                     // → torna a automàtic
+      applyTheme();
+    }
+
+    document.getElementById('theme-toggle-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      cycleTheme();
+    });
+
+    applyTheme();
+    setInterval(applyTheme, 60 * 1000); // en mode automàtic, revisa cada minut
+
+    // ------------------------------------------------------------------
+    // Dades ambientals segons coordenades (es refresquen cada 20 minuts)
+    // ------------------------------------------------------------------
     const FALLBACK_COORDS = { lat: 41.3874, lon: 2.1686 };
+    const WEATHER_REFRESH_MS = 20 * 60 * 1000;
+    const PRECIP_HOURS = 6;
+    let currentCoords = null;
 
     async function fetchWeather(lat, lon) {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
         `&current=temperature_2m,relative_humidity_2m,apparent_temperature` +
-        `&daily=precipitation_probability_max,snowfall_sum` +
-        `&timezone=auto`;
+        `&hourly=precipitation_probability,snowfall` +
+        `&daily=sunrise,sunset` +
+        `&forecast_days=2&timezone=auto`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Error de meteo');
       return res.json();
@@ -1742,39 +1930,69 @@
       return res.json();
     }
 
+    // Probabilitat màxima de precipitació de les properes hores (no de tot el dia),
+    // i si en aquest interval es preveu neu
+    function precipitationNextHours(weather) {
+      const hourly = weather.hourly;
+      if (!hourly || !hourly.time || !hourly.precipitation_probability) return null;
+      const currentHour = (weather.current && weather.current.time ? weather.current.time : '').slice(0, 13);
+      let start = hourly.time.findIndex(t => t.slice(0, 13) >= currentHour);
+      if (start < 0) start = 0;
+      const end = Math.min(start + PRECIP_HOURS, hourly.time.length);
+      let maxProb = 0;
+      let snow = 0;
+      for (let i = start; i < end; i++) {
+        maxProb = Math.max(maxProb, hourly.precipitation_probability[i] || 0);
+        snow += (hourly.snowfall && hourly.snowfall[i]) || 0;
+      }
+      return { prob: Math.round(maxProb), type: snow > 0 ? 'neu' : 'pluja' };
+    }
+
+    async function refreshWeather(lat, lon) {
+      const weather = await fetchWeather(lat, lon).catch(() => null);
+      if (!weather) return;
+
+      if (weather.current) {
+        document.getElementById('data-temp').textContent = `${Math.round(weather.current.temperature_2m)}°C`;
+        document.getElementById('data-humidity').textContent = `${Math.round(weather.current.relative_humidity_2m)}%`;
+        if (weather.current.apparent_temperature !== undefined) {
+          document.getElementById('data-feels').textContent = `${Math.round(weather.current.apparent_temperature)}°C`;
+        }
+      }
+
+      const precip = precipitationNextHours(weather);
+      if (precip) document.getElementById('data-precip').textContent = `${precip.prob}% ${precip.type}`;
+
+      if (weather.daily && weather.daily.sunrise && weather.daily.sunset) {
+        sunTimes = { sunrise: new Date(weather.daily.sunrise[0]), sunset: new Date(weather.daily.sunset[0]) };
+        applyTheme();
+      }
+    }
+
     async function loadInstrumentData(lat, lon) {
-      const [weather, elevation, locality] = await Promise.all([
-        fetchWeather(lat, lon).catch(() => null),
+      currentCoords = { lat, lon };
+      const [, elevation, locality] = await Promise.all([
+        refreshWeather(lat, lon),
         fetchElevation(lat, lon).catch(() => null),
         fetchLocality(lat, lon).catch(() => null)
       ]);
 
-      if (weather && weather.current) {
-        document.getElementById('data-temp').innerText = `${Math.round(weather.current.temperature_2m)}°C`;
-        document.getElementById('data-humidity').innerText = `${Math.round(weather.current.relative_humidity_2m)}%`;
-        if (weather.current.apparent_temperature !== undefined) {
-          document.getElementById('data-feels').innerText = `${Math.round(weather.current.apparent_temperature)}°C`;
-        }
-      }
-
-      if (weather && weather.daily && weather.daily.precipitation_probability_max && weather.daily.precipitation_probability_max.length) {
-        const prob = Math.round(weather.daily.precipitation_probability_max[0]);
-        const snowfall = (weather.daily.snowfall_sum && weather.daily.snowfall_sum[0]) || 0;
-        const tipus = snowfall > 0 ? 'neu' : 'pluja';
-        document.getElementById('data-precip').innerText = `${prob}% ${tipus}`;
-      }
-
       if (elevation && elevation.elevation && elevation.elevation.length) {
         const altitudeText = `${Math.round(elevation.elevation[0])} m`;
-        document.getElementById('data-altitude').innerText = altitudeText;
+        document.getElementById('data-altitude').textContent = altitudeText;
         document.getElementById('mondaine-alt-text').textContent = altitudeText;
       }
 
       if (locality) {
         const placeName = locality.city || locality.locality || locality.principalSubdivision || 'Ubicació desconeguda';
-        document.getElementById('data-location').innerText = placeName;
+        document.getElementById('data-location').textContent = placeName;
+        // Festes locals del municipi on ets (si és a Catalunya)
+        const inCatalonia = normName(locality.principalSubdivision).includes('CATALUNYA') ||
+                            normName(locality.principalSubdivision).includes('CATALONIA');
+        const town = locality.city || locality.locality;
+        if (inCatalonia && town) setHolidayMunicipality(town);
       } else {
-        document.getElementById('data-location').innerText = 'Ubicació desconeguda';
+        document.getElementById('data-location').textContent = 'Ubicació desconeguda';
       }
     }
 
@@ -1791,46 +2009,9 @@
     }
 
     initInstrumentData();
-
-    // ------------------------------------------------------------------
-    // Tema diürn / nocturn: automàtic segons l'hora, o manual amb botó
-    // ------------------------------------------------------------------
-    const THEME_STORAGE_KEY = 'tissot_theme_override'; // 'day' | 'night' | absent = automàtic
-
-    function isDaytimeNow() {
-      const h = new Date().getHours();
-      return h >= 7 && h < 20;
-    }
-
-    function applyTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      const btn = document.getElementById('theme-toggle-btn');
-      if (btn) btn.textContent = theme === 'day' ? '☀️' : '🌙';
-    }
-
-    function resolveTheme() {
-      const stored = localStorage.getItem(THEME_STORAGE_KEY);
-      if (stored === 'day' || stored === 'night') return stored;
-      return isDaytimeNow() ? 'day' : 'night';
-    }
-
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme') || 'night';
-      const next = current === 'day' ? 'night' : 'day';
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-      applyTheme(next);
-    }
-
-    document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
-
-    applyTheme(resolveTheme());
-
-    // Si no hi ha preferència manual, revisa cada 15 min si cal canviar de dia a nit o al revés
     setInterval(() => {
-      if (!localStorage.getItem(THEME_STORAGE_KEY)) {
-        applyTheme(isDaytimeNow() ? 'day' : 'night');
-      }
-    }, 15 * 60 * 1000);
+      if (currentCoords) refreshWeather(currentCoords.lat, currentCoords.lon);
+    }, WEATHER_REFRESH_MS);
   </script>
 </body>
 </html>
