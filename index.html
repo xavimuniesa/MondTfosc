@@ -14,13 +14,56 @@
       padding: 0;
     }
 
+    /* Variables de tema: nocturn (per defecte) i diürn, canviables automàticament o amb botó */
+    :root,
+    html[data-theme="night"] {
+      --bg: #0d0d0d;
+      --text: #ffffff;
+      --panel-bg: rgba(22, 22, 24, 0.85);
+      --panel-border: #2a2a2e;
+      --weekday-color: #888890;
+      --cell-color: #e0e0e0;
+      --weekend-color: #8fb4e3;
+      --month-title-color: #f0f0f0;
+      --data-item-bg: rgba(255, 255, 255, 0.03);
+      --data-item-border: #2a2a2e;
+      --data-label-color: #888890;
+      --data-value-color: #f0f0f0;
+      --data-location-color: #9a9aa2;
+      --today-btn-bg: #2a2a30;
+      --today-btn-border: #4a4a52;
+      --theme-btn-bg: #2a2a30;
+      --theme-btn-border: #4a4a52;
+    }
+
+    html[data-theme="day"] {
+      --bg: #e8edf4;
+      --text: #1b1b1f;
+      --panel-bg: rgba(255, 255, 255, 0.85);
+      --panel-border: #d3d9e2;
+      --weekday-color: #6b6f76;
+      --cell-color: #2a2a2e;
+      --weekend-color: #2f5fa0;
+      --month-title-color: #1b1b1f;
+      --data-item-bg: rgba(0, 0, 0, 0.035);
+      --data-item-border: #d3d9e2;
+      --data-label-color: #6b6f76;
+      --data-value-color: #1b1b1f;
+      --data-location-color: #5a5e66;
+      --today-btn-bg: #ffffff;
+      --today-btn-border: #c7cdd6;
+      --theme-btn-bg: #ffffff;
+      --theme-btn-border: #c7cdd6;
+    }
+
     html, body {
       width: 100%;
       min-height: 100%;
-      background: #0d0d0d;
+      background: var(--bg);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #ffffff;
+      color: var(--text);
       overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
     /* Layout Responsive amb Flexbox / CSS Container */
@@ -592,12 +635,13 @@
       width: 100%;
       max-height: calc(100dvh - 40px);
       overflow-y: auto;
-      background: rgba(22, 22, 24, 0.85);
+      background: var(--panel-bg);
       backdrop-filter: blur(10px);
-      border: 1px solid #2a2a2e;
+      border: 1px solid var(--panel-border);
       border-radius: 20px;
       padding: 22px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transition: background 0.4s ease, border-color 0.4s ease;
     }
 
     .calendar-header {
@@ -610,9 +654,47 @@
     .month-year-title {
       font-size: 1.25rem;
       font-weight: 700;
-      color: #f0f0f0;
+      color: var(--month-title-color);
       text-transform: capitalize;
       letter-spacing: 0.5px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .calendar-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .calendar-today-btn,
+    .theme-toggle-btn {
+      appearance: none;
+      border: 1px solid var(--today-btn-border);
+      background: var(--today-btn-bg);
+      color: #d7e8bc;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .theme-toggle-btn {
+      padding: 4px 8px;
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    .calendar-today-btn:hover,
+    .calendar-today-btn:active,
+    .theme-toggle-btn:hover,
+    .theme-toggle-btn:active {
+      background: #35353c;
+      border-color: #d7e8bc;
     }
 
     .calendar-grid {
@@ -625,7 +707,7 @@
     .weekday-header {
       font-size: 0.75rem;
       font-weight: 700;
-      color: #888890;
+      color: var(--weekday-color);
       padding-bottom: 8px;
       text-transform: uppercase;
     }
@@ -637,7 +719,7 @@
       align-items: center;
       font-size: 0.95rem;
       font-weight: 500;
-      color: #e0e0e0;
+      color: var(--cell-color);
       position: relative;
     }
 
@@ -647,7 +729,7 @@
 
     /* Cap de setmana: dissabtes i diumenges, un to fred discret sense cercle */
     .calendar-day-cell.weekend {
-      color: #8fb4e3;
+      color: var(--weekend-color);
       font-weight: 600;
     }
 
@@ -671,9 +753,9 @@
       transform: translate(-50%, -50%);
     }
 
-    /* Dia actual: anell daurat, independent i combinable amb festiu/cap de setmana */
+    /* Dia actual: anell del verd fosforescent, independent i combinable amb festiu/cap de setmana */
     .calendar-day-cell.today {
-      color: #ffffff;
+      color: var(--cell-color);
       font-weight: 800;
     }
 
@@ -692,7 +774,7 @@
     .data-panel {
       margin-top: 20px;
       padding-top: 16px;
-      border-top: 1px solid #2a2a2e;
+      border-top: 1px solid var(--panel-border);
     }
 
     .data-location {
@@ -701,23 +783,40 @@
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.5px;
-      color: #9a9aa2;
+      color: var(--data-location-color);
       text-transform: uppercase;
       margin-bottom: 10px;
     }
 
-    .data-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    /* Llista d'indicadors lliscable horitzontalment amb els dits (o el ratolí) */
+    .data-scroll {
+      display: flex;
       gap: 8px;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+    }
+
+    .data-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .data-scroll::-webkit-scrollbar-thumb {
+      background: var(--panel-border);
+      border-radius: 4px;
     }
 
     .data-item {
+      flex: 0 0 auto;
+      min-width: 84px;
+      scroll-snap-align: start;
       display: flex;
       flex-direction: column;
       gap: 2px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid #2a2a2e;
+      background: var(--data-item-bg);
+      border: 1px solid var(--data-item-border);
       border-radius: 10px;
       padding: 8px 10px;
     }
@@ -727,14 +826,16 @@
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      color: #888890;
+      color: var(--data-label-color);
+      white-space: nowrap;
     }
 
     .data-value {
       font-size: 1.05rem;
       font-weight: 700;
-      color: #f0f0f0;
+      color: var(--data-value-color);
       font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
     @media (max-width: 720px) {
@@ -794,7 +895,7 @@
         margin-bottom: 5px;
       }
 
-      .data-grid {
+      .data-scroll {
         gap: 5px;
       }
 
@@ -870,7 +971,7 @@
         margin-bottom: 2px;
       }
 
-      .data-grid {
+      .data-scroll {
         gap: 2px;
       }
 
@@ -958,17 +1059,17 @@
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
                 <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
                 <g id="mondaine-domaine-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">>SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">>SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -999,7 +1100,11 @@
     <!-- Secció Dreta: Calendari Mensual -->
     <div class="calendar-section">
       <div class="calendar-header">
-        <div class="month-year-title" id="month-year-title">Agost 2026</div>
+        <div class="month-year-title" id="month-year-title" title="Toca 2 cops per tornar al mes actual">Agost 2026</div>
+        <div class="calendar-header-actions">
+          <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Canvia entre tema diürn i nocturn">🌙</button>
+          <button type="button" class="calendar-today-btn" id="calendar-today-btn">Avui</button>
+        </div>
       </div>
       
       <div class="calendar-grid">
@@ -1014,17 +1119,25 @@
 
       <div class="calendar-grid" id="days-container"></div>
 
-      <!-- Panell de dades ambientals -->
+      <!-- Panell de dades ambientals: llista lliscable amb els dits -->
       <div class="data-panel">
         <span class="data-location" id="data-location">Localitzant…</span>
-        <div class="data-grid">
+        <div class="data-scroll" id="data-scroll">
           <div class="data-item">
             <span class="data-label">Temp.</span>
             <span class="data-value" id="data-temp">—</span>
           </div>
           <div class="data-item">
+            <span class="data-label">Sensació</span>
+            <span class="data-value" id="data-feels">—</span>
+          </div>
+          <div class="data-item">
             <span class="data-label">Humitat</span>
             <span class="data-value" id="data-humidity">—</span>
+          </div>
+          <div class="data-item">
+            <span class="data-label">Precip.</span>
+            <span class="data-value" id="data-precip">—</span>
           </div>
           <div class="data-item">
             <span class="data-label">Altitud</span>
@@ -1190,10 +1303,8 @@
       }
     }
 
-    // Desplaçament de mesos respecte del mes en curs (-2..+2), navegable lliscant
+    // Desplaçament de mesos respecte del mes en curs, sense límit, navegable lliscant
     let calendarMonthOffset = 0;
-    const CALENDAR_MIN_OFFSET = -2;
-    const CALENDAR_MAX_OFFSET = 2;
 
     // Renderitzar el calendari del mes seleccionat (mes en curs + calendarMonthOffset)
     async function renderCalendar() {
@@ -1250,18 +1361,26 @@
 
         daysContainer.appendChild(dayCell);
       }
+
+      // Omplim fins a 42 cel·les (6 setmanes) sempre, perquè l'alçada del
+      // calendari sigui fixa independentment de les setmanes que ocupi el mes
+      const filledCells = startingDay + lastDateOfMonth;
+      for (let i = filledCells; i < 42; i++) {
+        const trailingCell = document.createElement('div');
+        trailingCell.className = 'calendar-day-cell empty';
+        daysContainer.appendChild(trailingCell);
+      }
     }
 
-    // Canvia de mes (direction: -1 mes anterior, +1 mes següent), amb una
-    // petita transició de lliscament, i el limita a +-2 mesos respecte l'actual
-    function shiftCalendarMonth(direction) {
-      const next = calendarMonthOffset + direction;
-      if (next < CALENDAR_MIN_OFFSET || next > CALENDAR_MAX_OFFSET) return;
+    // Anima el pas d'un mes a un altre lliscant els elements del calendari
+    // (direction: -1 cap enrere, +1 cap endavant, 0 sense desplaçament lateral)
+    function animateToMonth(newOffset, direction) {
+      if (newOffset === calendarMonthOffset) return;
 
       const daysContainer = document.getElementById('days-container');
       const titleEl = document.getElementById('month-year-title');
-      const outDistance = direction > 0 ? '-14px' : '14px';
-      const inDistance = direction > 0 ? '14px' : '-14px';
+      const outDistance = direction > 0 ? '-14px' : direction < 0 ? '14px' : '0';
+      const inDistance = direction > 0 ? '14px' : direction < 0 ? '-14px' : '0';
 
       [daysContainer, titleEl].forEach(el => {
         el.style.transition = 'transform 0.16s ease, opacity 0.16s ease';
@@ -1269,7 +1388,7 @@
         el.style.opacity = '0';
       });
 
-      calendarMonthOffset = next;
+      calendarMonthOffset = newOffset;
 
       setTimeout(async () => {
         await renderCalendar();
@@ -1286,6 +1405,18 @@
           });
         });
       }, 160);
+    }
+
+    // Canvia de mes (direction: -1 mes anterior, +1 mes següent), sense límit
+    function shiftCalendarMonth(direction) {
+      animateToMonth(calendarMonthOffset + direction, direction);
+    }
+
+    // Torna directament al mes actual, des d'on sigui
+    function goToCurrentMonth() {
+      if (calendarMonthOffset === 0) return;
+      const direction = calendarMonthOffset > 0 ? -1 : 1;
+      animateToMonth(0, direction);
     }
 
     // Gestos de lliscament (tàctil i ratolí) sobre el calendari per canviar de mes
@@ -1332,6 +1463,46 @@
       swipeTarget.addEventListener('mouseup', (e) => {
         onEnd(e.clientX, e.clientY);
       });
+    })();
+
+    // Tornar al mes actual: botó "Avui" o doble toc/clic sobre el nom del mes
+    (function setupCalendarTodayControls() {
+      const todayBtn = document.getElementById('calendar-today-btn');
+      const titleEl = document.getElementById('month-year-title');
+      if (todayBtn) {
+        todayBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          goToCurrentMonth();
+        });
+      }
+      if (titleEl) {
+        // Doble clic (ratolí / trackpad)
+        titleEl.addEventListener('dblclick', (e) => {
+          e.stopPropagation();
+          goToCurrentMonth();
+        });
+
+        // Doble toc (tàctil): dos touchend consecutius en menys de 350ms i sense moviment
+        let lastTapTime = 0;
+        let lastTapX = 0;
+        let lastTapY = 0;
+        titleEl.addEventListener('touchend', (e) => {
+          const t = e.changedTouches[0];
+          const now = Date.now();
+          const dx = Math.abs(t.clientX - lastTapX);
+          const dy = Math.abs(t.clientY - lastTapY);
+          if (now - lastTapTime < 350 && dx < 25 && dy < 25) {
+            e.stopPropagation();
+            e.preventDefault();
+            goToCurrentMonth();
+            lastTapTime = 0;
+          } else {
+            lastTapTime = now;
+            lastTapX = t.clientX;
+            lastTapY = t.clientY;
+          }
+        });
+      }
     })();
 
     // ------------------------------------------------------------------
@@ -1542,7 +1713,10 @@
     const FALLBACK_COORDS = { lat: 41.3874, lon: 2.1686 };
 
     async function fetchWeather(lat, lon) {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m`;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+        `&current=temperature_2m,relative_humidity_2m,apparent_temperature` +
+        `&daily=precipitation_probability_max,snowfall_sum` +
+        `&timezone=auto`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Error de meteo');
       return res.json();
@@ -1572,6 +1746,16 @@
       if (weather && weather.current) {
         document.getElementById('data-temp').innerText = `${Math.round(weather.current.temperature_2m)}°C`;
         document.getElementById('data-humidity').innerText = `${Math.round(weather.current.relative_humidity_2m)}%`;
+        if (weather.current.apparent_temperature !== undefined) {
+          document.getElementById('data-feels').innerText = `${Math.round(weather.current.apparent_temperature)}°C`;
+        }
+      }
+
+      if (weather && weather.daily && weather.daily.precipitation_probability_max && weather.daily.precipitation_probability_max.length) {
+        const prob = Math.round(weather.daily.precipitation_probability_max[0]);
+        const snowfall = (weather.daily.snowfall_sum && weather.daily.snowfall_sum[0]) || 0;
+        const tipus = snowfall > 0 ? 'neu' : 'pluja';
+        document.getElementById('data-precip').innerText = `${prob}% ${tipus}`;
       }
 
       if (elevation && elevation.elevation && elevation.elevation.length) {
@@ -1601,6 +1785,46 @@
     }
 
     initInstrumentData();
+
+    // ------------------------------------------------------------------
+    // Tema diürn / nocturn: automàtic segons l'hora, o manual amb botó
+    // ------------------------------------------------------------------
+    const THEME_STORAGE_KEY = 'tissot_theme_override'; // 'day' | 'night' | absent = automàtic
+
+    function isDaytimeNow() {
+      const h = new Date().getHours();
+      return h >= 7 && h < 20;
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const btn = document.getElementById('theme-toggle-btn');
+      if (btn) btn.textContent = theme === 'day' ? '☀️' : '🌙';
+    }
+
+    function resolveTheme() {
+      const stored = localStorage.getItem(THEME_STORAGE_KEY);
+      if (stored === 'day' || stored === 'night') return stored;
+      return isDaytimeNow() ? 'day' : 'night';
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'night';
+      const next = current === 'day' ? 'night' : 'day';
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+      applyTheme(next);
+    }
+
+    document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+
+    applyTheme(resolveTheme());
+
+    // Si no hi ha preferència manual, revisa cada 15 min si cal canviar de dia a nit o al revés
+    setInterval(() => {
+      if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+        applyTheme(isDaytimeNow() ? 'day' : 'night');
+      }
+    }, 15 * 60 * 1000);
   </script>
 </body>
 </html>
