@@ -1430,7 +1430,13 @@
 
       const SWIPE_THRESHOLD = 40;
 
-      function onStart(x, y) {
+      function onStart(x, y, target) {
+        // La barra d'indicadors té el seu propi lliscament horitzontal natiu;
+        // no ha d'engegar mai el canvi de mes del calendari
+        if (target && target.closest && target.closest('.data-panel')) {
+          tracking = false;
+          return;
+        }
         startX = x;
         startY = y;
         tracking = true;
@@ -1447,7 +1453,7 @@
 
       swipeTarget.addEventListener('touchstart', (e) => {
         const t = e.changedTouches[0];
-        onStart(t.clientX, t.clientY);
+        onStart(t.clientX, t.clientY, e.target);
       }, { passive: true });
 
       swipeTarget.addEventListener('touchend', (e) => {
@@ -1457,7 +1463,7 @@
 
       // Suport per a ratolí (arrossegar), útil en escriptori
       swipeTarget.addEventListener('mousedown', (e) => {
-        onStart(e.clientX, e.clientY);
+        onStart(e.clientX, e.clientY, e.target);
       });
 
       swipeTarget.addEventListener('mouseup', (e) => {
