@@ -107,13 +107,13 @@
     }
 
     /* Secció Esquerra: Rellotge */
+    /* El bloc del rellotge ocupa només el que mesura el rellotge; així el
+       repartiment d'espai amb el calendari és el mateix a tots els navegadors */
     .watch-section {
-      flex: 1;
+      flex: 0 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
-      max-width: 600px;
-      width: 100%;
     }
 
     /* Embolcall que dona perspectiva 3D al gir de l'esfera */
@@ -661,7 +661,8 @@
 
     /* Secció Dreta: Calendari Mensual */
     .calendar-section {
-      flex: 1;
+      flex: 0 1 380px;
+      min-width: 0;
       max-width: 380px;
       width: 100%;
       max-height: calc(100dvh - 40px);
@@ -1016,7 +1017,10 @@
         flex-direction: row;
         align-items: center;
         padding: 10px;
-        gap: 16px;
+        /* marge per al notch i les cantonades arrodonides de l'iPhone */
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        gap: clamp(16px, 5vw, 48px);
       }
 
       .watch-container {
@@ -1025,6 +1029,8 @@
       }
 
       .calendar-section {
+        flex: 0 1 240px;
+        min-width: 200px;
         max-width: 240px;
         max-height: calc(100dvh - 16px);
         overflow-y: auto;
