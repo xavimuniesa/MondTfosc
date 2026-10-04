@@ -55,6 +55,10 @@
       --today-ring: #d7e8bc;
       --today-ring-glow: rgba(215, 232, 188, 0.75);
       --watch-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8);
+      --tip-bg: #f0f0f0;
+      --tip-text: #111114;
+      --alert: #f2b45c;
+      --rain-color: #8fb4e3;
     }
 
     html[data-theme="day"] {
@@ -80,6 +84,10 @@
       --today-ring: #7f9d48;
       --today-ring-glow: rgba(127, 157, 72, 0.45);
       --watch-shadow: 0 14px 34px rgba(30, 40, 60, 0.45), 0 0 18px rgba(30, 40, 60, 0.25);
+      --tip-bg: #1b1b1f;
+      --tip-text: #ffffff;
+      --alert: #a65a00;
+      --rain-color: #2f5fa0;
     }
 
     html, body {
@@ -691,6 +699,10 @@
       user-select: none;
     }
 
+    .month-year-title.wx-mode {
+      text-transform: none;
+    }
+
     .calendar-header-actions {
       display: flex;
       align-items: center;
@@ -832,6 +844,240 @@
       border: 2px solid var(--today-ring);
       box-shadow: 0 0 7px var(--today-ring-glow);
       pointer-events: none;
+    }
+
+    /* ------------------------------------------------------------------
+       Calendari i vista del temps al mateix espai (lliscar amunt / avall)
+       ------------------------------------------------------------------ */
+    .cal-views {
+      position: relative;
+      container-type: inline-size;
+    }
+
+    .cal-view {
+      transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+
+    .cal-views.show-weather .cal-view-calendar {
+      opacity: 0;
+      transform: translateY(calc(var(--swipe-dir, -1) * 18px));
+      pointer-events: none;
+    }
+
+    .cal-view-weather {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5cqw;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(calc(var(--swipe-dir, -1) * -18px));
+      pointer-events: none;
+    }
+
+    .cal-views.show-weather .cal-view-weather {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    /* Indicador de les dues vistes */
+    .view-dots {
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .view-dots span {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--weekday-color);
+      opacity: 0.35;
+      transition: opacity 0.3s ease, background 0.3s ease;
+    }
+
+    .view-dots span.on {
+      background: var(--accent);
+      opacity: 1;
+    }
+
+    .wx-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5cqw;
+    }
+
+    .wx-icon svg {
+      width: 24cqw;
+      height: 24cqw;
+      display: block;
+      fill: none;
+      stroke: var(--month-title-color);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .wx-icon .wx-sun { stroke: var(--accent); }
+    .wx-icon .wx-water { stroke: var(--rain-color); }
+    .wx-icon .wx-bolt { stroke: var(--alert); }
+
+    .wx-temp {
+      font-size: 20cqw;
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--month-title-color);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .wx-desc {
+      margin-top: 1.5cqw;
+      font-size: 4.4cqw;
+      font-weight: 600;
+      color: var(--weekday-color);
+    }
+
+    .wx-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4cqw 6cqw;
+      padding: 0 2cqw;
+    }
+
+    .wx-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6cqw;
+      border-left: 1px solid var(--data-item-border);
+      padding-left: 3.5cqw;
+    }
+
+    .wx-label {
+      font-size: 3.3cqw;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--data-label-color);
+    }
+
+    .wx-value {
+      font-size: 7.4cqw;
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--data-value-color);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .wx-sub {
+      font-size: 3.4cqw;
+      color: var(--weekday-color);
+      white-space: nowrap;
+    }
+
+    .wind-arrow {
+      display: inline-block;
+      width: 0.8em;
+      height: 0.8em;
+      margin-left: 0.15em;
+      vertical-align: -0.05em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .wx-alerts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2cqw;
+    }
+
+    .wx-alert {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.4cqw;
+      font-size: 3.6cqw;
+      font-weight: 700;
+      padding: 1.2cqw 3cqw;
+      border-radius: 999px;
+      border: 1px solid var(--alert);
+      color: var(--alert);
+      white-space: nowrap;
+    }
+
+    .wx-alert svg {
+      width: 1.2em;
+      height: 1.2em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .wx-alert.none {
+      border-color: var(--data-item-border);
+      color: var(--weekday-color);
+      font-weight: 600;
+    }
+
+    /* Rètol amb el nom del festiu */
+    .calendar-day-cell.holiday {
+      cursor: help;
+    }
+
+    .holiday-tip {
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      max-width: min(80vw, 280px);
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: var(--tip-bg);
+      color: var(--tip-text);
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.3;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+      pointer-events: none;
+      transform: translate(-50%, calc(-100% - 8px));
+    }
+
+    .holiday-tip::after {
+      content: '';
+      position: absolute;
+      left: var(--arrow-x, 50%);
+      top: 100%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--tip-bg);
+    }
+
+    .holiday-tip.below {
+      transform: translate(-50%, 8px);
+    }
+
+    .holiday-tip.below::after {
+      top: auto;
+      bottom: 100%;
+      border-top-color: transparent;
+      border-bottom-color: var(--tip-bg);
     }
 
     /* Panell instrumental de dades ambientals */
@@ -1164,17 +1410,17 @@
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
                 <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
                 <g id="mondaine-domaine-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -1215,17 +1461,57 @@
         </div>
       </div>
       
-      <div class="calendar-grid">
-        <div class="weekday-header">Dl</div>
-        <div class="weekday-header">Dt</div>
-        <div class="weekday-header">Dc</div>
-        <div class="weekday-header">Dj</div>
-        <div class="weekday-header">Dv</div>
-        <div class="weekday-header">Ds</div>
-        <div class="weekday-header">Dg</div>
-      </div>
+      <!-- El calendari i la vista del temps comparteixen el mateix espai:
+           lliscant amunt o avall es passa d'una a l'altra -->
+      <div class="cal-views" id="cal-views">
+        <div class="cal-view cal-view-calendar" id="view-calendar">
+          <div class="calendar-grid">
+            <div class="weekday-header">Dl</div>
+            <div class="weekday-header">Dt</div>
+            <div class="weekday-header">Dc</div>
+            <div class="weekday-header">Dj</div>
+            <div class="weekday-header">Dv</div>
+            <div class="weekday-header">Ds</div>
+            <div class="weekday-header">Dg</div>
+          </div>
 
-      <div class="calendar-grid" id="days-container"></div>
+          <div class="calendar-grid" id="days-container"></div>
+        </div>
+
+        <div class="cal-view cal-view-weather" id="view-weather" aria-hidden="true">
+          <div class="wx-main">
+            <div class="wx-icon" id="wx-icon"></div>
+            <div class="wx-temp-block">
+              <div class="wx-temp" id="wx-temp">—</div>
+              <div class="wx-desc" id="wx-desc">Carregant el temps…</div>
+            </div>
+          </div>
+          <div class="wx-grid">
+            <div class="wx-item">
+              <span class="wx-label">Sensació</span>
+              <span class="wx-value" id="wx-feels">—</span>
+            </div>
+            <div class="wx-item">
+              <span class="wx-label">Humitat</span>
+              <span class="wx-value" id="wx-humidity">—</span>
+            </div>
+            <div class="wx-item">
+              <span class="wx-label">Vent</span>
+              <span class="wx-value" id="wx-wind">—</span>
+              <span class="wx-sub" id="wx-gusts"></span>
+            </div>
+            <div class="wx-item">
+              <span class="wx-label">Altitud</span>
+              <span class="wx-value" id="wx-altitude">—</span>
+            </div>
+          </div>
+          <div class="wx-alerts" id="wx-alerts"></div>
+        </div>
+
+        <div class="view-dots" id="view-dots" title="Llisca amunt o avall per veure el temps">
+          <span class="on"></span><span></span>
+        </div>
+      </div>
 
       <!-- Panell de dades ambientals: llista lliscable amb els dits -->
       <div class="data-panel">
@@ -1255,6 +1541,8 @@
       </div>
     </div>
   </div>
+
+  <div class="holiday-tip" id="holiday-tip" role="tooltip" hidden></div>
 
   <script>
     // Generació del Bisel Negre
@@ -1353,13 +1641,13 @@
     //     partir de regles fixes i de la data de Pasqua, i es reintenta
     //     al cap d'una hora.
     // ------------------------------------------------------------------
-    const HOLIDAYS_CACHE_KEY = 'tissot_holidays_cache_v2';
+    const HOLIDAYS_CACHE_KEY = 'tissot_holidays_cache_v3';
     const HOLIDAYS_TTL_MS = 24 * 60 * 60 * 1000;   // dades de l'API: refresc diari
     const HOLIDAYS_RETRY_MS = 60 * 60 * 1000;      // reserva local: reintent cada hora
     const DEFAULT_MUNICIPALITY = 'Barcelona';
 
     let holidayMunicipality = DEFAULT_MUNICIPALITY;
-    const holidayMemory = new Map();   // "any|MUNICIPI" -> Set de dates ISO
+    const holidayMemory = new Map();   // "any|MUNICIPI" -> { dates, local, localMuni }
     const holidayPending = new Map();  // "any|MUNICIPI" -> Promise en curs
 
     function holidayKey(year, muni) { return `${year}|${normName(muni)}`; }
@@ -1420,18 +1708,30 @@
       return `https://analisi.transparenciacatalunya.cat/resource/b4eh-r8up.json?any_calendari=${year}&$where=${encodeURIComponent(where)}`;
     }
 
-    // Retorna immediatament el millor conjunt disponible (memòria, caché o càlcul local)
-    function getHolidaysSync(year) {
+    // Informació de festius d'un any: dates, quines són festes locals i de quin municipi
+    function makeHolidayInfo(dates, local, localMuni) {
+      return { dates: new Set(dates), local: new Set(local || []), localMuni: localMuni || holidayMunicipality };
+    }
+
+    function localFallbackInfo(year, muni) {
+      const local = localMunicipalFallback(year, muni);
+      return makeHolidayInfo(computeLocalHolidays(year, muni), local, local.length ? DEFAULT_MUNICIPALITY : muni);
+    }
+
+    // Retorna immediatament la millor informació disponible (memòria, caché o càlcul local)
+    function getHolidayInfoSync(year) {
       const key = holidayKey(year, holidayMunicipality);
       if (holidayMemory.has(key)) return holidayMemory.get(key);
       const cached = readHolidayCache()[key];
       if (cached) {
-        const set = new Set(cached.dates);
-        holidayMemory.set(key, set);
-        return set;
+        const info = makeHolidayInfo(cached.dates, cached.local, cached.localMuni);
+        holidayMemory.set(key, info);
+        return info;
       }
-      return computeLocalHolidays(year, holidayMunicipality);
+      return localFallbackInfo(year, holidayMunicipality);
     }
+
+    function getHolidaysSync(year) { return getHolidayInfoSync(year).dates; }
 
     function loadHolidays(year) {
       const muni = holidayMunicipality;
@@ -1439,14 +1739,14 @@
       const cache = readHolidayCache();
       const entry = cache[key];
       if (entry && entry.expiresAt > Date.now()) {
-        const set = new Set(entry.dates);
-        holidayMemory.set(key, set);
-        return Promise.resolve(set);
+        const info = makeHolidayInfo(entry.dates, entry.local, entry.localMuni);
+        holidayMemory.set(key, info);
+        return Promise.resolve(info);
       }
       if (holidayPending.has(key)) return holidayPending.get(key);
 
       const promise = (async () => {
-        let dates;
+        let info;
         let ttl = HOLIDAYS_TTL_MS;
         try {
           const regionalUrl = `https://analisi.transparenciacatalunya.cat/resource/yf2b-mjr6.json?any_calendari=${year}`;
@@ -1455,30 +1755,75 @@
             fetchJsonArray(localHolidaysUrl(year, muni))
           ]);
           if (regional.length === 0) throw new Error(`Calendari ${year} encara no publicat`);
-          dates = new Set();
+          const dates = new Set();
           regional.forEach(r => { if (r.data) dates.add(r.data.slice(0, 10)); });
           let localRows = local;
+          let localMuni = muni;
           // Si el nom del municipi no coincideix amb el de les dades obertes, fem servir Barcelona
           if (localRows.length === 0 && normName(muni) !== normName(DEFAULT_MUNICIPALITY)) {
             localRows = await fetchJsonArray(localHolidaysUrl(year, DEFAULT_MUNICIPALITY));
+            localMuni = DEFAULT_MUNICIPALITY;
           }
-          localRows.forEach(r => { if (r.data) dates.add(r.data.slice(0, 10)); });
-          if (localRows.length === 0) localMunicipalFallback(year, muni).forEach(iso => dates.add(iso));
+          let localDates = localRows.filter(r => r.data).map(r => r.data.slice(0, 10));
+          if (localDates.length === 0) {
+            localDates = localMunicipalFallback(year, localMuni);
+          }
+          localDates.forEach(iso => dates.add(iso));
+          info = makeHolidayInfo(dates, localDates, localMuni);
         } catch (err) {
           console.warn(`Festius ${year}: es fa servir el càlcul local (${err.message})`);
-          dates = entry ? new Set(entry.dates) : computeLocalHolidays(year, muni);
+          info = entry ? makeHolidayInfo(entry.dates, entry.local, entry.localMuni) : localFallbackInfo(year, muni);
           ttl = HOLIDAYS_RETRY_MS;
         }
         const fresh = readHolidayCache();
-        fresh[key] = { dates: Array.from(dates), expiresAt: Date.now() + ttl };
+        fresh[key] = {
+          dates: Array.from(info.dates), local: Array.from(info.local), localMuni: info.localMuni,
+          expiresAt: Date.now() + ttl
+        };
         writeHolidayCache(fresh);
-        holidayMemory.set(key, dates);
-        return dates;
+        holidayMemory.set(key, info);
+        return info;
       })();
 
       holidayPending.set(key, promise);
       promise.finally(() => holidayPending.delete(key));
       return promise;
+    }
+
+    // Noms de les festivitats. Les dades obertes només diuen quins dies són
+    // festius, no el nom, així que el nom surt d'aquesta taula.
+    const FIXED_HOLIDAY_NAMES = {
+      '01-01': "Cap d'Any",
+      '01-06': 'Reis',
+      '05-01': 'Festa del Treball',
+      '06-24': 'Sant Joan',
+      '08-15': "L'Assumpció",
+      '09-11': 'Diada Nacional de Catalunya',
+      '10-12': "Festa Nacional d'Espanya",
+      '11-01': 'Tots Sants',
+      '12-06': 'Dia de la Constitució',
+      '12-08': 'La Immaculada',
+      '12-25': 'Nadal',
+      '12-26': 'Sant Esteve'
+    };
+    const LOCAL_HOLIDAY_NAMES = {
+      'BARCELONA': { '09-24': 'La Mercè' }
+    };
+
+    function holidayName(iso, info) {
+      const year = Number(iso.slice(0, 4));
+      const mmdd = iso.slice(5);
+      const easter = easterSunday(year);
+      const easterNames = {
+        [isoOf(addDays(easter, -2))]: 'Divendres Sant',
+        [isoOf(addDays(easter, 1))]: 'Dilluns de Pasqua Florida',
+        [isoOf(addDays(easter, 50))]: 'Dilluns de Pasqua Granada'
+      };
+      const name = easterNames[iso] || FIXED_HOLIDAY_NAMES[mmdd] ||
+        (LOCAL_HOLIDAY_NAMES[normName(info.localMuni)] || {})[mmdd];
+      const isLocal = info.local.has(iso);
+      if (!name) return isLocal ? `Festa local de ${info.localMuni}` : 'Festiu oficial';
+      return isLocal ? `${name} · festa local de ${info.localMuni}` : name;
     }
 
     // Canvia el municipi dels festius locals (segons la geolocalització)
@@ -1565,6 +1910,8 @@
     // ------------------------------------------------------------------
     let calendarMonthOffset = 0;
     let calendarRenderToken = 0;
+    let calendarTitleText = '';
+    let weatherViewActive = false;
     const monthNames = [
       'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny',
       'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'
@@ -1588,8 +1935,9 @@
       const month = target.getMonth();
       const isCurrentMonth = year === real.getFullYear() && month === real.getMonth();
 
-      const holidays = await loadHolidays(year);
+      const holidayInfo = await loadHolidays(year);
       if (token !== calendarRenderToken) return;
+      hideHolidayTip();
 
       const frag = document.createDocumentFragment();
       let startingDay = new Date(year, month, 1).getDay() - 1;
@@ -1606,7 +1954,13 @@
         const cell = makeDayCell(day);
         const dow = new Date(year, month, day).getDay();
         if (dow === 0 || dow === 6) cell.classList.add('weekend');
-        if (holidays.has(`${year}-${pad2(month + 1)}-${pad2(day)}`)) cell.classList.add('holiday');
+        const iso = `${year}-${pad2(month + 1)}-${pad2(day)}`;
+        if (holidayInfo.dates.has(iso)) {
+          const name = holidayName(iso, holidayInfo);
+          cell.classList.add('holiday');
+          cell.dataset.holiday = name;
+          cell.setAttribute('aria-label', `${day}: ${name}`);
+        }
         if (isCurrentMonth && day === real.getDate()) cell.classList.add('today');
         frag.appendChild(cell);
       }
@@ -1616,9 +1970,210 @@
         frag.appendChild(makeDayCell(next, 'other-month'));
       }
 
-      document.getElementById('month-year-title').textContent = `${monthNames[month]} ${year}`;
+      calendarTitleText = `${monthNames[month]} ${year}`;
+      if (!weatherViewActive) document.getElementById('month-year-title').textContent = calendarTitleText;
       document.getElementById('days-container').replaceChildren(frag);
     }
+
+    // ------------------------------------------------------------------
+    // Rètol amb el nom del festiu: en passar-hi per damunt amb el ratolí
+    // o tocant la casella al mòbil (desapareix sol al cap d'uns segons).
+    // ------------------------------------------------------------------
+    const holidayTip = document.getElementById('holiday-tip');
+    let holidayTipTimer = null;
+
+    function hideHolidayTip() {
+      clearTimeout(holidayTipTimer);
+      if (holidayTip) holidayTip.hidden = true;
+    }
+
+    function showHolidayTip(cell, autoHideMs) {
+      clearTimeout(holidayTipTimer);
+      holidayTip.textContent = cell.dataset.holiday;
+      holidayTip.hidden = false;
+      const r = cell.getBoundingClientRect();
+      const tipW = holidayTip.offsetWidth;
+      const tipH = holidayTip.offsetHeight;
+      const centerX = r.left + r.width / 2;
+      const x = Math.min(Math.max(centerX, tipW / 2 + 6), window.innerWidth - tipW / 2 - 6);
+      const below = r.top < tipH + 14;
+      holidayTip.classList.toggle('below', below);
+      holidayTip.style.left = `${x}px`;
+      holidayTip.style.top = `${below ? r.bottom : r.top}px`;
+      holidayTip.style.setProperty('--arrow-x', `${tipW / 2 + (centerX - x)}px`);
+      if (autoHideMs) holidayTipTimer = setTimeout(hideHolidayTip, autoHideMs);
+    }
+
+    (function setupHolidayTips() {
+      const days = document.getElementById('days-container');
+      days.addEventListener('mouseover', (e) => {
+        const cell = e.target.closest('.holiday');
+        if (cell) showHolidayTip(cell);
+      });
+      days.addEventListener('mouseout', (e) => {
+        const cell = e.target.closest('.holiday');
+        if (cell && !cell.contains(e.relatedTarget)) hideHolidayTip();
+      });
+      days.addEventListener('click', (e) => {
+        const cell = e.target.closest('.holiday');
+        if (cell) showHolidayTip(cell, 2800);
+      });
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.holiday')) hideHolidayTip();
+      });
+      window.addEventListener('resize', hideHolidayTip);
+    })();
+
+    // ------------------------------------------------------------------
+    // Vista del temps (lliscar el calendari amunt o avall)
+    // ------------------------------------------------------------------
+    const WEATHER_TITLE = 'El temps ara';
+    const ALERT_HOURS = 12;
+
+    const WMO_DESCRIPTIONS = {
+      0: 'Cel serè', 1: 'Gairebé serè', 2: 'Parcialment ennuvolat', 3: 'Cobert',
+      45: 'Boira', 48: 'Boira gebradora',
+      51: 'Plugim feble', 53: 'Plugim', 55: 'Plugim intens', 56: 'Plugim gelat', 57: 'Plugim gelat intens',
+      61: 'Pluja feble', 63: 'Pluja', 65: 'Pluja intensa', 66: 'Pluja gelant', 67: 'Pluja gelant intensa',
+      71: 'Neu feble', 73: 'Neu', 75: 'Neu intensa', 77: 'Grans de neu',
+      80: 'Ruixats febles', 81: 'Ruixats', 82: 'Ruixats molt intensos',
+      85: 'Ruixats de neu', 86: 'Ruixats de neu intensos',
+      95: 'Tempesta', 96: 'Tempesta amb calamarsa', 99: 'Tempesta amb calamarsa forta'
+    };
+
+    // Icones de línia fina, en el mateix estil que el sol i la lluna del botó de tema
+    const WX_CLOUD = 'M7 17.5h10a3.6 3.6 0 0 0 .3-7.2 5.2 5.2 0 0 0-10 1.3A3 3 0 0 0 7 17.5z';
+    const WX_SUN_FULL = '<g class="wx-sun"><circle cx="12" cy="12" r="4.2"/>' +
+      '<path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.55 1.55M17.15 17.15l1.55 1.55M5.3 18.7l1.55-1.55M17.15 6.85l1.55-1.55"/></g>';
+    const WX_MOON_FULL = '<path class="wx-sun" d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/>';
+    const WX_SUN_SMALL = '<g class="wx-sun"><circle cx="8.5" cy="8" r="3"/>' +
+      '<path d="M8.5 2.3v1.3M2.8 8h1.3M4.5 4l.95.95M12.5 4l-.95.95M4.5 12l.95-.95"/></g>';
+    const WX_MOON_SMALL = '<path class="wx-sun" d="M12.3 9.6A5 5 0 0 1 6.1 3.4a5 5 0 1 0 6.2 6.2z"/>';
+
+    function cloudPath(dx, dy, filled) {
+      const fill = filled ? ' style="fill: var(--bg)"' : '';
+      return `<path transform="translate(${dx} ${dy})" d="${WX_CLOUD}"${fill}/>`;
+    }
+
+    function weatherIconSvg(code, isDay) {
+      let body;
+      if (code === 0) body = isDay ? WX_SUN_FULL : WX_MOON_FULL;
+      else if (code === 1 || code === 2) body = (isDay ? WX_SUN_SMALL : WX_MOON_SMALL) + cloudPath(1.5, 2.5, true);
+      else if (code === 3) body = cloudPath(0, 0);
+      else if (code === 45 || code === 48) body = '<path d="M4 8.5h16M6 12.5h12M4 16.5h16" />';
+      else if (code >= 51 && code <= 57) body = cloudPath(0, -3) + '<path class="wx-water" d="M8.5 18.5v1M12 19.5v1M15.5 18.5v1"/>';
+      else if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) body = cloudPath(0, -3) + '<path class="wx-water" d="M8.5 17.5l-1 3M12 18l-1 3M15.5 17.5l-1 3"/>';
+      else if ((code >= 71 && code <= 77) || code === 85 || code === 86) body = cloudPath(0, -3) +
+        '<path class="wx-water" d="M8 17.5v3M6.7 19h2.6M12 18.5v3M10.7 20h2.6M16 17.5v3M14.7 19h2.6"/>';
+      else if (code >= 95) body = cloudPath(0, -3) + '<path class="wx-bolt" d="M12.8 15.5l-2.3 3.5h3l-2.3 3.5"/>';
+      else body = cloudPath(0, 0);
+      return `<svg viewBox="0 0 24 24" aria-hidden="true">${body}</svg>`;
+    }
+
+    const ALERT_ICONS = {
+      rain: '<svg viewBox="0 0 24 24"><path d="M7 14.5h10a3.6 3.6 0 0 0 .3-7.2 5.2 5.2 0 0 0-10 1.3A3 3 0 0 0 7 14.5z"/><path d="M8.5 17.5l-1 3M12 18l-1 3M15.5 17.5l-1 3"/></svg>',
+      storm: '<svg viewBox="0 0 24 24"><path d="M7 14.5h10a3.6 3.6 0 0 0 .3-7.2 5.2 5.2 0 0 0-10 1.3A3 3 0 0 0 7 14.5z"/><path d="M12.8 15.5l-2.3 3.5h3l-2.3 3.5"/></svg>',
+      snow: '<svg viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>',
+      wind: '<svg viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3M3 12h8"/></svg>',
+      fog: '<svg viewBox="0 0 24 24"><path d="M4 8.5h16M6 12.5h12M4 16.5h16"/></svg>'
+    };
+
+    const WIND_DIRS = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
+    function windCardinal(deg) { return WIND_DIRS[Math.round(((deg % 360) + 360) % 360 / 45) % 8]; }
+
+    // Avisos calculats a partir de la previsió horària de les properes hores
+    // (no són els avisos oficials de Meteocat o AEMET)
+    function computeAlerts(weather) {
+      const h = weather.hourly;
+      if (!h || !h.time) return [];
+      const currentHour = (weather.current && weather.current.time ? weather.current.time : '').slice(0, 13);
+      let start = h.time.findIndex(t => t.slice(0, 13) >= currentHour);
+      if (start < 0) start = 0;
+      const end = Math.min(start + ALERT_HOURS, h.time.length);
+      const at = (i) => (i === start ? 'ara' : `a les ${Number(h.time[i].slice(11, 13))} h`);
+      const val = (arr, i) => (arr && arr[i] != null ? arr[i] : null);
+      const found = {};
+      for (let i = start; i < end; i++) {
+        const code = val(h.weather_code, i);
+        const precip = val(h.precipitation, i) || 0;
+        const snow = val(h.snowfall, i) || 0;
+        const gust = val(h.wind_gusts_10m, i) || 0;
+        const vis = val(h.visibility, i);
+        if (!found.storm && code >= 95) found.storm = { text: 'Tempesta', when: at(i) };
+        if (!found.rain && (precip >= 10 || code === 65 || code === 82)) found.rain = { text: 'Pluja intensa', when: at(i) };
+        if (!found.snow && (snow > 0 || (code >= 71 && code <= 77) || code === 85 || code === 86)) found.snow = { text: 'Neu', when: at(i) };
+        if (gust >= 60) {
+          if (!found.wind) found.wind = { text: 'Vent fort', when: at(i), max: gust };
+          else found.wind.max = Math.max(found.wind.max, gust);
+        }
+        if (!found.fog && (code === 45 || code === 48 || (vis != null && vis < 1000))) found.fog = { text: 'Boira', when: at(i) };
+      }
+      if (found.wind) found.wind.text = `Ratxes de ${Math.round(found.wind.max)} km/h`;
+      return ['storm', 'rain', 'snow', 'wind', 'fog'].filter(k => found[k]).map(k => ({ type: k, ...found[k] }));
+    }
+
+    function renderWeatherView(weather) {
+      const c = weather.current;
+      if (!c) return;
+      const code = c.weather_code != null ? c.weather_code : 3;
+      const isDay = c.is_day != null ? c.is_day === 1 : autoTheme() === 'day';
+      document.getElementById('wx-icon').innerHTML = weatherIconSvg(code, isDay);
+      document.getElementById('wx-temp').textContent = `${Math.round(c.temperature_2m)}°`;
+      document.getElementById('wx-desc').textContent = WMO_DESCRIPTIONS[code] || '';
+      document.getElementById('wx-feels').textContent = `${Math.round(c.apparent_temperature)}°C`;
+      document.getElementById('wx-humidity').textContent = `${Math.round(c.relative_humidity_2m)}%`;
+
+      if (c.wind_speed_10m != null) {
+        const dir = c.wind_direction_10m || 0;
+        const arrow = `<svg class="wind-arrow" viewBox="0 0 24 24" style="transform: rotate(${dir + 180}deg)" aria-hidden="true"><path d="M12 20V4M6 10l6-6 6 6"/></svg>`;
+        document.getElementById('wx-wind').innerHTML = `${Math.round(c.wind_speed_10m)} <small>km/h</small>`;
+        document.getElementById('wx-gusts').innerHTML =
+          `${windCardinal(dir)}${arrow}` + (c.wind_gusts_10m != null ? ` · ratxes ${Math.round(c.wind_gusts_10m)}` : '');
+      }
+
+      const alerts = computeAlerts(weather);
+      const box = document.getElementById('wx-alerts');
+      box.innerHTML = alerts.length
+        ? alerts.map(a => `<span class="wx-alert">${ALERT_ICONS[a.type]}${a.text} · ${a.when}</span>`).join('')
+        : `<span class="wx-alert none">Sense avisos les properes ${ALERT_HOURS} h</span>`;
+    }
+
+    function setWeatherView(active, swipeDir) {
+      if (active === weatherViewActive) return;
+      weatherViewActive = active;
+      hideHolidayTip();
+      const views = document.getElementById('cal-views');
+      views.style.setProperty('--swipe-dir', swipeDir === 'down' ? 1 : -1);
+      views.classList.toggle('show-weather', active);
+      document.getElementById('view-weather').setAttribute('aria-hidden', String(!active));
+      document.getElementById('view-calendar').setAttribute('aria-hidden', String(active));
+      const dots = document.querySelectorAll('#view-dots span');
+      dots[0].classList.toggle('on', !active);
+      dots[1].classList.toggle('on', active);
+      const titleEl = document.getElementById('month-year-title');
+      titleEl.textContent = active ? WEATHER_TITLE : calendarTitleText;
+      titleEl.classList.toggle('wx-mode', active);
+    }
+
+    function toggleWeatherView(swipeDir) { setWeatherView(!weatherViewActive, swipeDir); }
+
+    (function setupWeatherViewControls() {
+      document.getElementById('view-dots').addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleWeatherView('up');
+      });
+      // Roda del ratolí o trackpad sobre el calendari
+      let wheelLock = 0;
+      document.getElementById('cal-views').addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaY) < 25 || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+        e.preventDefault();
+        const now = Date.now();
+        if (now < wheelLock) return;
+        wheelLock = now + 700;
+        if (e.deltaY > 0 && !weatherViewActive) setWeatherView(true, 'up');
+        else if (e.deltaY < 0 && weatherViewActive) setWeatherView(false, 'down');
+      }, { passive: false });
+    })();
 
     // Anima el pas d'un mes a un altre lliscant els elements del calendari
     // (direction: -1 cap enrere, +1 cap endavant, 0 sense desplaçament lateral)
@@ -1662,6 +2217,7 @@
 
     // Torna directament al mes actual, des d'on sigui
     function goToCurrentMonth() {
+      setWeatherView(false, 'down');
       if (calendarMonthOffset === 0) return;
       const direction = calendarMonthOffset > 0 ? -1 : 1;
       animateToMonth(0, direction);
@@ -1695,7 +2251,13 @@
         tracking = false;
         const deltaX = x - startX;
         const deltaY = y - startY;
-        if (Math.abs(deltaX) < SWIPE_THRESHOLD || Math.abs(deltaX) < Math.abs(deltaY)) return;
+        // Vertical: alterna entre el calendari i la vista del temps
+        if (Math.abs(deltaY) >= SWIPE_THRESHOLD && Math.abs(deltaY) > Math.abs(deltaX)) {
+          toggleWeatherView(deltaY < 0 ? 'up' : 'down');
+          return;
+        }
+        // Horitzontal: canvia de mes (només a la vista del calendari)
+        if (Math.abs(deltaX) < SWIPE_THRESHOLD || weatherViewActive) return;
         shiftCalendarMonth(deltaX < 0 ? 1 : -1);
       }
 
@@ -1941,8 +2503,8 @@
 
     async function fetchWeather(lat, lon) {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-        `&current=temperature_2m,relative_humidity_2m,apparent_temperature` +
-        `&hourly=precipitation_probability,snowfall` +
+        `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
+        `&hourly=precipitation_probability,precipitation,snowfall,weather_code,wind_gusts_10m,visibility` +
         `&daily=sunrise,sunset` +
         `&forecast_days=2&timezone=auto`;
       const res = await fetch(url);
@@ -1994,6 +2556,8 @@
         }
       }
 
+      renderWeatherView(weather);
+
       const precip = precipitationNextHours(weather);
       if (precip) document.getElementById('data-precip').textContent = `${precip.prob}% ${precip.type}`;
 
@@ -2014,6 +2578,7 @@
       if (elevation && elevation.elevation && elevation.elevation.length) {
         const altitudeText = `${Math.round(elevation.elevation[0])} m`;
         document.getElementById('data-altitude').textContent = altitudeText;
+        document.getElementById('wx-altitude').textContent = altitudeText;
         document.getElementById('mondaine-alt-text').textContent = altitudeText;
       }
 
