@@ -751,9 +751,9 @@
 
     /* Secció Dreta: Calendari Mensual */
     .calendar-section {
-      flex: 0 1 380px;
+      flex: 0 1 440px;
       min-width: 0;
-      max-width: 380px;
+      max-width: 440px;
       width: 100%;
       /* Sense desplaçament intern: si no hi cap, s'encongeix (vegeu fitCalendar) */
       overflow: hidden;
@@ -938,8 +938,18 @@
     .cal-views {
       position: relative;
       container-type: inline-size;
-      /* El dit no desplaça res aquí: els gestos (mes / vista del temps) són propis */
+    }
+
+    /* Al calendari el dit no desplaça res: els gestos (mes / finestres) són propis */
+    .cal-view-calendar,
+    .view-dots {
       touch-action: none;
+    }
+
+    /* A les finestres el contingut es desplaça amunt i avall com una cinta;
+       el gest de costat (canviar de finestra) és propi */
+    .cal-view-fin {
+      touch-action: pan-y;
     }
 
     .calendar-header {
@@ -983,16 +993,32 @@
       flex: 0 0 100%;
       width: 100%;
       height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
       display: flex;
       flex-direction: column;
-      padding: 2px 4px 16px;
+      padding: 2px 4px 18px;
+      /* el final de la cinta s'esvaeix sota els punts */
+      -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 16px), transparent);
+      mask-image: linear-gradient(to bottom, #000 calc(100% - 16px), transparent);
     }
+
+    .fin-pag::-webkit-scrollbar { display: none; }
+
+    /* El temps i l'aire: centrats si hi caben, i desplaçables si no (sense tallar la part de dalt) */
+    .fin-temps > :first-child,
+    .fin-aire > :first-child,
+    .fin-ubicacio > :first-child { margin-top: auto; }
+    .fin-temps > :last-child,
+    .fin-aire > :last-child,
+    .fin-ubicacio > :last-child { margin-bottom: auto; }
 
     .fin-pag[hidden] { display: none; }
 
     .fin-temps {
-      justify-content: center;
       gap: 3.6cqw;
     }
 
@@ -1023,9 +1049,55 @@
       opacity: 1;
     }
 
+    /* Ubicació: població ben gran, comunitat autònoma o país, altitud */
+    .fin-ubicacio {
+      text-align: center;
+      gap: 3cqw;
+    }
+
+    .ub-poblacio {
+      font-size: 12cqw;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+      color: var(--month-title-color);
+      white-space: nowrap;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    .ub-regio {
+      font-size: 5.4cqw;
+      font-weight: 700;
+      color: var(--weekday-color);
+      min-height: 1.2em;
+    }
+
+    .ub-dades {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5cqw;
+      margin-top: 3cqw;
+      text-align: left;
+      padding: 0 8cqw;
+    }
+
+    .ub-dades .wx-value { font-size: 8cqw; }
+    .ub-dades .ub-coord { font-size: 4.6cqw; font-weight: 600; white-space: normal; }
+
+    /* Fila prima de "ara sona" (només visible mentre sona alguna cosa) */
+    .ara-sona-fila {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .ara-sona-fila[hidden] { display: none; }
+
+    .ara-sona-fila .ara-sona { max-width: 100%; }
+
     /* Qualitat de l'aire */
     .fin-aire {
-      justify-content: center;
       gap: 4.5cqw;
     }
 
@@ -1148,19 +1220,12 @@
     }
 
     .fin-noticies .noticies {
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
+      flex: none;
     }
 
     .fin-pag .llista-prog {
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
+      flex: none;
     }
-
-    .noticia.no-cap,
-    .prog-fila.no-cap { display: none; }
 
     /* A les finestres les ràdios ocupen tot l'espai disponible */
     .fin-pag .radios {
@@ -1867,7 +1932,7 @@
       .calendar-section {
         flex: 0 1 auto;
         padding: 12px 14px;
-        max-width: 260px;
+        max-width: 400px;
       }
 
       .calendar-header {
@@ -1883,12 +1948,12 @@
       }
 
       .weekday-header {
-        font-size: 0.58rem;
+        font-size: 0.68rem;
         padding-bottom: 3px;
       }
 
       .calendar-day-cell {
-        font-size: 0.88rem;
+        font-size: 1rem;
       }
 
       .calendar-day-cell.holiday::before {
@@ -1975,7 +2040,7 @@
 
       .calendar-section {
         flex: 0 1 auto;
-        max-width: 440px;
+        max-width: 480px;
       }
     }
 
@@ -1998,9 +2063,9 @@
       }
 
       .calendar-section {
-        flex: 0 1 240px;
-        min-width: 200px;
-        max-width: 240px;
+        flex: 0 1 320px;
+        min-width: 240px;
+        max-width: 320px;
         padding: 8px 12px;
         display: flex;
         flex-direction: column;
@@ -2227,17 +2292,17 @@
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
                 <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
                 <g id="mondaine-domaine-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -2304,6 +2369,15 @@
               <div class="avisos-llista" id="avisos-llista"></div>
             </section>
 
+            <section class="fin-pag fin-ubicacio" data-nom="Ubicació">
+              <div class="ub-poblacio" id="data-location">Localitzant…</div>
+              <div class="ub-regio" id="ub-regio"></div>
+              <div class="ub-dades">
+                <div class="wx-item"><span class="wx-label">Altitud</span><span class="wx-value" id="wx-altitude">—</span></div>
+                <div class="wx-item"><span class="wx-label">Coordenades</span><span class="wx-value ub-coord" id="ub-coord">—</span></div>
+              </div>
+            </section>
+
             <section class="fin-pag fin-temps" data-nom="El temps">
               <div class="wx-main">
                 <div class="wx-icon" id="wx-icon"></div>
@@ -2327,8 +2401,8 @@
                   <span class="wx-sub" id="wx-gusts"></span>
                 </div>
                 <div class="wx-item">
-                  <span class="wx-label">Altitud</span>
-                  <span class="wx-value" id="wx-altitude">—</span>
+                  <span class="wx-label">Pluja 6 h</span>
+                  <span class="wx-value" id="wx-precip">—</span>
                 </div>
               </div>
               <div class="wx-alerts" id="wx-alerts"></div>
@@ -2389,14 +2463,11 @@
         </div>
       </div>
 
-      <!-- Sota el calendari només hi queda la població -->
-      <div class="data-panel">
-        <div class="visor-head">
-          <span class="data-location" id="data-location">Localitzant…</span>
-          <button type="button" class="ara-sona" id="ara-sona" hidden aria-label="Pausar o reprendre">
-            <span class="ara-sona-ic" id="ara-sona-ic"></span><span class="ara-sona-tx" id="ara-sona-tx"></span>
-          </button>
-        </div>
+      <!-- Fila prima que només apareix quan sona una ràdio o un podcast -->
+      <div class="ara-sona-fila" id="ara-sona-fila" hidden>
+        <button type="button" class="ara-sona" id="ara-sona" aria-label="Pausar o reprendre">
+          <span class="ara-sona-ic" id="ara-sona-ic"></span><span class="ara-sona-tx" id="ara-sona-tx"></span>
+        </button>
       </div>
     </div>
   </div>
@@ -3025,6 +3096,10 @@
       document.getElementById('wx-desc').textContent = WMO_DESCRIPTIONS[code] || '';
       document.getElementById('wx-feels').textContent = `${Math.round(c.apparent_temperature)}°C`;
       document.getElementById('wx-humidity').textContent = `${Math.round(c.relative_humidity_2m)}%`;
+      const precip = precipitationNextHours(weather);
+      if (precip) {
+        document.getElementById('wx-precip').innerHTML = `${precip.prob}% <small>${precip.type}</small>`;
+      }
 
       if (c.wind_speed_10m != null) {
         const dir = c.wind_direction_10m || 0;
@@ -3056,8 +3131,15 @@
       dots[1].classList.toggle('on', active);
       const titleEl = document.getElementById('month-year-title');
       titleEl.classList.toggle('wx-mode', active);
-      if (active) updateFinTitle();
-      else titleEl.textContent = calendarTitleText;
+      if (active) {
+        // Com a l'índex: s'obre sempre per la primera finestra, amb les cintes al principi
+        document.querySelectorAll('.fin-pag').forEach(page => { page.scrollTop = 0; });
+        goToFinPage(0, false);
+        updateFinTitle();
+        requestAnimationFrame(fitLocation);
+      } else {
+        titleEl.textContent = calendarTitleText;
+      }
     }
 
     function toggleWeatherView(swipeDir) { setWeatherView(!weatherViewActive, swipeDir); }
@@ -3069,21 +3151,57 @@
       });
       // Roda del ratolí o trackpad sobre el calendari
       let wheelLock = 0;
+      // Darrer moviment de la cinta d'una finestra: si s'hi ha arribat al principi fa
+      // un moment, l'impuls de la mateixa roda no ha de tancar les finestres
+      let lastPageScroll = 0;
+      document.querySelectorAll('.fin-pag').forEach(page => {
+        page.addEventListener('scroll', () => { lastPageScroll = Date.now(); }, { passive: true });
+      });
       document.getElementById('cal-views').addEventListener('wheel', (e) => {
         const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
         const amount = horizontal ? e.deltaX : e.deltaY;
+        const now = Date.now();
+        if (weatherViewActive && !horizontal) {
+          // A les finestres la roda desplaça la cinta; al principi, roda amunt torna al calendari
+          const page = currentFinPage();
+          const atTop = !page || page.scrollTop <= 0;
+          if (!(amount < 0 && atTop)) return;
+          e.preventDefault();
+          if (Math.abs(amount) < 25 || now < wheelLock || now - lastPageScroll < 400) return;
+          wheelLock = now + 700;
+          setWeatherView(false, 'down');
+          return;
+        }
         if (Math.abs(amount) < 25) return;
         e.preventDefault();
-        const now = Date.now();
         if (now < wheelLock) return;
         wheelLock = now + 700;
         if (horizontal) {
           if (weatherViewActive) shiftFinPage(amount > 0 ? 1 : -1);
           return;
         }
-        if (amount > 0 && !weatherViewActive) setWeatherView(true, 'up');
-        else if (amount < 0 && weatherViewActive) setWeatherView(false, 'down');
+        if (amount > 0) setWeatherView(true, 'up');
       }, { passive: false });
+
+      // Teclat: ↓ obre les finestres, ↑ o Esc tornen al calendari, ← → passen finestres o mesos
+      document.addEventListener('keydown', (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (weatherViewActive) {
+          if (e.key === 'ArrowRight') shiftFinPage(1);
+          else if (e.key === 'ArrowLeft') shiftFinPage(-1);
+          else if (e.key === 'Escape' || e.key === 'ArrowUp') {
+            const page = currentFinPage();
+            if (e.key === 'ArrowUp' && page && page.scrollTop > 0) return; // desplaça la cinta
+            setWeatherView(false, 'down');
+          } else return;
+        } else {
+          if (e.key === 'ArrowDown') setWeatherView(true, 'up');
+          else if (e.key === 'ArrowRight') shiftCalendarMonth(1);
+          else if (e.key === 'ArrowLeft') shiftCalendarMonth(-1);
+          else return;
+        }
+        e.preventDefault();
+      });
     })();
 
     // Anima el pas d'un mes a un altre lliscant els elements del calendari
@@ -3141,6 +3259,7 @@
 
       let startX = 0;
       let startY = 0;
+      let startScrollTop = 0;
       let tracking = false;
 
       const SWIPE_THRESHOLD = 40;
@@ -3154,6 +3273,8 @@
         }
         startX = x;
         startY = y;
+        const page = weatherViewActive ? currentFinPage() : null;
+        startScrollTop = page ? page.scrollTop : 0;
         tracking = true;
       }
 
@@ -3162,9 +3283,17 @@
         tracking = false;
         const deltaX = x - startX;
         const deltaY = y - startY;
-        // Vertical: alterna entre el calendari i la vista del temps
+        // Vertical, sempre amb el dit (o el ratolí) cap avall:
+        //  - al calendari, obre les finestres;
+        //  - a una finestra, el contingut es desplaça com una cinta; si ja era al
+        //    principi, torna al calendari.
         if (Math.abs(deltaY) >= SWIPE_THRESHOLD && Math.abs(deltaY) > Math.abs(deltaX)) {
-          toggleWeatherView(deltaY < 0 ? 'up' : 'down');
+          if (!weatherViewActive) {
+            if (deltaY > 0) setWeatherView(true, 'down');
+          } else if (deltaY > 0) {
+            const page = currentFinPage();
+            if (startScrollTop <= 0 && (!page || page.scrollTop <= 0)) setWeatherView(false, 'down');
+          }
           return;
         }
         if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
@@ -3357,27 +3486,8 @@
       refreshFinDots();
       updateFinTitle();
       if (pages[finIndex].dataset.nom === 'Notícies' && typeof loadNews === 'function') loadNews(false);
-      requestAnimationFrame(fitNewsList);
     }
 
-    // Notícies i podcasts: només els elements que hi caben sencers (sense
-    // tallar-ne cap); com que van del més recent al més antic, s'amaguen els més antics
-    function fitList(boxId, itemSelector) {
-      const box = document.getElementById(boxId);
-      if (!box) return;
-      const items = [...box.querySelectorAll(itemSelector)];
-      items.forEach(a => a.classList.remove('no-cap'));
-      const limit = box.getBoundingClientRect().bottom + 1;
-      let hide = false;
-      items.forEach((a, i) => {
-        if (i > 0 && (hide || a.getBoundingClientRect().bottom > limit)) { hide = true; a.classList.add('no-cap'); }
-      });
-    }
-
-    function fitNewsList() {
-      fitList('llista-noticies', '.noticia');
-      fitList('llista-competencia', '.prog-fila');
-    }
 
     function shiftFinPage(direction) {
       const next = finIndex + direction;
@@ -3421,15 +3531,15 @@
         const bar = el.querySelector('.prog-barra');
         if (bar && !mine) bar.style.width = '0';
       });
-      const pill = document.getElementById('ara-sona');
-      pill.hidden = !nowPlaying;
-      document.querySelector('.visor-head').classList.toggle('sonant', !!nowPlaying);
+      const row = document.getElementById('ara-sona-fila');
+      const wasHidden = row.hidden;
+      row.hidden = !nowPlaying;
+      if (wasHidden !== row.hidden && typeof scheduleFit === 'function') scheduleFit(0);
       if (nowPlaying) {
         document.getElementById('ara-sona-ic').innerHTML = playing ? ICON_MINI_PAUSE : ICON_MINI_PLAY;
         document.getElementById('ara-sona-tx').textContent = nowPlaying.titol + (nowPlaying.sub ? ' · ' + nowPlaying.sub : '');
       }
       if ('mediaSession' in navigator) navigator.mediaSession.playbackState = nowPlaying ? (playing ? 'playing' : 'paused') : 'none';
-      fitLocation();
     }
 
     function playItem(item) {
@@ -3554,7 +3664,8 @@
 
     function loadClips(prog) { return omnyClips(prog).catch(() => appleClips(prog)); }
 
-    // El darrer programa de cada dia indicat, del més recent al més antic
+    // El darrer programa de cada dia indicat (de dilluns a divendres, sense
+    // excepció, a La Competència), del més antic al més recent: l'últim emès al final
     function latestPerDay(clips, days, hour) {
       const now = Date.now();
       const perDay = {};
@@ -3565,7 +3676,7 @@
         if (hour != null && m.hora !== hour) return;
         if (!perDay[m.dow] || cl.data > perDay[m.dow].data) { cl.m = m; perDay[m.dow] = cl; }
       });
-      return Object.values(perDay).sort((a, b) => b.data - a.data);
+      return Object.values(perDay).sort((a, b) => a.data - b.data);
     }
 
     function programButton(cl, latest, program, withTitle) {
@@ -3617,20 +3728,19 @@
         const list = latestPerDay(clips, [1, 2, 3, 4, 5], null);
         if (!list.length) throw new Error('buit');
         lc.innerHTML = '';
-        list.forEach((cl, i) => lc.appendChild(programButton(cl, i === 0, 'La Competència', true)));
+        list.forEach((cl, i) => lc.appendChild(programButton(cl, i === list.length - 1, 'La Competència', true)));
       }).catch(() => programsError(lc, PROGRAMS.competencia));
       const p2 = loadClips(PROGRAMS.via).then(clips => {
         const list = latestPerDay(clips, [6, 0], 7);
         if (!list.length) throw new Error('buit');
         lv.innerHTML = '';
-        list.forEach((cl, i) => lv.appendChild(programButton(cl, i === 0, 'Via lliure', false)));
+        list.forEach((cl, i) => lv.appendChild(programButton(cl, i === list.length - 1, 'Via lliure', false)));
       }).catch(() => programsError(lv, PROGRAMS.via));
       Promise.all([p1, p2]).then(() => {
         programsBusy = false;
         programsLoadedAt = Date.now();
         updatePlayState();
-        requestAnimationFrame(fitNewsList);
-      });
+        });
     }
 
     // ---- Notícies de l'ACN (secció «Al minut» de la portada d'acn.cat) ----
@@ -3716,8 +3826,7 @@
         });
         const now = new Date();
         document.getElementById('noticies-peu').textContent = `Agència Catalana de Notícies · actualitzat a les ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
-        requestAnimationFrame(fitNewsList);
-        newsLoadedAt = Date.now();
+          newsLoadedAt = Date.now();
       }).catch(() => {
         if (!newsLoadedAt) {
           box.innerHTML = '<div class="estat-prog">No s\'han pogut carregar els titulars. <a href="https://www.acn.cat/" target="_blank" rel="noopener">Obre acn.cat</a></div>';
@@ -3857,33 +3966,65 @@
     // El nom de la població, tan gran com es pugui però sempre en una línia
     function fitLocation() {
       const el = document.getElementById('data-location');
-      if (!el) return;
+      if (!el || !el.clientWidth) return;
       el.style.fontSize = '';
+      el.style.whiteSpace = 'nowrap';
       let size = parseFloat(getComputedStyle(el).fontSize);
-      while (el.scrollWidth > el.clientWidth + 1 && size > 10) {
+      const min = size * 0.5;
+      while (el.scrollWidth > el.clientWidth + 1 && size > min) {
         size -= 0.5;
         el.style.fontSize = `${size}px`;
       }
+      // Si encara no hi cap, en dues línies
+      if (el.scrollWidth > el.clientWidth + 1) el.style.whiteSpace = 'normal';
+    }
+
+    // Repartiment de l'espai: el calendari (amb les finestres) té una amplada
+    // fixa segons la pantalla, i l'esfera es fa tan gran com hi càpiga sense
+    // solapar-se. Només si l'esfera hagués de quedar massa petita, s'encongeix
+    // una mica el calendari.
+    const WATCH_MAX = 560;
+    const WATCH_MIN = 200;
+
+    function setWatchSize(px) {
+      const watch = document.querySelector('.watch-container');
+      if (!watch) return;
+      const size = `${Math.round(px)}px`;
+      watch.style.width = size;
+      watch.style.height = size;
     }
 
     function fitCalendar() {
-      fitLocation();
-      if (typeof fitNewsList === 'function') requestAnimationFrame(fitNewsList);
       const app = document.querySelector('.app-container');
       const section = document.querySelector('.calendar-section');
-      const watchSection = document.querySelector('.watch-section');
       if (!app || !section) return;
       section.style.zoom = '';
       const cs = getComputedStyle(app);
       const innerH = app.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-      let allowed = innerH;
-      if (cs.flexDirection.startsWith('column')) {
-        allowed -= watchSection.offsetHeight + (parseFloat(cs.rowGap) || 0);
+      const innerW = app.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const column = cs.flexDirection.startsWith('column');
+      const gap = parseFloat(column ? cs.rowGap : cs.columnGap) || 0;
+      const calH = section.scrollHeight;
+      const calW = section.offsetWidth;
+      if (calH <= 0) return;
+
+      let watch;
+      let zoom = 1;
+      if (column) {
+        watch = Math.min(innerW, WATCH_MAX, innerH - calH - gap);
+        if (watch < WATCH_MIN) {
+          watch = Math.min(innerW, Math.max(WATCH_MIN, innerH * 0.4));
+          zoom = (innerH - watch - gap) / calH;
+        }
+      } else {
+        watch = Math.min(innerH, WATCH_MAX, innerW - calW - gap);
+        watch = Math.max(Math.min(WATCH_MIN, innerH), watch);
+        if (calH > innerH) zoom = innerH / calH;
       }
-      const natural = section.scrollHeight;
-      if (natural <= 0) return;
-      const scale = Math.max(0.5, Math.min(1, allowed / natural));
-      if (scale < 0.995) section.style.zoom = scale.toFixed(3);
+      setWatchSize(watch);
+      zoom = Math.max(0.5, Math.min(1, zoom));
+      if (zoom < 0.995) section.style.zoom = zoom.toFixed(3);
+      fitLocation();
     }
 
     let fitTimer = null;
@@ -4101,9 +4242,18 @@
         document.getElementById('mondaine-alt-text').textContent = altitudeText;
       }
 
+      const fmtCoord = (v, pos, neg) => `${Math.abs(v).toFixed(4).replace('.', ',')}° ${v >= 0 ? pos : neg}`;
+      document.getElementById('ub-coord').textContent = `${fmtCoord(lat, 'N', 'S')} · ${fmtCoord(lon, 'E', 'O')}`;
+
       if (locality) {
         const placeName = locality.city || locality.locality || locality.principalSubdivision || 'Ubicació desconeguda';
         document.getElementById('data-location').textContent = placeName;
+        // Comunitat autònoma si és a l'Estat espanyol; el país, si és fora
+        const code = (locality.countryCode || '').toUpperCase();
+        const inSpain = !code || code === 'ES';
+        document.getElementById('ub-regio').textContent = inSpain
+          ? (locality.principalSubdivision || '')
+          : (locality.countryName || locality.principalSubdivision || '');
         scheduleFit(0);
         // Festes locals del municipi on ets (si és a Catalunya)
         const inCatalonia = normName(locality.principalSubdivision).includes('CATALUNYA') ||
