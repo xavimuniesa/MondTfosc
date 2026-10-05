@@ -90,6 +90,82 @@
       --rain-color: #2f5fa0;
     }
 
+    /* Mode Zz: nocturn negre i taronja, tènue, per tenir-lo de nit al costat del llit */
+    html[data-theme="zz"] {
+      --bg: #000000;
+      --text: #ff8a2b;
+      --panel-bg: transparent;
+      --panel-border: rgba(255, 128, 32, 0.16);
+      --weekday-color: #9c5016;
+      --cell-color: #ff8a2b;
+      --weekend-color: #c9681f;
+      --month-title-color: #ff9438;
+      --data-item-bg: transparent;
+      --data-item-border: rgba(255, 128, 32, 0.16);
+      --data-label-color: #9c5016;
+      --data-value-color: #ff8a2b;
+      --data-location-color: #a9571a;
+      --today-btn-bg: transparent;
+      --today-btn-border: rgba(255, 128, 32, 0.30);
+      --theme-btn-bg: transparent;
+      --theme-btn-border: rgba(255, 128, 32, 0.30);
+      --accent: #ff9438;
+      --btn-hover-bg: rgba(255, 128, 32, 0.08);
+      --today-ring: #ff8a2b;
+      --today-ring-glow: rgba(255, 138, 43, 0.45);
+      --watch-shadow: none;
+      --tip-bg: #ff8a2b;
+      --tip-text: #000000;
+      --alert: #ff8a2b;
+      --rain-color: #d9701f;
+    }
+
+    /* El rellotge es tenyeix de taronja: l'esfera blanca s'inverteix (queda
+       negra amb les marques clares) i tot plegat passa a un sol to taronja.
+       El filtre va a cada cara i no al contenidor per no trencar el gir 3D. */
+    html[data-theme="zz"] .watch-face-front {
+      filter: url(#zz-tint) brightness(0.9);
+    }
+
+    html[data-theme="zz"] .watch-face-back {
+      filter: url(#zz-tint) brightness(0.72);
+    }
+
+    html[data-theme="zz"] .dial,
+    html[data-theme="zz"] #mondaine-clock {
+      filter: invert(1);
+    }
+
+    html[data-theme="zz"] .dial {
+      background: #ffffff;
+      box-shadow: none;
+    }
+
+    html[data-theme="zz"] .dial::after {
+      display: none;
+    }
+
+    /* El lume (verd fosforescent) es torna a invertir perquè brilli en taronja */
+    html[data-theme="zz"] .hour-index::before,
+    html[data-theme="zz"] .hand-lume {
+      filter: invert(1);
+    }
+
+    html[data-theme="zz"] .calendar-day-cell.holiday::before {
+      background: #b8430d;
+      box-shadow: none;
+    }
+
+    html[data-theme="zz"] .calendar-day-cell.holiday,
+    html[data-theme="zz"] .calendar-day-cell.holiday.today {
+      color: #000000;
+    }
+
+    html[data-theme="zz"] .data-alert {
+      background: #a3250b;
+      color: #ffd9bf;
+    }
+
     html, body {
       width: 100%;
       min-height: 100%;
@@ -785,8 +861,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 0.95rem;
-      font-weight: 500;
+      font-size: 1.1rem;
+      font-weight: 700;
       color: var(--cell-color);
       position: relative;
       isolation: isolate; /* el cercle del festiu (z-index -1) queda dins la casella */
@@ -800,13 +876,13 @@
     .calendar-day-cell.other-month {
       color: var(--weekday-color);
       opacity: 0.4;
-      font-weight: 400;
+      font-weight: 600;
     }
 
     /* Cap de setmana: dissabtes i diumenges, un to fred discret sense cercle */
     .calendar-day-cell.weekend {
       color: var(--weekend-color);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     /* Festius (estatals, autonòmics i locals de Barcelona): cercle vermell ple */
@@ -833,6 +909,10 @@
     .calendar-day-cell.today {
       color: var(--cell-color);
       font-weight: 800;
+    }
+
+    .calendar-day-cell.holiday.today {
+      color: #ffffff;
     }
 
     .calendar-day-cell.today::after {
@@ -1137,6 +1217,54 @@
       padding-left: 0;
     }
 
+    /* Alertes meteorològiques a la cinta: fons vermell, lletra blanca */
+    .data-alert {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      margin-right: 8px;
+      padding: 5px 11px;
+      border-radius: 9px;
+      background: #c62828;
+      color: #ffffff;
+    }
+
+    .data-alert-when {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      opacity: 0.92;
+    }
+
+    .data-alert-when svg {
+      width: 1.15em;
+      height: 1.15em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .data-alert-text {
+      font-size: 1rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .data-alert + .data-item {
+      border-left: none;
+      padding-left: 2px;
+    }
+
     .data-label {
       font-size: 0.65rem;
       font-weight: 700;
@@ -1198,7 +1326,7 @@
       }
 
       .calendar-day-cell {
-        font-size: 0.75rem;
+        font-size: 0.88rem;
       }
 
       .calendar-day-cell.holiday::before {
@@ -1230,6 +1358,19 @@
 
       .data-value {
         font-size: 0.78rem;
+      }
+
+      .data-alert {
+        padding: 3px 8px;
+        margin-right: 6px;
+      }
+
+      .data-alert-when {
+        font-size: 0.52rem;
+      }
+
+      .data-alert-text {
+        font-size: 0.8rem;
       }
     }
 
@@ -1304,7 +1445,7 @@
       }
 
       .calendar-day-cell {
-        font-size: 0.56rem;
+        font-size: 0.66rem;
       }
 
       .calendar-day-cell.holiday::before {
@@ -1336,6 +1477,20 @@
 
       .data-value {
         font-size: 0.6rem;
+      }
+
+      .data-alert {
+        padding: 2px 7px;
+        margin-right: 5px;
+        border-radius: 6px;
+      }
+
+      .data-alert-when {
+        font-size: 0.42rem;
+      }
+
+      .data-alert-text {
+        font-size: 0.62rem;
       }
     }
   </style>
@@ -1408,19 +1563,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!--  gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine--text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -1543,6 +1698,17 @@
   </div>
 
   <div class="holiday-tip" id="holiday-tip" role="tooltip" hidden></div>
+
+  <!-- Filtre del mode Zz: converteix cada punt a taronja segons la seva lluminositat -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="zz-tint" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        0.2018 0.6794 0.0686 0 0
+        0.1063 0.3576 0.0361 0 0
+        0.0298 0.1001 0.0101 0 0
+        0      0      0      1 0"/>
+    </filter>
+  </svg>
 
   <script>
     // Generació del Bisel Negre
@@ -2075,7 +2241,8 @@
       storm: '<svg viewBox="0 0 24 24"><path d="M7 14.5h10a3.6 3.6 0 0 0 .3-7.2 5.2 5.2 0 0 0-10 1.3A3 3 0 0 0 7 14.5z"/><path d="M12.8 15.5l-2.3 3.5h3l-2.3 3.5"/></svg>',
       snow: '<svg viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>',
       wind: '<svg viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3M3 12h8"/></svg>',
-      fog: '<svg viewBox="0 0 24 24"><path d="M4 8.5h16M6 12.5h12M4 16.5h16"/></svg>'
+      fog: '<svg viewBox="0 0 24 24"><path d="M4 8.5h16M6 12.5h12M4 16.5h16"/></svg>',
+      ice: '<svg viewBox="0 0 24 24"><path d="M10 4.5a2 2 0 0 1 4 0v9.2a4 4 0 1 1-4 0z"/><path d="M12 11v5M17.5 6h3M17.5 9.5h3"/></svg>'
     };
 
     const WIND_DIRS = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
@@ -2099,6 +2266,7 @@
         const snow = val(h.snowfall, i) || 0;
         const gust = val(h.wind_gusts_10m, i) || 0;
         const vis = val(h.visibility, i);
+        const temp = val(h.temperature_2m, i);
         if (!found.storm && code >= 95) found.storm = { text: 'Tempesta', when: at(i) };
         if (!found.rain && (precip >= 10 || code === 65 || code === 82)) found.rain = { text: 'Pluja intensa', when: at(i) };
         if (!found.snow && (snow > 0 || (code >= 71 && code <= 77) || code === 85 || code === 86)) found.snow = { text: 'Neu', when: at(i) };
@@ -2106,10 +2274,31 @@
           if (!found.wind) found.wind = { text: 'Vent fort', when: at(i), max: gust };
           else found.wind.max = Math.max(found.wind.max, gust);
         }
-        if (!found.fog && (code === 45 || code === 48 || (vis != null && vis < 1000))) found.fog = { text: 'Boira', when: at(i) };
+        if (!found.fog && (((code === 45 || code === 48) && (vis == null || vis < 1000)) || (vis != null && vis < 500))) {
+          found.fog = { text: 'Boira intensa', when: at(i) };
+        }
+        // Glaç: pluja o plugim gelant, o temperatura sota zero
+        if (!found.ice && ([56, 57, 66, 67].includes(code) || (temp != null && temp <= 0))) found.ice = { text: 'Glaç', when: at(i) };
       }
       if (found.wind) found.wind.text = `Ratxes de ${Math.round(found.wind.max)} km/h`;
-      return ['storm', 'rain', 'snow', 'wind', 'fog'].filter(k => found[k]).map(k => ({ type: k, ...found[k] }));
+      return ['storm', 'rain', 'snow', 'ice', 'wind', 'fog'].filter(k => found[k]).map(k => ({ type: k, ...found[k] }));
+    }
+
+    // Alertes a la cinta de dades: fons vermell i lletra blanca, al principi
+    // de la cinta. Si no n'hi ha cap, no apareix res.
+    function renderDataAlerts(alerts) {
+      const strip = document.getElementById('data-scroll');
+      strip.querySelectorAll('.data-alert').forEach(el => el.remove());
+      const first = strip.firstElementChild;
+      alerts.forEach(a => {
+        const el = document.createElement('div');
+        el.className = 'data-alert';
+        el.setAttribute('role', 'alert');
+        el.innerHTML = `<span class="data-alert-when">${ALERT_ICONS[a.type]}Avís · ${a.when}</span>` +
+                       `<span class="data-alert-text">${a.text}</span>`;
+        strip.insertBefore(el, first);
+      });
+      if (alerts.length) strip.scrollLeft = 0;
     }
 
     function renderWeatherView(weather) {
@@ -2136,6 +2325,7 @@
       box.innerHTML = alerts.length
         ? alerts.map(a => `<span class="wx-alert">${ALERT_ICONS[a.type]}${a.text} · ${a.when}</span>`).join('')
         : `<span class="wx-alert none">Sense avisos les properes ${ALERT_HOURS} h</span>`;
+      renderDataAlerts(alerts);
     }
 
     function setWeatherView(active, swipeDir) {
@@ -2420,13 +2610,19 @@
     requestAnimationFrame(updateMondaine);
 
     // ------------------------------------------------------------------
-    // Tema diürn / nocturn
-    //  - Automàtic: segons la sortida i la posta de sol reals del lloc
-    //    (Open-Meteo); si encara no se saben, de 7 h a 20 h.
-    //  - Botó de 3 estats: automàtic → manual (l'altre tema) → manual
-    //    (el tema contrari) → torna a automàtic.
+    // Temes: diürn, nocturn i Zz (nocturn negre i taronja, com el mode
+    // StandBy de l'iPhone quan es carrega de nit)
+    //  - Automàtic: dia o nit segons la sortida i la posta de sol del lloc
+    //    (Open-Meteo; si encara no se saben, de 7 h a 20 h). De nit, si el
+    //    dispositiu s'està carregant, passa a Zz. La càrrega només es pot
+    //    saber als navegadors que tenen l'API de bateria (Chrome, Android);
+    //    Safari a l'iPhone no la té, i allà el Zz es tria amb el botó.
+    //  - Botó: des del mode automàtic recorre els altres dos temes i torna a
+    //    automàtic; cada toc canvia el que es veu.
     // ------------------------------------------------------------------
-    const THEME_STORAGE_KEY = 'tissot_theme_override'; // 'day' | 'night' | absent = automàtic
+    const THEME_STORAGE_KEY = 'tissot_theme_override'; // 'day' | 'night' | 'zz' | absent = automàtic
+    const THEMES = ['day', 'night', 'zz'];
+    const THEME_COLORS = { day: '#e8edf4', night: '#0d0d0d', zz: '#000000' };
 
     // Icones de línia fina, en la línia gràfica del rellotge
     const SUN_ICON = '<svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">' +
@@ -2436,12 +2632,19 @@
     const MOON_ICON = '<svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">' +
       '<path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8z"/>' +
       '</svg>';
-    let sunTimes = null; // { sunrise: Date, sunset: Date }
+    const ZZ_ICON = '<svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M3.5 9.5h8l-8 10h8M14 4h6.5L14 12h6.5"/>' +
+      '</svg>';
+    const THEME_ICONS = { day: SUN_ICON, night: MOON_ICON, zz: ZZ_ICON };
+    const THEME_NAMES = { day: 'diürn', night: 'nocturn', zz: 'Zz nocturn' };
+
+    let sunTimes = null;   // { sunrise: Date, sunset: Date }
+    let isCharging = false;
 
     function getStoredTheme() {
       try {
         const v = localStorage.getItem(THEME_STORAGE_KEY);
-        return v === 'day' || v === 'night' ? v : null;
+        return THEMES.includes(v) ? v : null;
       } catch (e) { return null; }
     }
 
@@ -2452,13 +2655,18 @@
       } catch (e) {}
     }
 
-    function autoTheme() {
+    function isSunUp() {
       const now = new Date();
       if (sunTimes && isoOf(sunTimes.sunrise) === isoOf(now)) {
-        return now >= sunTimes.sunrise && now < sunTimes.sunset ? 'day' : 'night';
+        return now >= sunTimes.sunrise && now < sunTimes.sunset;
       }
       const h = now.getHours();
-      return h >= 7 && h < 20 ? 'day' : 'night';
+      return h >= 7 && h < 20;
+    }
+
+    function autoTheme() {
+      if (isSunUp()) return 'day';
+      return isCharging ? 'zz' : 'night';
     }
 
     function applyTheme() {
@@ -2466,22 +2674,23 @@
       const theme = stored || autoTheme();
       document.documentElement.setAttribute('data-theme', theme);
       const themeMeta = document.getElementById('theme-color-meta');
-      if (themeMeta) themeMeta.setAttribute('content', theme === 'day' ? '#e8edf4' : '#0d0d0d');
+      if (themeMeta) themeMeta.setAttribute('content', THEME_COLORS[theme]);
       const btn = document.getElementById('theme-toggle-btn');
       if (btn) {
-        btn.innerHTML = (theme === 'day' ? SUN_ICON : MOON_ICON) + (stored ? '' : '<span class="theme-auto-badge">A</span>');
+        btn.innerHTML = THEME_ICONS[theme] + (stored ? '' : '<span class="theme-auto-badge">A</span>');
         btn.title = stored
-          ? `Tema ${theme === 'day' ? 'diürn' : 'nocturn'} fix (toca per canviar)`
-          : 'Tema automàtic segons el sol (toca per fixar-lo)';
+          ? `Tema ${THEME_NAMES[theme]} fix (toca per canviar)`
+          : 'Tema automàtic: dia o nit segons el sol, i Zz quan es carrega de nit (toca per canviar)';
       }
     }
 
     function cycleTheme() {
       const stored = getStoredTheme();
       const auto = autoTheme();
-      if (!stored) setStoredTheme(auto === 'day' ? 'night' : 'day'); // automàtic → l'altre tema
-      else if (stored !== auto) setStoredTheme(auto);                // → el tema contrari
-      else setStoredTheme(null);                                     // → torna a automàtic
+      const current = stored || auto;
+      const next = THEMES[(THEMES.indexOf(current) + 1) % THEMES.length];
+      if (stored && next === auto) setStoredTheme(null); // ha fet la volta: torna a automàtic
+      else setStoredTheme(next);
       applyTheme();
     }
 
@@ -2489,6 +2698,18 @@
       e.stopPropagation();
       cycleTheme();
     });
+
+    // Estat de càrrega (només als navegadors que tenen l'API de bateria)
+    if (navigator.getBattery) {
+      navigator.getBattery().then((battery) => {
+        isCharging = battery.charging;
+        battery.addEventListener('chargingchange', () => {
+          isCharging = battery.charging;
+          applyTheme();
+        });
+        applyTheme();
+      }).catch(() => {});
+    }
 
     applyTheme();
     setInterval(applyTheme, 60 * 1000); // en mode automàtic, revisa cada minut
@@ -2504,7 +2725,7 @@
     async function fetchWeather(lat, lon) {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
         `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-        `&hourly=precipitation_probability,precipitation,snowfall,weather_code,wind_gusts_10m,visibility` +
+        `&hourly=precipitation_probability,precipitation,snowfall,weather_code,wind_gusts_10m,visibility,temperature_2m` +
         `&daily=sunrise,sunset` +
         `&forecast_days=2&timezone=auto`;
       const res = await fetch(url);
