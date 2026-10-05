@@ -956,23 +956,224 @@
       pointer-events: none;
     }
 
-    .cal-view-weather {
+    .cal-view-fin {
       position: absolute;
       inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5cqw;
       overflow: hidden;
       opacity: 0;
       transform: translateY(calc(var(--swipe-dir, -1) * -18px));
       pointer-events: none;
     }
 
-    .cal-views.show-weather .cal-view-weather {
+    .cal-views.show-weather .cal-view-fin {
       opacity: 1;
       transform: none;
       pointer-events: auto;
+    }
+
+    /* Pista de finestres: es desplaça de costat amb el gest (no hi ha
+       desplaçament natiu, així el gest amunt/avall sempre torna al calendari) */
+    .fin-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.35s ease;
+    }
+
+    .fin-pag {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 2px 4px 16px;
+    }
+
+    .fin-pag[hidden] { display: none; }
+
+    .fin-temps {
+      justify-content: center;
+      gap: 3.6cqw;
+    }
+
+    .fin-punts {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2px;
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .fin-punts button {
+      appearance: none;
+      width: 6px;
+      height: 6px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: var(--weekday-color);
+      opacity: 0.35;
+      cursor: pointer;
+    }
+
+    .fin-punts button.on {
+      background: var(--accent);
+      opacity: 1;
+    }
+
+    /* Qualitat de l'aire */
+    .fin-aire {
+      justify-content: center;
+      gap: 4.5cqw;
+    }
+
+    .aq-main {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5cqw;
+    }
+
+    .aq-index {
+      min-width: 1.6em;
+      font-size: 17cqw;
+      font-weight: 300;
+      line-height: 1;
+      text-align: center;
+      color: var(--month-title-color);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .aq-label {
+      display: inline-block;
+      font-size: 5.6cqw;
+      font-weight: 800;
+      padding: 0.6cqw 3cqw;
+      border-radius: 999px;
+      background: var(--aq-color, var(--data-item-border));
+      color: var(--aq-text, var(--cell-color));
+    }
+
+    .aq-sub {
+      margin-top: 1.4cqw;
+      font-size: 3.3cqw;
+      font-weight: 600;
+      color: var(--weekday-color);
+    }
+
+    .aq-scale {
+      position: relative;
+      display: flex;
+      height: 1.6cqw;
+      margin: 0 3cqw;
+      border-radius: 999px;
+      overflow: visible;
+    }
+
+    .aq-scale span { flex: 1; }
+    .aq-scale span:nth-child(1) { background: #50f0e6; border-radius: 999px 0 0 999px; }
+    .aq-scale span:nth-child(2) { background: #50ccaa; }
+    .aq-scale span:nth-child(3) { background: #f0e641; }
+    .aq-scale span:nth-child(4) { background: #ff5050; }
+    .aq-scale span:nth-child(5) { background: #960032; }
+    .aq-scale span:nth-child(6) { background: #7d2181; border-radius: 0 999px 999px 0; }
+
+    .aq-marker {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 3.4cqw;
+      height: 3.4cqw;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 0.8cqw solid var(--month-title-color);
+      transform: translate(-50%, -50%);
+      transition: left 0.4s ease;
+      display: none;
+    }
+
+    .aq-grid .wx-value { font-size: 6.2cqw; }
+
+    /* Pol·len */
+    .pollen-llista {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4cqw;
+    }
+
+    .pollen-fila {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 1cqw 3cqw;
+    }
+
+    .pollen-nom {
+      font-size: 4.4cqw;
+      font-weight: 700;
+      color: var(--cell-color);
+    }
+
+    .pollen-nivell {
+      font-size: 3.4cqw;
+      font-weight: 800;
+      padding: 0.5cqw 2.6cqw;
+      border-radius: 999px;
+      border: 1px solid var(--data-item-border);
+      color: var(--weekday-color);
+      white-space: nowrap;
+    }
+
+    .pollen-nivell.n1 { border-color: #3f9b5a; color: #3f9b5a; }
+    .pollen-nivell.n2 { background: #e0b100; border-color: #e0b100; color: #1b1b1f; }
+    .pollen-nivell.n3 { background: #e0612b; border-color: #e0612b; color: #ffffff; }
+    .pollen-nivell.n4 { background: #c62828; border-color: #c62828; color: #ffffff; }
+
+    .pollen-barra {
+      grid-column: 1 / -1;
+      height: 1.1cqw;
+      border-radius: 999px;
+      background: var(--data-item-border);
+      overflow: hidden;
+    }
+
+    .pollen-barra i {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: var(--weekday-color);
+    }
+
+    .fin-noticies .noticies {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .fin-pag .llista-prog {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .noticia.no-cap,
+    .prog-fila.no-cap { display: none; }
+
+    /* A les finestres les ràdios ocupen tot l'espai disponible */
+    .fin-pag .radios {
+      flex: 1;
+      grid-auto-rows: 1fr;
+    }
+
+    .fin-pag .radio {
+      justify-content: center;
+    }
+
+    .fin-pag .radio .nom {
+      font-size: 1rem;
     }
 
     /* Indicador de les dues vistes */
@@ -1207,12 +1408,16 @@
 
     .data-location {
       display: block;
+      min-width: 0;
+      max-width: 100%;
       text-align: center;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
       color: var(--data-location-color);
       text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
       margin-bottom: 10px;
     }
 
@@ -1608,17 +1813,18 @@
 
     /* Finestra estreta (mòbil): ràdios en fileres d'una línia i podcasts
        només amb el dia i la data, perquè tot es vegi sense desplaçar */
-    @container visor (max-width: 300px) {
+    @container (max-width: 300px) {
       .radios { grid-template-columns: repeat(2, 1fr); gap: 5px; }
       .radio { padding: 3px 8px; gap: 0; border-radius: 8px; }
-      .radio .nom { font-size: 0.72rem; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .radio .nom, .fin-pag .radio .nom { font-size: 0.8rem; max-width: 100%; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
       .radio .sub { font-size: 0.52rem; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .prog-titol { display: none; }
       .prog { padding: 4px 8px; }
       .prog-dia { flex: 1; width: auto; flex-direction: row; align-items: baseline; gap: 6px; }
       .prog-fila { gap: 5px; }
       .llista-prog { gap: 5px; }
-      .via-fila { margin-top: 6px; }
+      .via-fila { margin-top: 6px; flex-direction: column; align-items: stretch; gap: 4px; }
+      .via-etiqueta { flex-direction: row; gap: 5px; }
     }
 
     .data-label {
@@ -1696,8 +1902,8 @@
       }
 
       .data-location {
-        font-size: 0.66rem;
-        margin-bottom: 5px;
+        font-size: 1.1rem;
+        margin-bottom: 2px;
       }
 
       .data-scroll {
@@ -1833,8 +2039,8 @@
       }
 
       .data-location {
-        font-size: 0.52rem;
-        margin-bottom: 2px;
+        font-size: 0.85rem;
+        margin-bottom: 0;
       }
 
       .data-scroll {
@@ -2021,17 +2227,17 @@
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
                 <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
                 <g id="mondaine-domaine-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF XML</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF XML</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF XML</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -2089,42 +2295,101 @@
           <div class="calendar-grid" id="days-container"></div>
         </div>
 
-        <div class="cal-view cal-view-weather" id="view-weather" aria-hidden="true">
-          <div class="wx-main">
-            <div class="wx-icon" id="wx-icon"></div>
-            <div class="wx-temp-block">
-              <div class="wx-temp" id="wx-temp">—</div>
-              <div class="wx-desc" id="wx-desc">Carregant el temps…</div>
-            </div>
+        <!-- Finestres: ocupen l'espai del calendari (lliscar amunt/avall) i es
+             passen lliscant a dreta o esquerra -->
+        <div class="cal-view cal-view-fin" id="view-fin" aria-hidden="true">
+          <div class="fin-track" id="fin-track">
+            <section class="fin-pag" id="pag-avisos" data-nom="Avisos" hidden>
+              <div class="visor-titol">Properes 12 hores</div>
+              <div class="avisos-llista" id="avisos-llista"></div>
+            </section>
+
+            <section class="fin-pag fin-temps" data-nom="El temps">
+              <div class="wx-main">
+                <div class="wx-icon" id="wx-icon"></div>
+                <div class="wx-temp-block">
+                  <div class="wx-temp" id="wx-temp">—</div>
+                  <div class="wx-desc" id="wx-desc">Carregant el temps…</div>
+                </div>
+              </div>
+              <div class="wx-grid">
+                <div class="wx-item">
+                  <span class="wx-label">Sensació</span>
+                  <span class="wx-value" id="wx-feels">—</span>
+                </div>
+                <div class="wx-item">
+                  <span class="wx-label">Humitat</span>
+                  <span class="wx-value" id="wx-humidity">—</span>
+                </div>
+                <div class="wx-item">
+                  <span class="wx-label">Vent</span>
+                  <span class="wx-value" id="wx-wind">—</span>
+                  <span class="wx-sub" id="wx-gusts"></span>
+                </div>
+                <div class="wx-item">
+                  <span class="wx-label">Altitud</span>
+                  <span class="wx-value" id="wx-altitude">—</span>
+                </div>
+              </div>
+              <div class="wx-alerts" id="wx-alerts"></div>
+            </section>
+
+            <section class="fin-pag fin-aire" data-nom="Qualitat de l'aire">
+              <div class="aq-main">
+                <div class="aq-index" id="aq-index">—</div>
+                <div class="aq-text">
+                  <div class="aq-label" id="aq-label">Carregant…</div>
+                  <div class="aq-sub">Índex europeu de qualitat de l'aire</div>
+                </div>
+              </div>
+              <div class="aq-scale" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+                <i class="aq-marker" id="aq-marker"></i>
+              </div>
+              <div class="wx-grid aq-grid">
+                <div class="wx-item"><span class="wx-label">PM2,5</span><span class="wx-value" id="aq-pm25">—</span></div>
+                <div class="wx-item"><span class="wx-label">PM10</span><span class="wx-value" id="aq-pm10">—</span></div>
+                <div class="wx-item"><span class="wx-label">Diòxid de nitrogen</span><span class="wx-value" id="aq-no2">—</span></div>
+                <div class="wx-item"><span class="wx-label">Ozó</span><span class="wx-value" id="aq-o3">—</span></div>
+              </div>
+              <div class="peu-dades">µg/m³ · ara · font: Copernicus (Open-Meteo)</div>
+            </section>
+
+            <section class="fin-pag fin-pollen" data-nom="Pol·len">
+              <div class="visor-titol">Màxim de les properes 24 hores</div>
+              <div class="pollen-llista" id="pollen-llista"><div class="estat-prog">Carregant…</div></div>
+              <div class="peu-dades">grans/m³ · nivells orientatius · font: Copernicus (Open-Meteo)</div>
+            </section>
+
+            <section class="fin-pag" data-nom="Ràdio">
+              <div class="visor-titol">En directe</div>
+              <div class="radios" id="llista-radios"></div>
+            </section>
+
+            <section class="fin-pag" data-nom="Podcasts">
+              <div class="visor-titol">La Competència · RAC1</div>
+              <div class="llista-prog" id="llista-competencia"><div class="estat-prog">Carregant programes…</div></div>
+              <div class="via-fila">
+                <div class="via-etiqueta">Via lliure<small>7 h</small></div>
+                <div class="via-lliure" id="llista-via"><div class="estat-prog">Carregant…</div></div>
+              </div>
+            </section>
+
+            <section class="fin-pag fin-noticies" data-nom="Notícies">
+              <div class="visor-titol">ACN · Al minut</div>
+              <div class="noticies" id="llista-noticies"><div class="estat-prog">Carregant titulars…</div></div>
+              <div class="peu-dades" id="noticies-peu"></div>
+            </section>
           </div>
-          <div class="wx-grid">
-            <div class="wx-item">
-              <span class="wx-label">Sensació</span>
-              <span class="wx-value" id="wx-feels">—</span>
-            </div>
-            <div class="wx-item">
-              <span class="wx-label">Humitat</span>
-              <span class="wx-value" id="wx-humidity">—</span>
-            </div>
-            <div class="wx-item">
-              <span class="wx-label">Vent</span>
-              <span class="wx-value" id="wx-wind">—</span>
-              <span class="wx-sub" id="wx-gusts"></span>
-            </div>
-            <div class="wx-item">
-              <span class="wx-label">Altitud</span>
-              <span class="wx-value" id="wx-altitude">—</span>
-            </div>
-          </div>
-          <div class="wx-alerts" id="wx-alerts"></div>
+          <div class="fin-punts" id="fin-punts"></div>
         </div>
 
-        <div class="view-dots" id="view-dots" title="Llisca amunt o avall per veure el temps">
+        <div class="view-dots" id="view-dots" title="Llisca amunt o avall per veure les finestres">
           <span class="on"></span><span></span>
         </div>
       </div>
 
-      <!-- Població i finestra lliscable: avisos, ràdio, podcasts i notícies -->
+      <!-- Sota el calendari només hi queda la població -->
       <div class="data-panel">
         <div class="visor-head">
           <span class="data-location" id="data-location">Localitzant…</span>
@@ -2132,30 +2397,6 @@
             <span class="ara-sona-ic" id="ara-sona-ic"></span><span class="ara-sona-tx" id="ara-sona-tx"></span>
           </button>
         </div>
-        <div class="visor" id="visor">
-          <section class="visor-pag" id="pag-avisos" data-nom="Avisos" hidden>
-            <div class="visor-titol">Avisos <small>properes 12 h</small></div>
-            <div class="avisos-llista" id="avisos-llista"></div>
-          </section>
-          <section class="visor-pag" data-nom="Ràdio">
-            <div class="visor-titol">Ràdio <small>en directe</small></div>
-            <div class="radios" id="llista-radios"></div>
-          </section>
-          <section class="visor-pag" data-nom="Podcasts">
-            <div class="visor-titol">La Competència <small>RAC1</small></div>
-            <div class="llista-prog" id="llista-competencia"><div class="estat-prog">Carregant programes…</div></div>
-            <div class="via-fila">
-              <div class="via-etiqueta">Via lliure<small>7 h</small></div>
-              <div class="via-lliure" id="llista-via"><div class="estat-prog">Carregant…</div></div>
-            </div>
-          </section>
-          <section class="visor-pag" data-nom="Notícies">
-            <div class="visor-titol">Notícies <small>ACN · Al minut</small></div>
-            <div class="noticies" id="llista-noticies"><div class="estat-prog">Carregant titulars…</div></div>
-            <div class="peu-dades" id="noticies-peu"></div>
-          </section>
-        </div>
-        <div class="visor-punts" id="visor-punts"></div>
       </div>
     </div>
   </div>
@@ -2657,7 +2898,6 @@
     // ------------------------------------------------------------------
     // Vista del temps (lliscar el calendari amunt o avall)
     // ------------------------------------------------------------------
-    const WEATHER_TITLE = 'El temps ara';
     const ALERT_HOURS = 12;
 
     const WMO_DESCRIPTIONS = {
@@ -2755,6 +2995,7 @@
     function renderDataAlerts(alerts) {
       const page = document.getElementById('pag-avisos');
       const list = document.getElementById('avisos-llista');
+      const currentPage = typeof currentFinPage === 'function' ? currentFinPage() : null;
       list.innerHTML = '';
       alerts.forEach(a => {
         const el = document.createElement('div');
@@ -2768,8 +3009,10 @@
       const key = alerts.map(a => a.type).join(',');
       const isNew = key && key !== lastAlertsKey;
       lastAlertsKey = key;
-      if (typeof refreshVisorDots === 'function') refreshVisorDots();
-      if (isNew && typeof goToVisorPage === 'function') goToVisorPage(0, false);
+      if (typeof goToFinPage === 'function') {
+        if (isNew) goToFinPage(0, false);
+        else goToFinPage(Math.max(0, finPages().indexOf(currentPage)), false);
+      }
     }
 
     function renderWeatherView(weather) {
@@ -2806,14 +3049,15 @@
       const views = document.getElementById('cal-views');
       views.style.setProperty('--swipe-dir', swipeDir === 'down' ? 1 : -1);
       views.classList.toggle('show-weather', active);
-      document.getElementById('view-weather').setAttribute('aria-hidden', String(!active));
+      document.getElementById('view-fin').setAttribute('aria-hidden', String(!active));
       document.getElementById('view-calendar').setAttribute('aria-hidden', String(active));
       const dots = document.querySelectorAll('#view-dots span');
       dots[0].classList.toggle('on', !active);
       dots[1].classList.toggle('on', active);
       const titleEl = document.getElementById('month-year-title');
-      titleEl.textContent = active ? WEATHER_TITLE : calendarTitleText;
       titleEl.classList.toggle('wx-mode', active);
+      if (active) updateFinTitle();
+      else titleEl.textContent = calendarTitleText;
     }
 
     function toggleWeatherView(swipeDir) { setWeatherView(!weatherViewActive, swipeDir); }
@@ -2826,13 +3070,19 @@
       // Roda del ratolí o trackpad sobre el calendari
       let wheelLock = 0;
       document.getElementById('cal-views').addEventListener('wheel', (e) => {
-        if (Math.abs(e.deltaY) < 25 || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+        const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+        const amount = horizontal ? e.deltaX : e.deltaY;
+        if (Math.abs(amount) < 25) return;
         e.preventDefault();
         const now = Date.now();
         if (now < wheelLock) return;
         wheelLock = now + 700;
-        if (e.deltaY > 0 && !weatherViewActive) setWeatherView(true, 'up');
-        else if (e.deltaY < 0 && weatherViewActive) setWeatherView(false, 'down');
+        if (horizontal) {
+          if (weatherViewActive) shiftFinPage(amount > 0 ? 1 : -1);
+          return;
+        }
+        if (amount > 0 && !weatherViewActive) setWeatherView(true, 'up');
+        else if (amount < 0 && weatherViewActive) setWeatherView(false, 'down');
       }, { passive: false });
     })();
 
@@ -2917,9 +3167,10 @@
           toggleWeatherView(deltaY < 0 ? 'up' : 'down');
           return;
         }
-        // Horitzontal: canvia de mes (només a la vista del calendari)
-        if (Math.abs(deltaX) < SWIPE_THRESHOLD || weatherViewActive) return;
-        shiftCalendarMonth(deltaX < 0 ? 1 : -1);
+        if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+        // Horitzontal: a les finestres, canvia de finestra; al calendari, de mes
+        if (weatherViewActive) shiftFinPage(deltaX < 0 ? 1 : -1);
+        else shiftCalendarMonth(deltaX < 0 ? 1 : -1);
       }
 
       swipeTarget.addEventListener('touchstart', (e) => {
@@ -3061,51 +3312,79 @@
     })();
 
     // ------------------------------------------------------------------
-    // Finestra lliscable sota el calendari: pàgines Avisos (només si n'hi
-    // ha), Ràdio, Podcasts i Notícies. Es passa de pàgina lliscant amb el
-    // dit o tocant els punts.
+    // Finestres (a l'espai del calendari): Avisos (només si n'hi ha), El
+    // temps, Qualitat de l'aire, Pol·len, Ràdio, Podcasts i Notícies. Es
+    // passa de finestra lliscant a dreta o esquerra, o tocant els punts.
     // ------------------------------------------------------------------
-    const visorEl = document.getElementById('visor');
-    const visorDots = document.getElementById('visor-punts');
+    const finTrack = document.getElementById('fin-track');
+    const finDots = document.getElementById('fin-punts');
+    let finIndex = 0;
 
-    function visorPages() {
-      return [...visorEl.querySelectorAll('.visor-pag')].filter(p => !p.hidden);
+    function finPages() {
+      return [...finTrack.querySelectorAll('.fin-pag')].filter(p => !p.hidden);
     }
 
-    function currentVisorIndex() {
-      return Math.round(visorEl.scrollLeft / Math.max(1, visorEl.clientWidth));
+    function currentFinPage() { return finPages()[finIndex]; }
+
+    function updateFinTitle() {
+      if (!weatherViewActive) return;
+      const page = currentFinPage();
+      document.getElementById('month-year-title').textContent = page ? page.dataset.nom : '';
     }
 
-    function refreshVisorDots() {
-      const pages = visorPages();
-      const current = Math.min(currentVisorIndex(), pages.length - 1);
-      visorDots.innerHTML = '';
+    function refreshFinDots() {
+      const pages = finPages();
+      finDots.innerHTML = '';
       pages.forEach((page, i) => {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = i === current ? 'on' : '';
+        b.className = i === finIndex ? 'on' : '';
         b.setAttribute('aria-label', page.dataset.nom);
         b.title = page.dataset.nom;
-        b.addEventListener('click', () => goToVisorPage(i, true));
-        visorDots.appendChild(b);
+        b.addEventListener('click', (e) => { e.stopPropagation(); goToFinPage(i, true); });
+        finDots.appendChild(b);
       });
     }
 
-    function goToVisorPage(i, smooth) {
-      visorEl.scrollTo({ left: i * visorEl.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
-      setTimeout(refreshVisorDots, smooth ? 350 : 0);
+    function goToFinPage(i, animate = true) {
+      const pages = finPages();
+      if (!pages.length) return;
+      finIndex = Math.max(0, Math.min(pages.length - 1, i));
+      if (!animate) finTrack.style.transition = 'none';
+      finTrack.style.transform = `translateX(${-finIndex * 100}%)`;
+      if (!animate) { void finTrack.offsetWidth; finTrack.style.transition = ''; }
+      pages.forEach((page, k) => page.setAttribute('aria-hidden', String(k !== finIndex)));
+      refreshFinDots();
+      updateFinTitle();
+      if (pages[finIndex].dataset.nom === 'Notícies' && typeof loadNews === 'function') loadNews(false);
+      requestAnimationFrame(fitNewsList);
     }
 
-    let visorScrollTimer = null;
-    visorEl.addEventListener('scroll', () => {
-      clearTimeout(visorScrollTimer);
-      visorScrollTimer = setTimeout(() => {
-        refreshVisorDots();
-        const page = visorPages()[currentVisorIndex()];
-        if (page && page.dataset.nom === 'Notícies') loadNews(false);
-      }, 90);
-    }, { passive: true });
-    window.addEventListener('resize', () => goToVisorPage(currentVisorIndex(), false));
+    // Notícies i podcasts: només els elements que hi caben sencers (sense
+    // tallar-ne cap); com que van del més recent al més antic, s'amaguen els més antics
+    function fitList(boxId, itemSelector) {
+      const box = document.getElementById(boxId);
+      if (!box) return;
+      const items = [...box.querySelectorAll(itemSelector)];
+      items.forEach(a => a.classList.remove('no-cap'));
+      const limit = box.getBoundingClientRect().bottom + 1;
+      let hide = false;
+      items.forEach((a, i) => {
+        if (i > 0 && (hide || a.getBoundingClientRect().bottom > limit)) { hide = true; a.classList.add('no-cap'); }
+      });
+    }
+
+    function fitNewsList() {
+      fitList('llista-noticies', '.noticia');
+      fitList('llista-competencia', '.prog-fila');
+    }
+
+    function shiftFinPage(direction) {
+      const next = finIndex + direction;
+      if (next < 0 || next >= finPages().length) return;
+      goToFinPage(next, true);
+    }
+
 
     // Avís breu a la part de baix de la pantalla
     let toastEl = null;
@@ -3150,6 +3429,7 @@
         document.getElementById('ara-sona-tx').textContent = nowPlaying.titol + (nowPlaying.sub ? ' · ' + nowPlaying.sub : '');
       }
       if ('mediaSession' in navigator) navigator.mediaSession.playbackState = nowPlaying ? (playing ? 'playing' : 'paused') : 'none';
+      fitLocation();
     }
 
     function playItem(item) {
@@ -3300,7 +3580,7 @@
         (withTitle ? '<span class="prog-titol"></span>' : '') +
         `<span class="prog-icona">${ICON_PLAY}${ICON_PAUSE}</span><span class="prog-barra"></span>`;
       b.querySelector('b').textContent = dayName;
-      b.querySelector('small').textContent = `${cl.m.dia}/${cl.m.mes}` + (withTitle ? '' : ` · ${cl.m.hora} h`);
+      b.querySelector('small').textContent = `${cl.m.dia}/${cl.m.mes}`;
       if (withTitle) b.querySelector('.prog-titol').textContent = cl.titol;
       b.setAttribute('aria-label', `${program}, ${dayName} ${cl.m.dia}/${cl.m.mes}` + (withTitle ? `: ${cl.titol}` : ''));
       b.addEventListener('click', () => {
@@ -3349,6 +3629,7 @@
         programsBusy = false;
         programsLoadedAt = Date.now();
         updatePlayState();
+        requestAnimationFrame(fitNewsList);
       });
     }
 
@@ -3435,6 +3716,7 @@
         });
         const now = new Date();
         document.getElementById('noticies-peu').textContent = `Agència Catalana de Notícies · actualitzat a les ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+        requestAnimationFrame(fitNewsList);
         newsLoadedAt = Date.now();
       }).catch(() => {
         if (!newsLoadedAt) {
@@ -3443,7 +3725,7 @@
       }).then(() => { newsBusy = false; });
     }
 
-    refreshVisorDots();
+    goToFinPage(0, false);
     loadPrograms(true);
     loadNews(true);
     // Es comprova cada 20 minuts (programes) i 10 minuts (notícies)
@@ -3452,12 +3734,141 @@
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') loadNews(false); });
 
     // ------------------------------------------------------------------
+    // Qualitat de l'aire i pol·len (Open-Meteo, dades de Copernicus CAMS)
+    // ------------------------------------------------------------------
+    // Índex europeu de qualitat de l'aire (escala i colors de l'Agència Europea de Medi Ambient)
+    const AQI_BANDS = [
+      { max: 20, label: 'Bona', color: '#50f0e6', text: '#0b2b2a' },
+      { max: 40, label: 'Acceptable', color: '#50ccaa', text: '#0b2b22' },
+      { max: 60, label: 'Moderada', color: '#f0e641', text: '#2b2600' },
+      { max: 80, label: 'Dolenta', color: '#ff5050', text: '#ffffff' },
+      { max: 100, label: 'Molt dolenta', color: '#960032', text: '#ffffff' },
+      { max: Infinity, label: 'Extremadament dolenta', color: '#7d2181', text: '#ffffff' }
+    ];
+
+    // Llindars orientatius (grans/m³): baix / moderat / alt / molt alt
+    const POLLEN_TYPES = [
+      { key: 'grass_pollen', nom: 'Gramínies', t: [5, 25, 50] },
+      { key: 'olive_pollen', nom: 'Olivera', t: [10, 50, 200] },
+      { key: 'birch_pollen', nom: 'Bedoll', t: [10, 50, 100] },
+      { key: 'alder_pollen', nom: 'Vern', t: [10, 50, 100] },
+      { key: 'mugwort_pollen', nom: 'Artemísia', t: [5, 15, 50] },
+      { key: 'ragweed_pollen', nom: 'Ambròsia', t: [5, 15, 50] }
+    ];
+    const POLLEN_LEVELS = ['Cap', 'Baix', 'Moderat', 'Alt', 'Molt alt'];
+
+    function pollenLevel(value, t) {
+      if (!value || value < 0.5) return 0;
+      if (value < t[0]) return 1;
+      if (value < t[1]) return 2;
+      if (value < t[2]) return 3;
+      return 4;
+    }
+
+    async function fetchAirQuality(lat, lon) {
+      const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}` +
+        `&current=european_aqi,pm10,pm2_5,nitrogen_dioxide,ozone` +
+        `&hourly=${POLLEN_TYPES.map(p => p.key).join(',')}` +
+        `&forecast_days=2&timezone=auto`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Error de qualitat de l\'aire');
+      return res.json();
+    }
+
+    function renderAirQuality(data) {
+      const c = data && data.current;
+      if (!c || c.european_aqi == null) {
+        document.getElementById('aq-label').textContent = 'Sense dades';
+        return;
+      }
+      const aqi = Math.round(c.european_aqi);
+      const band = AQI_BANDS.find(b => aqi <= b.max);
+      document.getElementById('aq-index').textContent = aqi;
+      const label = document.getElementById('aq-label');
+      label.textContent = band.label;
+      label.style.setProperty('--aq-color', band.color);
+      label.style.setProperty('--aq-text', band.text);
+      const marker = document.getElementById('aq-marker');
+      marker.style.display = 'block';
+      marker.style.left = `${Math.min(100, aqi / 120 * 100)}%`;
+      const fmt = v => (v == null ? '—' : String(Math.round(v)));
+      document.getElementById('aq-pm25').textContent = fmt(c.pm2_5);
+      document.getElementById('aq-pm10').textContent = fmt(c.pm10);
+      document.getElementById('aq-no2').textContent = fmt(c.nitrogen_dioxide);
+      document.getElementById('aq-o3').textContent = fmt(c.ozone);
+    }
+
+    function renderPollen(data) {
+      const box = document.getElementById('pollen-llista');
+      const h = data && data.hourly;
+      if (!h || !h.time) {
+        box.innerHTML = '<div class="estat-prog">Sense dades de pol·len</div>';
+        return;
+      }
+      const currentHour = (data.current && data.current.time ? data.current.time : '').slice(0, 13);
+      let start = h.time.findIndex(t => t.slice(0, 13) >= currentHour);
+      if (start < 0) start = 0;
+      const end = Math.min(start + 24, h.time.length);
+      const rows = POLLEN_TYPES.map(p => {
+        let max = null;
+        for (let i = start; i < end; i++) {
+          const v = h[p.key] ? h[p.key][i] : null;
+          if (v != null) max = Math.max(max == null ? 0 : max, v);
+        }
+        return { ...p, max, level: max == null ? null : pollenLevel(max, p.t) };
+      });
+      if (rows.every(r => r.max == null)) {
+        box.innerHTML = '<div class="estat-prog">No hi ha dades de pol·len per a aquesta zona</div>';
+        return;
+      }
+      box.innerHTML = '';
+      rows.forEach(r => {
+        const row = document.createElement('div');
+        row.className = 'pollen-fila';
+        const levelText = r.level == null ? 'Sense dades' : POLLEN_LEVELS[r.level];
+        const pct = r.max == null ? 0 : Math.min(100, (r.max / r.t[2]) * 100);
+        row.innerHTML = `<span class="pollen-nom"></span><span class="pollen-nivell n${r.level || 0}"></span>` +
+                        `<span class="pollen-barra"><i style="width:${pct}%"></i></span>`;
+        row.querySelector('.pollen-nom').textContent = r.nom;
+        row.querySelector('.pollen-nivell').textContent = r.max == null ? levelText : `${levelText} · ${Math.round(r.max)}`;
+        box.appendChild(row);
+      });
+    }
+
+    async function refreshAir(lat, lon) {
+      try {
+        const data = await fetchAirQuality(lat, lon);
+        renderAirQuality(data);
+        renderPollen(data);
+      } catch (e) {
+        if (document.getElementById('aq-index').textContent === '—') {
+          document.getElementById('aq-label').textContent = 'Sense dades';
+          document.getElementById('pollen-llista').innerHTML = '<div class="estat-prog">Sense dades de pol·len</div>';
+        }
+      }
+    }
+
+    // ------------------------------------------------------------------
     // Encabir el calendari a l'alçada visible. Al navegador del mòbil les
     // barres de Safari o Chrome deixen menys alçada que a l'app instal·lada;
     // si el bloc del calendari (capçalera, graella i cinta de dades) no hi cap
     // sencer, s'encongeix proporcionalment en lloc de quedar tallat.
     // ------------------------------------------------------------------
+    // El nom de la població, tan gran com es pugui però sempre en una línia
+    function fitLocation() {
+      const el = document.getElementById('data-location');
+      if (!el) return;
+      el.style.fontSize = '';
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      while (el.scrollWidth > el.clientWidth + 1 && size > 10) {
+        size -= 0.5;
+        el.style.fontSize = `${size}px`;
+      }
+    }
+
     function fitCalendar() {
+      fitLocation();
+      if (typeof fitNewsList === 'function') requestAnimationFrame(fitNewsList);
       const app = document.querySelector('.app-container');
       const section = document.querySelector('.calendar-section');
       const watchSection = document.querySelector('.watch-section');
@@ -3664,6 +4075,7 @@
     }
 
     async function refreshWeather(lat, lon) {
+      refreshAir(lat, lon);
       const weather = await fetchWeather(lat, lon).catch(() => null);
       if (!weather) return;
 
@@ -3692,6 +4104,7 @@
       if (locality) {
         const placeName = locality.city || locality.locality || locality.principalSubdivision || 'Ubicació desconeguda';
         document.getElementById('data-location').textContent = placeName;
+        scheduleFit(0);
         // Festes locals del municipi on ets (si és a Catalunya)
         const inCatalonia = normName(locality.principalSubdivision).includes('CATALUNYA') ||
                             normName(locality.principalSubdivision).includes('CATALONIA');
