@@ -2358,19 +2358,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FSS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FSS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FSS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -2631,7 +2631,7 @@
               'Neige faible', 'Neige', 'Neige forte', 'Grains de neige', 'Averses faibles', 'Averses', 'Averses violentes',
               'Averses de neige', 'Fortes averses de neige', 'Orage', 'Orage avec grêle', 'Orage avec forte grêle'],
         windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'], west: 'O',
-        aqBands: ['Bonne', 'Acceptable', 'Moyenne', 'Mauvaise', 'Très mauvaise', 'Extrêmement mauvaise'],
+        aqBands: ['Bonne', 'Correcte', 'Moyenne', 'Mauvaise', 'Très mauvaise', 'Extrêmement mauvaise'],
         pollen: { grass: 'Graminées', olive: 'Olivier', birch: 'Bouleau', alder: 'Aulne', mugwort: 'Armoise', ragweed: 'Ambroisie' },
         pollenLevels: ['Aucun', 'Faible', 'Modéré', 'Élevé', 'Très élevé'],
         themeNames: { day: 'jour', night: 'nuit', zz: 'Zz nuit' },
@@ -5186,6 +5186,31 @@
         setLanguage(b.dataset.lang, true);
       });
     });
+
+    // ------------------------------------------------------------------
+    // Pantalla sempre encesa mentre l'app és oberta i visible (Screen Wake
+    // Lock: Chrome, Edge, Android i Safari a partir d'iOS 16.4). El sistema
+    // allibera el bloqueig quan l'app passa a segon pla o es bloqueja el
+    // telèfon; es torna a demanar en tornar-hi i en cada toc, per si de cas.
+    // ------------------------------------------------------------------
+    let wakeLock = null;
+    let wakeLockPending = false;
+    async function requestWakeLock() {
+      if (!('wakeLock' in navigator) || wakeLock || wakeLockPending || document.visibilityState !== 'visible') return;
+      wakeLockPending = true;
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => { wakeLock = null; });
+      } catch (e) {
+        wakeLock = null; // p. ex. bateria baixa o el navegador espera un toc
+      } finally {
+        wakeLockPending = false;
+      }
+    }
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') requestWakeLock(); });
+    window.addEventListener('pageshow', requestWakeLock);
+    ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, requestWakeLock, { passive: true }));
+    requestWakeLock();
 
     setLanguage(currentLang, false);
     initInstrumentData();
