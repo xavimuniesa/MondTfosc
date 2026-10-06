@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="ca" translate="no" class="notranslate">
 <head>
   <meta charset="UTF-8">
+  <!-- Sense traducció automàtica de Google ni del navegador: l'app ja té els seus idiomes -->
+  <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Rellotge Automàtic i Calendari Mensual - Tissot PRS 516</title>
 
@@ -952,7 +954,8 @@
       touch-action: pan-y;
     }
 
-    .calendar-header {
+    .calendar-header,
+    .lang-fila {
       touch-action: none;
     }
 
@@ -1096,6 +1099,62 @@
 
     .ara-sona-fila .ara-sona { max-width: 100%; }
 
+    /* Botons d'idioma, al peu del calendari */
+    .lang-fila {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      flex: none;
+    }
+
+    .lang-btn {
+      appearance: none;
+      min-width: 2.35rem;
+      padding: 4px 0;
+      border: 1px solid var(--today-btn-border);
+      border-radius: 999px;
+      background: var(--today-btn-bg);
+      color: var(--weekday-color);
+      font: inherit;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .lang-btn.on {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-text);
+    }
+
+    .lang-veu {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2rem;
+      margin-left: 4px;
+      color: var(--accent);
+    }
+
+    .lang-veu svg {
+      width: 0.85rem;
+      height: 0.85rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .lang-veu[aria-pressed="false"] { color: var(--weekday-color); }
+
     /* Qualitat de l'aire */
     .fin-aire {
       gap: 4.5cqw;
@@ -1230,7 +1289,7 @@
     /* A les finestres les ràdios ocupen tot l'espai disponible */
     .fin-pag .radios {
       flex: 1;
-      grid-auto-rows: 1fr;
+      grid-auto-rows: minmax(3.1rem, 1fr);
     }
 
     .fin-pag .radio {
@@ -2222,7 +2281,7 @@
     }
   </style>
 </head>
-<body>
+<body translate="no">
 
   <div class="app-container">
     <!-- Secció Esquerra: Rellotge Automàtic (amb gir a la Mondaine en tocar l'esfera) -->
@@ -2292,17 +2351,17 @@
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
                 <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
                 <g id="mondaine-domaine-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF XML</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF XML</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF XML</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -2333,13 +2392,13 @@
     <!-- Secció Dreta: Calendari Mensual -->
     <div class="calendar-section">
       <div class="calendar-header">
-        <div class="month-year-title" id="month-year-title" title="Toca 2 cops per tornar al mes actual">Agost 2026</div>
+        <div class="month-year-title" id="month-year-title" data-i18n-title="titleDbl" title="Toca 2 cops per tornar al mes actual">Agost 2026</div>
         <div class="calendar-header-actions">
-          <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Canvia entre tema diürn i nocturn" aria-label="Tema diürn o nocturn"></button>
-          <button type="button" class="theme-toggle-btn" id="install-btn" title="Instal·la com a app" aria-label="Instal·la com a app" hidden>
+          <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Canvia entre tema diürn i nocturn" data-i18n-aria="themeAria" aria-label="Tema diürn o nocturn"></button>
+          <button type="button" class="theme-toggle-btn" id="install-btn" data-i18n-title="install" data-i18n-aria="install" title="Instal·la com a app" aria-label="Instal·la com a app" hidden>
             <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>
           </button>
-          <button type="button" class="calendar-today-btn" id="calendar-today-btn">Avui</button>
+          <button type="button" class="calendar-today-btn" id="calendar-today-btn" data-i18n="today">Avui</button>
         </div>
       </div>
       
@@ -2347,7 +2406,7 @@
            lliscant amunt o avall es passa d'una a l'altra -->
       <div class="cal-views" id="cal-views">
         <div class="cal-view cal-view-calendar" id="view-calendar">
-          <div class="calendar-grid">
+          <div class="calendar-grid" id="weekday-row">
             <div class="weekday-header">Dl</div>
             <div class="weekday-header">Dt</div>
             <div class="weekday-header">Dc</div>
@@ -2364,56 +2423,56 @@
              passen lliscant a dreta o esquerra -->
         <div class="cal-view cal-view-fin" id="view-fin" aria-hidden="true">
           <div class="fin-track" id="fin-track">
-            <section class="fin-pag" id="pag-avisos" data-nom="Avisos" hidden>
-              <div class="visor-titol">Properes 12 hores</div>
+            <section class="fin-pag" id="pag-avisos" data-key="avisos" data-nom="Avisos" hidden>
+              <div class="visor-titol" data-i18n="next12">Properes 12 hores</div>
               <div class="avisos-llista" id="avisos-llista"></div>
             </section>
 
-            <section class="fin-pag fin-ubicacio" data-nom="Ubicació">
-              <div class="ub-poblacio" id="data-location">Localitzant…</div>
+            <section class="fin-pag fin-ubicacio" data-key="ubicacio" data-nom="Ubicació">
+              <div class="ub-poblacio" id="data-location" data-i18n="locating">Localitzant…</div>
               <div class="ub-regio" id="ub-regio"></div>
               <div class="ub-dades">
-                <div class="wx-item"><span class="wx-label">Altitud</span><span class="wx-value" id="wx-altitude">—</span></div>
-                <div class="wx-item"><span class="wx-label">Coordenades</span><span class="wx-value ub-coord" id="ub-coord">—</span></div>
+                <div class="wx-item"><span class="wx-label" data-i18n="altitude">Altitud</span><span class="wx-value" id="wx-altitude">—</span></div>
+                <div class="wx-item"><span class="wx-label" data-i18n="coords">Coordenades</span><span class="wx-value ub-coord" id="ub-coord">—</span></div>
               </div>
             </section>
 
-            <section class="fin-pag fin-temps" data-nom="El temps">
+            <section class="fin-pag fin-temps" data-key="temps" data-nom="El temps">
               <div class="wx-main">
                 <div class="wx-icon" id="wx-icon"></div>
                 <div class="wx-temp-block">
                   <div class="wx-temp" id="wx-temp">—</div>
-                  <div class="wx-desc" id="wx-desc">Carregant el temps…</div>
+                  <div class="wx-desc" id="wx-desc" data-i18n="loadingWx">Carregant el temps…</div>
                 </div>
               </div>
               <div class="wx-grid">
                 <div class="wx-item">
-                  <span class="wx-label">Sensació</span>
+                  <span class="wx-label" data-i18n="feels">Sensació</span>
                   <span class="wx-value" id="wx-feels">—</span>
                 </div>
                 <div class="wx-item">
-                  <span class="wx-label">Humitat</span>
+                  <span class="wx-label" data-i18n="humidity">Humitat</span>
                   <span class="wx-value" id="wx-humidity">—</span>
                 </div>
                 <div class="wx-item">
-                  <span class="wx-label">Vent</span>
+                  <span class="wx-label" data-i18n="wind">Vent</span>
                   <span class="wx-value" id="wx-wind">—</span>
                   <span class="wx-sub" id="wx-gusts"></span>
                 </div>
                 <div class="wx-item">
-                  <span class="wx-label">Pluja 6 h</span>
+                  <span class="wx-label" data-i18n="precip6">Pluja 6 h</span>
                   <span class="wx-value" id="wx-precip">—</span>
                 </div>
               </div>
               <div class="wx-alerts" id="wx-alerts"></div>
             </section>
 
-            <section class="fin-pag fin-aire" data-nom="Qualitat de l'aire">
+            <section class="fin-pag fin-aire" data-key="aire" data-nom="Qualitat de l'aire">
               <div class="aq-main">
                 <div class="aq-index" id="aq-index">—</div>
                 <div class="aq-text">
-                  <div class="aq-label" id="aq-label">Carregant…</div>
-                  <div class="aq-sub">Índex europeu de qualitat de l'aire</div>
+                  <div class="aq-label" id="aq-label" data-i18n="loading">Carregant…</div>
+                  <div class="aq-sub" data-i18n="aqSub">Índex europeu de qualitat de l'aire</div>
                 </div>
               </div>
               <div class="aq-scale" aria-hidden="true">
@@ -2421,53 +2480,63 @@
                 <i class="aq-marker" id="aq-marker"></i>
               </div>
               <div class="wx-grid aq-grid">
-                <div class="wx-item"><span class="wx-label">PM2,5</span><span class="wx-value" id="aq-pm25">—</span></div>
+                <div class="wx-item"><span class="wx-label" data-i18n="pm25">PM2,5</span><span class="wx-value" id="aq-pm25">—</span></div>
                 <div class="wx-item"><span class="wx-label">PM10</span><span class="wx-value" id="aq-pm10">—</span></div>
-                <div class="wx-item"><span class="wx-label">Diòxid de nitrogen</span><span class="wx-value" id="aq-no2">—</span></div>
-                <div class="wx-item"><span class="wx-label">Ozó</span><span class="wx-value" id="aq-o3">—</span></div>
+                <div class="wx-item"><span class="wx-label" data-i18n="no2">Diòxid de nitrogen</span><span class="wx-value" id="aq-no2">—</span></div>
+                <div class="wx-item"><span class="wx-label" data-i18n="o3">Ozó</span><span class="wx-value" id="aq-o3">—</span></div>
               </div>
-              <div class="peu-dades">µg/m³ · ara · font: Copernicus (Open-Meteo)</div>
+              <div class="peu-dades" data-i18n="aqFoot">µg/m³ · ara · font: Copernicus (Open-Meteo)</div>
             </section>
 
-            <section class="fin-pag fin-pollen" data-nom="Pol·len">
-              <div class="visor-titol">Màxim de les properes 24 hores</div>
-              <div class="pollen-llista" id="pollen-llista"><div class="estat-prog">Carregant…</div></div>
-              <div class="peu-dades">grans/m³ · nivells orientatius · font: Copernicus (Open-Meteo)</div>
+            <section class="fin-pag fin-pollen" data-key="pollen" data-nom="Pol·len">
+              <div class="visor-titol" data-i18n="pollenTitle">Màxim de les properes 24 hores</div>
+              <div class="pollen-llista" id="pollen-llista"><div class="estat-prog" data-i18n="loading">Carregant…</div></div>
+              <div class="peu-dades" data-i18n="pollenFoot">grans/m³ · nivells orientatius · font: Copernicus (Open-Meteo)</div>
             </section>
 
-            <section class="fin-pag" data-nom="Ràdio">
-              <div class="visor-titol">En directe</div>
+            <section class="fin-pag" data-key="radio" data-nom="Ràdio">
+              <div class="visor-titol" data-i18n="live">En directe</div>
               <div class="radios" id="llista-radios"></div>
             </section>
 
-            <section class="fin-pag" data-nom="Podcasts">
+            <section class="fin-pag" data-key="podcasts" data-nom="Podcasts">
               <div class="visor-titol">La Competència · RAC1</div>
-              <div class="llista-prog" id="llista-competencia"><div class="estat-prog">Carregant programes…</div></div>
+              <div class="llista-prog" id="llista-competencia"><div class="estat-prog" data-i18n="loadingPrograms">Carregant programes…</div></div>
               <div class="via-fila">
-                <div class="via-etiqueta">Via lliure<small>7 h</small></div>
-                <div class="via-lliure" id="llista-via"><div class="estat-prog">Carregant…</div></div>
+                <div class="via-etiqueta">Via lliure<small data-i18n="via7">7 h</small></div>
+                <div class="via-lliure" id="llista-via"><div class="estat-prog" data-i18n="loading">Carregant…</div></div>
               </div>
             </section>
 
-            <section class="fin-pag fin-noticies" data-nom="Notícies">
-              <div class="visor-titol">ACN · Al minut</div>
-              <div class="noticies" id="llista-noticies"><div class="estat-prog">Carregant titulars…</div></div>
+            <section class="fin-pag fin-noticies" data-key="noticies" data-nom="Notícies">
+              <div class="visor-titol" id="noticies-titol">ACN · Al minut</div>
+              <div class="noticies" id="llista-noticies"><div class="estat-prog" data-i18n="loadingNews">Carregant titulars…</div></div>
               <div class="peu-dades" id="noticies-peu"></div>
             </section>
           </div>
           <div class="fin-punts" id="fin-punts"></div>
         </div>
 
-        <div class="view-dots" id="view-dots" title="Llisca amunt o avall per veure les finestres">
+        <div class="view-dots" id="view-dots" data-i18n-title="viewDots" title="Llisca avall per veure les finestres">
           <span class="on"></span><span></span>
         </div>
       </div>
 
       <!-- Fila prima que només apareix quan sona una ràdio o un podcast -->
       <div class="ara-sona-fila" id="ara-sona-fila" hidden>
-        <button type="button" class="ara-sona" id="ara-sona" aria-label="Pausar o reprendre">
+        <button type="button" class="ara-sona" id="ara-sona" data-i18n-aria="pausePlay" aria-label="Pausar o reprendre">
           <span class="ara-sona-ic" id="ara-sona-ic"></span><span class="ara-sona-tx" id="ara-sona-tx"></span>
         </button>
+      </div>
+
+      <!-- Idioma de l'app (i de l'anunci de l'hora en punt) -->
+      <div class="lang-fila" id="lang-fila" role="group" aria-label="Idioma">
+        <button type="button" class="lang-btn" data-lang="ca" lang="ca" title="Català">CA</button>
+        <button type="button" class="lang-btn" data-lang="fr" lang="fr" title="Français">FR</button>
+        <button type="button" class="lang-btn" data-lang="de" lang="de" title="Deutsch">DE</button>
+        <button type="button" class="lang-btn" data-lang="it" lang="it" title="Italiano">IT</button>
+        <button type="button" class="lang-btn" data-lang="en" lang="en" title="English">EN</button>
+        <button type="button" class="lang-btn lang-veu" id="veu-btn" aria-pressed="true"></button>
       </div>
     </div>
   </div>
@@ -2486,6 +2555,289 @@
   </svg>
 
   <script>
+    // ------------------------------------------------------------------
+    // Idiomes: català, francès, alemany, italià i anglès. Tot el text de
+    // l'app surt d'aquí; t('clau', ...) retorna el text de l'idioma triat.
+    // ------------------------------------------------------------------
+    const LANGS = ['ca', 'fr', 'de', 'it', 'en'];
+    const LANG_STORAGE_KEY = 'prs516_lang';
+    const WMO_CODES = [0, 1, 2, 3, 45, 48, 51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99];
+
+    const I18N = {
+      ca: {
+        locale: 'ca-ES', name: 'Català', decimal: ',',
+        months: ['Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'],
+        weekShort: ['Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds', 'Dg'],
+        watchDays: ['DG', 'DL', 'DT', 'DC', 'DJ', 'DV', 'DS'],
+        longDays: ['Diumenge', 'Dilluns', 'Dimarts', 'Dimecres', 'Dijous', 'Divendres', 'Dissabte'],
+        wmo: ['Cel serè', 'Gairebé serè', 'Parcialment ennuvolat', 'Cobert', 'Boira', 'Boira gebradora',
+              'Plugim feble', 'Plugim', 'Plugim intens', 'Plugim gelat', 'Plugim gelat intens',
+              'Pluja feble', 'Pluja', 'Pluja intensa', 'Pluja gelant', 'Pluja gelant intensa',
+              'Neu feble', 'Neu', 'Neu intensa', 'Grans de neu', 'Ruixats febles', 'Ruixats', 'Ruixats molt intensos',
+              'Ruixats de neu', 'Ruixats de neu intensos', 'Tempesta', 'Tempesta amb calamarsa', 'Tempesta amb calamarsa forta'],
+        windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'], west: 'O',
+        aqBands: ['Bona', 'Acceptable', 'Moderada', 'Dolenta', 'Molt dolenta', 'Extremadament dolenta'],
+        pollen: { grass: 'Gramínies', olive: 'Olivera', birch: 'Bedoll', alder: 'Vern', mugwort: 'Artemísia', ragweed: 'Ambròsia' },
+        pollenLevels: ['Cap', 'Baix', 'Moderat', 'Alt', 'Molt alt'],
+        themeNames: { day: 'diürn', night: 'nocturn', zz: 'Zz nocturn' },
+        today: 'Avui', titleDbl: 'Toca 2 cops per tornar al mes actual', install: 'Instal·la com a app',
+        themeAria: 'Tema diürn o nocturn',
+        themeFixed: n => `Tema ${n} fix (toca per canviar)`,
+        themeAuto: 'Tema automàtic: dia o nit segons el sol, i Zz quan es carrega de nit (toca per canviar)',
+        viewDots: 'Llisca avall per veure les finestres', pausePlay: 'Pausar o reprendre',
+        pages: { avisos: 'Avisos', ubicacio: 'Ubicació', temps: 'El temps', aire: "Qualitat de l'aire", pollen: 'Pol·len', radio: 'Ràdio', podcasts: 'Podcasts', noticies: 'Notícies' },
+        next12: 'Properes 12 hores', locating: 'Localitzant…', unknownLoc: 'Ubicació desconeguda',
+        altitude: 'Altitud', coords: 'Coordenades', loadingWx: 'Carregant el temps…', loading: 'Carregant…',
+        feels: 'Sensació', humidity: 'Humitat', wind: 'Vent', precip6: 'Pluja 6 h', rain: 'pluja', snow: 'neu', gusts: 'ratxes',
+        noAlerts: h => `Sense avisos les properes ${h} h`, alertWord: 'Avís', now: 'ara',
+        atHour: h => (h === 1 ? 'a la 1 h' : `a les ${h} h`),
+        alerts: { storm: 'Tempesta', rain: 'Pluja intensa', snow: 'Neu', ice: 'Glaç', wind: 'Vent fort', fog: 'Boira intensa' },
+        gustsText: n => `Ratxes de ${n} km/h`,
+        aqSub: "Índex europeu de qualitat de l'aire", pm25: 'PM2,5', no2: 'Diòxid de nitrogen', o3: 'Ozó',
+        aqFoot: 'µg/m³ · ara · font: Copernicus (Open-Meteo)', noData: 'Sense dades',
+        pollenTitle: 'Màxim de les properes 24 hores', pollenFoot: 'grans/m³ · nivells orientatius · font: Copernicus (Open-Meteo)',
+        noPollen: 'Sense dades de pol·len', noPollenZone: 'No hi ha dades de pol·len per a aquesta zona',
+        live: 'En directe', liveLower: 'en directe', newsWord: 'notícies', classical: 'clàssica', worldEnglish: 'Europa · anglès',
+        loadingPrograms: 'Carregant programes…', via7: '7 h',
+        programsError: 'No s\'han pogut carregar.', openSite: 'Obre la web', openWeb: 'Obrir a la web',
+        loadingNews: 'Carregant titulars…',
+        newsFoot: t => `actualitzat a les ${t}`,
+        newsError: 'No s\'han pogut carregar els titulars.',
+        toastRadio: n => `No es pot reproduir aquí: torna a tocar ${n} per obrir la seva web`,
+        toastPodcast: 'No s\'ha pogut reproduir. Fes servir la fletxa ↗ per obrir-lo a la web',
+        voiceOn: 'Anunci de l\'hora en punt activat (toca per silenciar)',
+        voiceOff: 'Anunci de l\'hora en punt silenciat (toca per activar)',
+        langGroup: 'Idioma',
+        hello: 'Hola! Diré les hores en punt en català.'
+      },
+      fr: {
+        locale: 'fr-FR', name: 'Français', decimal: ',',
+        months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+        weekShort: ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'],
+        watchDays: ['DIM', 'LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM'],
+        longDays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+        wmo: ['Ciel dégagé', 'Presque dégagé', 'Partiellement nuageux', 'Couvert', 'Brouillard', 'Brouillard givrant',
+              'Bruine légère', 'Bruine', 'Bruine forte', 'Bruine verglaçante', 'Bruine verglaçante forte',
+              'Pluie faible', 'Pluie', 'Pluie forte', 'Pluie verglaçante', 'Pluie verglaçante forte',
+              'Neige faible', 'Neige', 'Neige forte', 'Grains de neige', 'Averses faibles', 'Averses', 'Averses violentes',
+              'Averses de neige', 'Fortes averses de neige', 'Orage', 'Orage avec grêle', 'Orage avec forte grêle'],
+        windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'], west: 'O',
+        aqBands: ['Bonne', 'Correcte', 'Moyenne', 'Mauvaise', 'Très mauvaise', 'Extrêmement mauvaise'],
+        pollen: { grass: 'Graminées', olive: 'Olivier', birch: 'Bouleau', alder: 'Aulne', mugwort: 'Armoise', ragweed: 'Ambroisie' },
+        pollenLevels: ['Aucun', 'Faible', 'Modéré', 'Élevé', 'Très élevé'],
+        themeNames: { day: 'jour', night: 'nuit', zz: 'Zz nuit' },
+        today: 'Auj.', titleDbl: 'Touchez 2 fois pour revenir au mois actuel', install: 'Installer comme app',
+        themeAria: 'Thème jour ou nuit',
+        themeFixed: n => `Thème ${n} fixe (touchez pour changer)`,
+        themeAuto: 'Thème automatique : jour ou nuit selon le soleil, et Zz en charge la nuit (touchez pour changer)',
+        viewDots: 'Glissez vers le bas pour voir les fenêtres', pausePlay: 'Pause ou reprise',
+        pages: { avisos: 'Alertes', ubicacio: 'Lieu', temps: 'Météo', aire: "Qualité de l'air", pollen: 'Pollen', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Actualités' },
+        next12: '12 prochaines heures', locating: 'Localisation…', unknownLoc: 'Lieu inconnu',
+        altitude: 'Altitude', coords: 'Coordonnées', loadingWx: 'Chargement de la météo…', loading: 'Chargement…',
+        feels: 'Ressenti', humidity: 'Humidité', wind: 'Vent', precip6: 'Pluie 6 h', rain: 'pluie', snow: 'neige', gusts: 'rafales',
+        noAlerts: h => `Aucune alerte dans les ${h} prochaines heures`, alertWord: 'Alerte', now: 'maintenant',
+        atHour: h => `à ${h} h`,
+        alerts: { storm: 'Orage', rain: 'Fortes pluies', snow: 'Neige', ice: 'Verglas', wind: 'Vent fort', fog: 'Brouillard dense' },
+        gustsText: n => `Rafales à ${n} km/h`,
+        aqSub: "Indice européen de la qualité de l'air", pm25: 'PM2,5', no2: "Dioxyde d'azote", o3: 'Ozone',
+        aqFoot: 'µg/m³ · maintenant · source : Copernicus (Open-Meteo)', noData: 'Pas de données',
+        pollenTitle: 'Maximum des prochaines 24 heures', pollenFoot: 'grains/m³ · niveaux indicatifs · source : Copernicus (Open-Meteo)',
+        noPollen: 'Pas de données de pollen', noPollenZone: 'Pas de données de pollen pour cette zone',
+        live: 'En direct', liveLower: 'en direct', newsWord: 'infos', classical: 'classique', worldEnglish: 'Europe · anglais',
+        loadingPrograms: 'Chargement des émissions…', via7: '7 h',
+        programsError: 'Impossible de charger.', openSite: 'Ouvrir le site', openWeb: 'Ouvrir sur le web',
+        loadingNews: 'Chargement des titres…',
+        newsFoot: t => `mis à jour à ${t}`,
+        newsError: 'Impossible de charger les titres.',
+        toastRadio: n => `Lecture impossible ici : touchez à nouveau ${n} pour ouvrir son site`,
+        toastPodcast: 'Lecture impossible. Utilisez la flèche ↗ pour l\'ouvrir sur le web',
+        voiceOn: 'Annonce des heures pile activée (touchez pour couper)',
+        voiceOff: 'Annonce des heures pile coupée (touchez pour activer)',
+        langGroup: 'Langue',
+        hello: 'Bonjour ! J\'annoncerai les heures pile en français.'
+      },
+      de: {
+        locale: 'de-DE', name: 'Deutsch', decimal: ',',
+        months: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+        weekShort: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+        watchDays: ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'],
+        longDays: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+        wmo: ['Klar', 'Überwiegend klar', 'Teilweise bewölkt', 'Bedeckt', 'Nebel', 'Reifnebel',
+              'Leichter Nieselregen', 'Nieselregen', 'Starker Nieselregen', 'Gefrierender Nieselregen', 'Starker gefrierender Nieselregen',
+              'Leichter Regen', 'Regen', 'Starker Regen', 'Gefrierender Regen', 'Starker gefrierender Regen',
+              'Leichter Schneefall', 'Schneefall', 'Starker Schneefall', 'Schneegriesel', 'Leichte Schauer', 'Schauer', 'Heftige Schauer',
+              'Schneeschauer', 'Starke Schneeschauer', 'Gewitter', 'Gewitter mit Hagel', 'Gewitter mit starkem Hagel'],
+        windDirs: ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'], west: 'W', east: 'O',
+        aqBands: ['Gut', 'Akzeptabel', 'Mäßig', 'Schlecht', 'Sehr schlecht', 'Extrem schlecht'],
+        pollen: { grass: 'Gräser', olive: 'Olive', birch: 'Birke', alder: 'Erle', mugwort: 'Beifuß', ragweed: 'Ambrosia' },
+        pollenLevels: ['Keine', 'Niedrig', 'Mäßig', 'Hoch', 'Sehr hoch'],
+        themeNames: { day: 'Tag', night: 'Nacht', zz: 'Zz-Nacht' },
+        today: 'Heute', titleDbl: 'Zweimal tippen, um zum aktuellen Monat zurückzukehren', install: 'Als App installieren',
+        themeAria: 'Tag- oder Nachtmodus',
+        themeFixed: n => `Modus ${n} fest (tippen zum Ändern)`,
+        themeAuto: 'Automatischer Modus: Tag oder Nacht je nach Sonnenstand, Zz beim nächtlichen Laden (tippen zum Ändern)',
+        viewDots: 'Nach unten wischen, um die Fenster zu sehen', pausePlay: 'Pause oder fortsetzen',
+        pages: { avisos: 'Warnungen', ubicacio: 'Standort', temps: 'Wetter', aire: 'Luftqualität', pollen: 'Pollen', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Nachrichten' },
+        next12: 'Nächste 12 Stunden', locating: 'Standort wird ermittelt…', unknownLoc: 'Unbekannter Standort',
+        altitude: 'Höhe', coords: 'Koordinaten', loadingWx: 'Wetter wird geladen…', loading: 'Wird geladen…',
+        feels: 'Gefühlt', humidity: 'Feuchte', wind: 'Wind', precip6: 'Regen 6 h', rain: 'Regen', snow: 'Schnee', gusts: 'Böen',
+        noAlerts: h => `Keine Warnungen in den nächsten ${h} Stunden`, alertWord: 'Warnung', now: 'jetzt',
+        atHour: h => `um ${h} Uhr`,
+        alerts: { storm: 'Gewitter', rain: 'Starkregen', snow: 'Schnee', ice: 'Glätte', wind: 'Starker Wind', fog: 'Dichter Nebel' },
+        gustsText: n => `Böen bis ${n} km/h`,
+        aqSub: 'Europäischer Luftqualitätsindex', pm25: 'PM2,5', no2: 'Stickstoffdioxid', o3: 'Ozon',
+        aqFoot: 'µg/m³ · jetzt · Quelle: Copernicus (Open-Meteo)', noData: 'Keine Daten',
+        pollenTitle: 'Höchstwert der nächsten 24 Stunden', pollenFoot: 'Körner/m³ · Richtwerte · Quelle: Copernicus (Open-Meteo)',
+        noPollen: 'Keine Pollendaten', noPollenZone: 'Keine Pollendaten für diese Region',
+        live: 'Live', liveLower: 'live', newsWord: 'Nachrichten', classical: 'Klassik', worldEnglish: 'Europa · Englisch',
+        loadingPrograms: 'Sendungen werden geladen…', via7: '7 Uhr',
+        programsError: 'Konnte nicht geladen werden.', openSite: 'Website öffnen', openWeb: 'Im Web öffnen',
+        loadingNews: 'Schlagzeilen werden geladen…',
+        newsFoot: t => `aktualisiert um ${t}`,
+        newsError: 'Die Schlagzeilen konnten nicht geladen werden.',
+        toastRadio: n => `Hier nicht abspielbar: ${n} erneut antippen, um die Website zu öffnen`,
+        toastPodcast: 'Wiedergabe nicht möglich. Mit dem Pfeil ↗ im Web öffnen',
+        voiceOn: 'Stundenansage aktiv (tippen zum Stummschalten)',
+        voiceOff: 'Stundenansage stumm (tippen zum Aktivieren)',
+        langGroup: 'Sprache',
+        hello: 'Hallo! Ich sage die vollen Stunden auf Deutsch an.'
+      },
+      it: {
+        locale: 'it-IT', name: 'Italiano', decimal: ',',
+        months: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+        weekShort: ['Lu', 'Ma', 'Me', 'Gi', 'Ve', 'Sa', 'Do'],
+        watchDays: ['DOM', 'LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB'],
+        longDays: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'],
+        wmo: ['Sereno', 'Quasi sereno', 'Parzialmente nuvoloso', 'Coperto', 'Nebbia', 'Nebbia con brina',
+              'Pioviggine debole', 'Pioviggine', 'Pioviggine intensa', 'Pioviggine gelata', 'Pioviggine gelata intensa',
+              'Pioggia debole', 'Pioggia', 'Pioggia intensa', 'Pioggia gelata', 'Pioggia gelata intensa',
+              'Neve debole', 'Neve', 'Neve intensa', 'Granuli di neve', 'Rovesci deboli', 'Rovesci', 'Rovesci violenti',
+              'Rovesci di neve', 'Forti rovesci di neve', 'Temporale', 'Temporale con grandine', 'Temporale con forte grandine'],
+        windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'], west: 'O',
+        aqBands: ['Buona', 'Discreta', 'Moderata', 'Scadente', 'Molto scadente', 'Estremamente scadente'],
+        pollen: { grass: 'Graminacee', olive: 'Olivo', birch: 'Betulla', alder: 'Ontano', mugwort: 'Artemisia', ragweed: 'Ambrosia' },
+        pollenLevels: ['Assente', 'Basso', 'Moderato', 'Alto', 'Molto alto'],
+        themeNames: { day: 'diurno', night: 'notturno', zz: 'Zz notturno' },
+        today: 'Oggi', titleDbl: 'Tocca 2 volte per tornare al mese corrente', install: 'Installa come app',
+        themeAria: 'Tema giorno o notte',
+        themeFixed: n => `Tema ${n} fisso (tocca per cambiare)`,
+        themeAuto: 'Tema automatico: giorno o notte secondo il sole, e Zz quando si ricarica di notte (tocca per cambiare)',
+        viewDots: 'Scorri verso il basso per vedere le finestre', pausePlay: 'Pausa o riprendi',
+        pages: { avisos: 'Allerte', ubicacio: 'Posizione', temps: 'Meteo', aire: "Qualità dell'aria", pollen: 'Pollini', radio: 'Radio', podcasts: 'Podcast', noticies: 'Notizie' },
+        next12: 'Prossime 12 ore', locating: 'Localizzazione…', unknownLoc: 'Posizione sconosciuta',
+        altitude: 'Altitudine', coords: 'Coordinate', loadingWx: 'Caricamento meteo…', loading: 'Caricamento…',
+        feels: 'Percepita', humidity: 'Umidità', wind: 'Vento', precip6: 'Pioggia 6 h', rain: 'pioggia', snow: 'neve', gusts: 'raffiche',
+        noAlerts: h => `Nessuna allerta nelle prossime ${h} ore`, alertWord: 'Allerta', now: 'ora',
+        atHour: h => (h === 1 ? "all'una" : (h === 8 || h === 11) ? `all'${h}` : `alle ${h}`),
+        alerts: { storm: 'Temporale', rain: 'Pioggia intensa', snow: 'Neve', ice: 'Ghiaccio', wind: 'Vento forte', fog: 'Nebbia fitta' },
+        gustsText: n => `Raffiche di ${n} km/h`,
+        aqSub: "Indice europeo della qualità dell'aria", pm25: 'PM2,5', no2: 'Biossido di azoto', o3: 'Ozono',
+        aqFoot: 'µg/m³ · ora · fonte: Copernicus (Open-Meteo)', noData: 'Nessun dato',
+        pollenTitle: 'Massimo delle prossime 24 ore', pollenFoot: 'granuli/m³ · livelli indicativi · fonte: Copernicus (Open-Meteo)',
+        noPollen: 'Nessun dato sui pollini', noPollenZone: 'Nessun dato sui pollini per questa zona',
+        live: 'In diretta', liveLower: 'in diretta', newsWord: 'notizie', classical: 'classica', worldEnglish: 'Europa · inglese',
+        loadingPrograms: 'Caricamento programmi…', via7: 'ore 7',
+        programsError: 'Impossibile caricare.', openSite: 'Apri il sito', openWeb: 'Apri sul web',
+        loadingNews: 'Caricamento titoli…',
+        newsFoot: t => `aggiornato alle ${t}`,
+        newsError: 'Impossibile caricare i titoli.',
+        toastRadio: n => `Impossibile riprodurre qui: tocca di nuovo ${n} per aprire il sito`,
+        toastPodcast: 'Impossibile riprodurre. Usa la freccia ↗ per aprirlo sul web',
+        voiceOn: 'Annuncio delle ore in punto attivo (tocca per silenziare)',
+        voiceOff: 'Annuncio delle ore in punto silenziato (tocca per attivare)',
+        langGroup: 'Lingua',
+        hello: 'Ciao! Annuncerò le ore in punto in italiano.'
+      },
+      en: {
+        locale: 'en-GB', name: 'English', decimal: '.',
+        months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        weekShort: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+        watchDays: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+        longDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        wmo: ['Clear sky', 'Mainly clear', 'Partly cloudy', 'Overcast', 'Fog', 'Freezing fog',
+              'Light drizzle', 'Drizzle', 'Heavy drizzle', 'Freezing drizzle', 'Heavy freezing drizzle',
+              'Light rain', 'Rain', 'Heavy rain', 'Freezing rain', 'Heavy freezing rain',
+              'Light snow', 'Snow', 'Heavy snow', 'Snow grains', 'Light showers', 'Showers', 'Violent showers',
+              'Snow showers', 'Heavy snow showers', 'Thunderstorm', 'Thunderstorm with hail', 'Thunderstorm with heavy hail'],
+        windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], west: 'W',
+        aqBands: ['Good', 'Fair', 'Moderate', 'Poor', 'Very poor', 'Extremely poor'],
+        pollen: { grass: 'Grass', olive: 'Olive', birch: 'Birch', alder: 'Alder', mugwort: 'Mugwort', ragweed: 'Ragweed' },
+        pollenLevels: ['None', 'Low', 'Moderate', 'High', 'Very high'],
+        themeNames: { day: 'day', night: 'night', zz: 'Zz night' },
+        today: 'Today', titleDbl: 'Tap twice to return to the current month', install: 'Install as app',
+        themeAria: 'Day or night theme',
+        themeFixed: n => `Fixed ${n} theme (tap to change)`,
+        themeAuto: 'Automatic theme: day or night by the sun, and Zz when charging at night (tap to change)',
+        viewDots: 'Swipe down to see the panels', pausePlay: 'Pause or resume',
+        pages: { avisos: 'Alerts', ubicacio: 'Location', temps: 'Weather', aire: 'Air quality', pollen: 'Pollen', radio: 'Radio', podcasts: 'Podcasts', noticies: 'News' },
+        next12: 'Next 12 hours', locating: 'Locating…', unknownLoc: 'Unknown location',
+        altitude: 'Altitude', coords: 'Coordinates', loadingWx: 'Loading weather…', loading: 'Loading…',
+        feels: 'Feels like', humidity: 'Humidity', wind: 'Wind', precip6: 'Rain 6 h', rain: 'rain', snow: 'snow', gusts: 'gusts',
+        noAlerts: h => `No alerts in the next ${h} hours`, alertWord: 'Alert', now: 'now',
+        atHour: h => `at ${h}:00`,
+        alerts: { storm: 'Thunderstorm', rain: 'Heavy rain', snow: 'Snow', ice: 'Ice', wind: 'Strong wind', fog: 'Dense fog' },
+        gustsText: n => `Gusts of ${n} km/h`,
+        aqSub: 'European Air Quality Index', pm25: 'PM2.5', no2: 'Nitrogen dioxide', o3: 'Ozone',
+        aqFoot: 'µg/m³ · now · source: Copernicus (Open-Meteo)', noData: 'No data',
+        pollenTitle: 'Peak over the next 24 hours', pollenFoot: 'grains/m³ · indicative levels · source: Copernicus (Open-Meteo)',
+        noPollen: 'No pollen data', noPollenZone: 'No pollen data for this area',
+        live: 'Live', liveLower: 'live', newsWord: 'news', classical: 'classical', worldEnglish: 'Europe · English',
+        loadingPrograms: 'Loading shows…', via7: '7 am',
+        programsError: 'Couldn\'t load.', openSite: 'Open the website', openWeb: 'Open on the web',
+        loadingNews: 'Loading headlines…',
+        newsFoot: t => `updated at ${t}`,
+        newsError: 'Couldn\'t load the headlines.',
+        toastRadio: n => `Can't play here: tap ${n} again to open its website`,
+        toastPodcast: 'Couldn\'t play. Use the ↗ arrow to open it on the web',
+        voiceOn: 'Hourly announcement on (tap to mute)',
+        voiceOff: 'Hourly announcement muted (tap to turn on)',
+        langGroup: 'Language',
+        hello: 'Hello! I\'ll announce the time on the hour in English.'
+      }
+    };
+
+    function readStoredLang() {
+      try {
+        const v = localStorage.getItem(LANG_STORAGE_KEY);
+        return LANGS.includes(v) ? v : 'ca';
+      } catch (e) { return 'ca'; }
+    }
+
+    let currentLang = readStoredLang();
+
+    // Text de l'idioma triat; si és una funció, s'hi passen els paràmetres
+    function t(key, ...args) {
+      const dict = I18N[currentLang];
+      let v = dict[key];
+      if (v === undefined) v = I18N.ca[key];
+      return typeof v === 'function' ? v(...args) : v;
+    }
+
+    function wmoText(code) {
+      const i = WMO_CODES.indexOf(code);
+      return i < 0 ? '' : t('wmo')[i];
+    }
+
+    // Nombre amb el separador decimal de l'idioma
+    function fmtDecimal(v, digits) { return v.toFixed(digits).replace('.', t('decimal')); }
+
+    // Textos fixos de l'HTML marcats amb data-i18n, data-i18n-title i data-i18n-aria
+    function applyStaticTexts() {
+      document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+      document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+      document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+      document.querySelectorAll('.fin-pag[data-key]').forEach(el => { el.dataset.nom = t('pages')[el.dataset.key]; });
+      const heads = document.querySelectorAll('#weekday-row .weekday-header');
+      t('weekShort').forEach((d, i) => { if (heads[i]) heads[i].textContent = d; });
+      const group = document.getElementById('lang-fila');
+      if (group) group.setAttribute('aria-label', t('langGroup'));
+      document.querySelectorAll('.lang-btn[data-lang]').forEach(b => {
+        const on = b.dataset.lang === currentLang;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+    }
+
     // Generació del Bisel Negre
     const bezel = document.getElementById('bezel');
     const bezelNumbers = [
@@ -2564,8 +2916,6 @@
 
     buildArcText('SWISS', 'swiss-arc', 7, 2.33, 1, true);
     buildArcText('MADE', 'made-arc', 7, 2.44, -1, false);
-
-    const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
     function pad2(n) { return String(n).padStart(2, '0'); }
     function isoOf(date) { return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`; }
@@ -2782,7 +3132,8 @@
       const dow = now.getDay();
       if (dow === 0) return '#a50044';
       if (dow === 6) return '#1a5c2e';
-      if (getHolidaysSync(now.getFullYear()).has(isoOf(now))) return '#a50044';
+      // Les festes del calendari, de moment, només en català
+      if (currentLang === 'ca' && getHolidaysSync(now.getFullYear()).has(isoOf(now))) return '#a50044';
       return null;
     }
 
@@ -2798,11 +3149,11 @@
 
     function refreshDateWindows(now) {
       const festiuColor = getFestiuColor(now);
-      tissotDayEl.textContent = daysOfWeek[now.getDay()];
+      tissotDayEl.textContent = t('watchDays')[now.getDay()];
       tissotDateEl.textContent = pad2(now.getDate());
       tissotDayEl.style.color = festiuColor || '';
       tissotDateEl.style.color = festiuColor || '';
-      mondaineDayEl.textContent = daysOfWeek[now.getDay()];
+      mondaineDayEl.textContent = t('watchDays')[now.getDay()];
       mondaineDateEl.textContent = now.getDate();
       mondaineDayEl.setAttribute('fill', festiuColor || '#1c1c1c');
       mondaineDateEl.setAttribute('fill', festiuColor || '#1c1c1c');
@@ -2853,10 +3204,6 @@
     let calendarRenderToken = 0;
     let calendarTitleText = '';
     let weatherViewActive = false;
-    const monthNames = [
-      'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny',
-      'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'
-    ];
 
     function makeDayCell(text, extraClass) {
       const cell = document.createElement('div');
@@ -2896,7 +3243,7 @@
         const dow = new Date(year, month, day).getDay();
         if (dow === 0 || dow === 6) cell.classList.add('weekend');
         const iso = `${year}-${pad2(month + 1)}-${pad2(day)}`;
-        if (holidayInfo.dates.has(iso)) {
+        if (currentLang === 'ca' && holidayInfo.dates.has(iso)) {
           const name = holidayName(iso, holidayInfo);
           cell.classList.add('holiday');
           cell.dataset.holiday = name;
@@ -2911,7 +3258,7 @@
         frag.appendChild(makeDayCell(next, 'other-month'));
       }
 
-      calendarTitleText = `${monthNames[month]} ${year}`;
+      calendarTitleText = `${t('months')[month]} ${year}`;
       if (!weatherViewActive) document.getElementById('month-year-title').textContent = calendarTitleText;
       document.getElementById('days-container').replaceChildren(frag);
       scheduleFit();
@@ -2971,16 +3318,6 @@
     // ------------------------------------------------------------------
     const ALERT_HOURS = 12;
 
-    const WMO_DESCRIPTIONS = {
-      0: 'Cel serè', 1: 'Gairebé serè', 2: 'Parcialment ennuvolat', 3: 'Cobert',
-      45: 'Boira', 48: 'Boira gebradora',
-      51: 'Plugim feble', 53: 'Plugim', 55: 'Plugim intens', 56: 'Plugim gelat', 57: 'Plugim gelat intens',
-      61: 'Pluja feble', 63: 'Pluja', 65: 'Pluja intensa', 66: 'Pluja gelant', 67: 'Pluja gelant intensa',
-      71: 'Neu feble', 73: 'Neu', 75: 'Neu intensa', 77: 'Grans de neu',
-      80: 'Ruixats febles', 81: 'Ruixats', 82: 'Ruixats molt intensos',
-      85: 'Ruixats de neu', 86: 'Ruixats de neu intensos',
-      95: 'Tempesta', 96: 'Tempesta amb calamarsa', 99: 'Tempesta amb calamarsa forta'
-    };
 
     // Icones de línia fina, en el mateix estil que el sol i la lluna del botó de tema
     const WX_CLOUD = 'M7 17.5h10a3.6 3.6 0 0 0 .3-7.2 5.2 5.2 0 0 0-10 1.3A3 3 0 0 0 7 17.5z';
@@ -3020,8 +3357,7 @@
       ice: '<svg viewBox="0 0 24 24"><path d="M10 4.5a2 2 0 0 1 4 0v9.2a4 4 0 1 1-4 0z"/><path d="M12 11v5M17.5 6h3M17.5 9.5h3"/></svg>'
     };
 
-    const WIND_DIRS = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
-    function windCardinal(deg) { return WIND_DIRS[Math.round(((deg % 360) + 360) % 360 / 45) % 8]; }
+    function windCardinal(deg) { return t('windDirs')[Math.round(((deg % 360) + 360) % 360 / 45) % 8]; }
 
     // Avisos calculats a partir de la previsió horària de les properes hores
     // (no són els avisos oficials de Meteocat o AEMET)
@@ -3032,7 +3368,7 @@
       let start = h.time.findIndex(t => t.slice(0, 13) >= currentHour);
       if (start < 0) start = 0;
       const end = Math.min(start + ALERT_HOURS, h.time.length);
-      const at = (i) => (i === start ? 'ara' : `a les ${Number(h.time[i].slice(11, 13))} h`);
+      const at = (i) => (i === start ? t('now') : t('atHour', Number(h.time[i].slice(11, 13))));
       const val = (arr, i) => (arr && arr[i] != null ? arr[i] : null);
       const found = {};
       for (let i = start; i < end; i++) {
@@ -3042,20 +3378,22 @@
         const gust = val(h.wind_gusts_10m, i) || 0;
         const vis = val(h.visibility, i);
         const temp = val(h.temperature_2m, i);
-        if (!found.storm && code >= 95) found.storm = { text: 'Tempesta', when: at(i) };
-        if (!found.rain && (precip >= 10 || code === 65 || code === 82)) found.rain = { text: 'Pluja intensa', when: at(i) };
-        if (!found.snow && (snow > 0 || (code >= 71 && code <= 77) || code === 85 || code === 86)) found.snow = { text: 'Neu', when: at(i) };
+        if (!found.storm && code >= 95) found.storm = { when: at(i) };
+        if (!found.rain && (precip >= 10 || code === 65 || code === 82)) found.rain = { when: at(i) };
+        if (!found.snow && (snow > 0 || (code >= 71 && code <= 77) || code === 85 || code === 86)) found.snow = { when: at(i) };
         if (gust >= 60) {
-          if (!found.wind) found.wind = { text: 'Vent fort', when: at(i), max: gust };
+          if (!found.wind) found.wind = { when: at(i), max: gust };
           else found.wind.max = Math.max(found.wind.max, gust);
         }
         if (!found.fog && (((code === 45 || code === 48) && (vis == null || vis < 1000)) || (vis != null && vis < 500))) {
-          found.fog = { text: 'Boira intensa', when: at(i) };
+          found.fog = { when: at(i) };
         }
         // Glaç: pluja o plugim gelant, o temperatura sota zero
-        if (!found.ice && ([56, 57, 66, 67].includes(code) || (temp != null && temp <= 0))) found.ice = { text: 'Glaç', when: at(i) };
+        if (!found.ice && ([56, 57, 66, 67].includes(code) || (temp != null && temp <= 0))) found.ice = { when: at(i) };
       }
-      if (found.wind) found.wind.text = `Ratxes de ${Math.round(found.wind.max)} km/h`;
+      const names = t('alerts');
+      Object.keys(found).forEach(k => { found[k].text = names[k]; });
+      if (found.wind) found.wind.text = t('gustsText', Math.round(found.wind.max));
       return ['storm', 'rain', 'snow', 'ice', 'wind', 'fog'].filter(k => found[k]).map(k => ({ type: k, ...found[k] }));
     }
 
@@ -3072,7 +3410,7 @@
         const el = document.createElement('div');
         el.className = 'data-alert';
         el.setAttribute('role', 'alert');
-        el.innerHTML = `<span class="data-alert-when">${ALERT_ICONS[a.type]}Avís · ${a.when}</span>` +
+        el.innerHTML = `<span class="data-alert-when">${ALERT_ICONS[a.type]}${t('alertWord')} · ${a.when}</span>` +
                        `<span class="data-alert-text">${a.text}</span>`;
         list.appendChild(el);
       });
@@ -3086,19 +3424,23 @@
       }
     }
 
+    let lastWeather = null;
     function renderWeatherView(weather) {
+      lastWeather = weather;
       const c = weather.current;
       if (!c) return;
       const code = c.weather_code != null ? c.weather_code : 3;
       const isDay = c.is_day != null ? c.is_day === 1 : autoTheme() === 'day';
       document.getElementById('wx-icon').innerHTML = weatherIconSvg(code, isDay);
       document.getElementById('wx-temp').textContent = `${Math.round(c.temperature_2m)}°`;
-      document.getElementById('wx-desc').textContent = WMO_DESCRIPTIONS[code] || '';
+      const descEl = document.getElementById('wx-desc');
+      descEl.removeAttribute('data-i18n');
+      descEl.textContent = wmoText(code);
       document.getElementById('wx-feels').textContent = `${Math.round(c.apparent_temperature)}°C`;
       document.getElementById('wx-humidity').textContent = `${Math.round(c.relative_humidity_2m)}%`;
       const precip = precipitationNextHours(weather);
       if (precip) {
-        document.getElementById('wx-precip').innerHTML = `${precip.prob}% <small>${precip.type}</small>`;
+        document.getElementById('wx-precip').innerHTML = `${precip.prob}% <small>${precip.snow ? t('snow') : t('rain')}</small>`;
       }
 
       if (c.wind_speed_10m != null) {
@@ -3106,14 +3448,14 @@
         const arrow = `<svg class="wind-arrow" viewBox="0 0 24 24" style="transform: rotate(${dir + 180}deg)" aria-hidden="true"><path d="M12 20V4M6 10l6-6 6 6"/></svg>`;
         document.getElementById('wx-wind').innerHTML = `${Math.round(c.wind_speed_10m)} <small>km/h</small>`;
         document.getElementById('wx-gusts').innerHTML =
-          `${windCardinal(dir)}${arrow}` + (c.wind_gusts_10m != null ? ` · ratxes ${Math.round(c.wind_gusts_10m)}` : '');
+          `${windCardinal(dir)}${arrow}` + (c.wind_gusts_10m != null ? ` · ${t('gusts')} ${Math.round(c.wind_gusts_10m)}` : '');
       }
 
       const alerts = computeAlerts(weather);
       const box = document.getElementById('wx-alerts');
       box.innerHTML = alerts.length
         ? alerts.map(a => `<span class="wx-alert">${ALERT_ICONS[a.type]}${a.text} · ${a.when}</span>`).join('')
-        : `<span class="wx-alert none">Sense avisos les properes ${ALERT_HOURS} h</span>`;
+        : `<span class="wx-alert none">${t('noAlerts', ALERT_HOURS)}</span>`;
       renderDataAlerts(alerts);
     }
 
@@ -3485,7 +3827,7 @@
       pages.forEach((page, k) => page.setAttribute('aria-hidden', String(k !== finIndex)));
       refreshFinDots();
       updateFinTitle();
-      if (pages[finIndex].dataset.nom === 'Notícies' && typeof loadNews === 'function') loadNews(false);
+      if (pages[finIndex].dataset.key === 'noticies' && typeof loadNews === 'function') loadNews(false);
     }
 
 
@@ -3542,18 +3884,133 @@
       if ('mediaSession' in navigator) navigator.mediaSession.playbackState = nowPlaying ? (playing ? 'playing' : 'paused') : 'none';
     }
 
+    // Fluxos HLS (.m3u8): Safari els reprodueix directament; als altres
+    // navegadors es carrega hls.js només el primer cop que cal
+    let hls = null;
+    let hlsLib = null;
+    const isHlsUrl = url => /\.m3u8(\?|$)/i.test(url || '');
+
+    function stopHls() {
+      if (hls) { try { hls.destroy(); } catch (e) {} hls = null; }
+    }
+
+    function loadHlsLib() {
+      if (window.Hls) return Promise.resolve(window.Hls);
+      if (!hlsLib) {
+        hlsLib = new Promise((resolve, reject) => {
+          const sc = document.createElement('script');
+          sc.src = 'https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js';
+          sc.onload = () => (window.Hls ? resolve(window.Hls) : reject(new Error('hls')));
+          sc.onerror = () => { hlsLib = null; reject(new Error('hls')); };
+          document.head.appendChild(sc);
+        });
+      }
+      return hlsLib;
+    }
+
+    // Fluxos trobats a Radio Browser durant aquesta sessió (id -> url)
+    const resolvedStreams = {};
+    const RB_HOSTS = ['de1', 'nl1', 'at1', 'all'];
+
+    // Busca el flux d'una emissora a l'índex obert Radio Browser: el de nom
+    // exacte amb més escoltes, sempre https i millor si no és HLS
+    function resolveRadioBrowser(rb, i = 0) {
+      if (i >= RB_HOSTS.length) return Promise.reject(new Error('rb'));
+      const url = `https://${RB_HOSTS[i]}.api.radio-browser.info/json/stations/search?name=${encodeURIComponent(rb.name)}` +
+        `&countrycode=${rb.cc}&hidebroken=true&order=clickcount&reverse=true&limit=20`;
+      return withTimeout(fetch(url), 7000)
+        .then(r => { if (!r.ok) throw new Error('http'); return r.json(); })
+        .then(list => {
+          const ok = list.filter(st => /^https:/i.test(st.url_resolved || ''));
+          const exact = ok.filter(st => (st.name || '').trim().toLowerCase() === rb.name.toLowerCase());
+          const pool = exact.length ? exact : ok;
+          const best = pool.find(st => !isHlsUrl(st.url_resolved)) || pool[0];
+          if (!best) throw new Error('cap');
+          return best.url_resolved;
+        })
+        .catch(() => resolveRadioBrowser(rb, i + 1));
+    }
+
+    function startSource(item, url) {
+      stopHls();
+      item.currentUrl = url;
+      item.attempt = (item.attempt || 0) + 1;
+      const attempt = item.attempt;
+      if (isHlsUrl(url) && !player.canPlayType('application/vnd.apple.mpegurl')) {
+        player.removeAttribute('src');
+        loadHlsLib().then(Hls => {
+          if (nowPlaying !== item || item.attempt !== attempt) return;
+          if (!Hls.isSupported()) throw new Error('hls');
+          hls = new Hls();
+          hls.on(Hls.Events.ERROR, (ev, data) => {
+            if (data && data.fatal && nowPlaying === item && item.attempt === attempt) streamFailed(item);
+          });
+          hls.loadSource(url);
+          hls.attachMedia(player);
+          player.play().catch(() => {});
+        }).catch(() => { if (nowPlaying === item && item.attempt === attempt) streamFailed(item); });
+        updatePlayState();
+        return;
+      }
+      player.src = url;
+      player.play().catch(() => {});
+    }
+
+    // Un flux no ha funcionat: es prova el de Radio Browser i, si tampoc, s'avisa
+    function streamFailed(item) {
+      if (item.failing) return;
+      if (item.rb && !item.rbTried) {
+        item.rbTried = true;
+        item.failing = true;
+        resolveRadioBrowser(item.rb).then(url => {
+          item.failing = false;
+          if (nowPlaying !== item) return;
+          if (url && url !== item.currentUrl) { resolvedStreams[item.id] = url; startSource(item, url); }
+          else giveUpStream(item);
+        }).catch(() => { item.failing = false; if (nowPlaying === item) giveUpStream(item); });
+        return;
+      }
+      giveUpStream(item);
+    }
+
+    function giveUpStream(failed) {
+      stopHls();
+      player.removeAttribute('src');
+      try { player.load(); } catch (e) {}
+      nowPlaying = null;
+      delete resolvedStreams[failed.id];
+      updatePlayState();
+      if (failed.tipus === 'radio') {
+        const tile = document.querySelector(`[data-audio-id="${failed.id}"]`);
+        if (tile) tile.setAttribute('data-nomes-web', '1');
+        showToast(t('toastRadio', failed.titol), 6000);
+      } else {
+        showToast(t('toastPodcast'), 6000);
+      }
+    }
+
     function playItem(item) {
       if (nowPlaying && nowPlaying.id === item.id) {
         if (player.paused) player.play().catch(() => {}); else player.pause();
         return;
       }
       nowPlaying = item;
-      player.src = item.audio;
-      player.play().catch(() => {});
+      const known = resolvedStreams[item.id] || item.audio;
+      if (known) startSource(item, known);
+      else if (item.rb) {
+        // No se'n coneix cap flux fix: directament a Radio Browser
+        item.rbTried = true;
+        player.pause();
+        resolveRadioBrowser(item.rb).then(url => {
+          if (nowPlaying !== item) return;
+          resolvedStreams[item.id] = url;
+          startSource(item, url);
+        }).catch(() => { if (nowPlaying === item) giveUpStream(item); });
+      }
       if ('mediaSession' in navigator && window.MediaMetadata) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: item.titol + (item.sub ? ' · ' + item.sub : ''),
-          artist: item.tipus === 'radio' ? 'En directe' : 'RAC1',
+          artist: item.tipus === 'radio' ? t('live') : 'RAC1',
           artwork: [{ src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' }]
         });
       }
@@ -3567,17 +4024,8 @@
       if (bar) bar.style.width = (player.currentTime / player.duration * 100) + '%';
     });
     player.addEventListener('error', () => {
-      if (!nowPlaying || !player.getAttribute('src')) return;
-      const failed = nowPlaying;
-      nowPlaying = null;
-      updatePlayState();
-      if (failed.tipus === 'radio') {
-        const tile = document.querySelector(`[data-audio-id="${failed.id}"]`);
-        if (tile) tile.setAttribute('data-nomes-web', '1');
-        showToast(`No es pot reproduir aquí: torna a tocar ${failed.titol} per obrir la seva web`, 6000);
-      } else {
-        showToast('No s\'ha pogut reproduir. Fes servir la fletxa ↗ per obrir-lo a la web', 6000);
-      }
+      if (!nowPlaying || hls || !player.getAttribute('src')) return;
+      streamFailed(nowPlaying);
     });
     document.getElementById('ara-sona').addEventListener('click', (e) => {
       e.stopPropagation();
@@ -3592,33 +4040,97 @@
     }
 
     // ---- Ràdio en directe ----
-    const RADIOS = [
-      { id: 'r-rac1', nom: 'RAC1', sub: 'Directe', audio: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC_1.mp3', web: 'https://www.rac1.cat/' },
-      { id: 'r-catradio', nom: 'Catalunya Ràdio', sub: '3Cat', audio: 'https://shoutcast.ccma.cat/ccma/catalunyaradioHD.mp3', web: 'https://www.3cat.cat/3cat/directes/catalunya-radio/' },
-      { id: 'r-catinfo', nom: 'Catalunya Informació', sub: '3Cat · notícies', audio: 'https://shoutcast.ccma.cat/ccma/catalunyainformacioHD.mp3', web: 'https://www.3cat.cat/3cat/directes/catalunya-informacio/' },
-      { id: 'r-rac105', nom: 'RAC105', sub: 'Directe', audio: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC105.mp3', web: 'https://www.rac105.cat/' },
-      { id: 'r-clasica', nom: 'Radio Clásica', sub: 'RNE · clàssica', audio: 'https://rtvelivestream.rtve.es/rtvesec/rne/rne_r2_main.m3u8', web: 'https://www.rtve.es/radio/radioclasica/' },
-      { id: 'r-bbc', nom: 'BBC World Service', sub: 'Europa · anglès', audio: 'https://stream.live.vc.bbcmedia.co.uk/bbc_world_service', web: 'https://www.bbc.com/audio' }
-    ];
+    // Emissores segons l'idioma. En català, sub és una llista de claus de
+    // traducció ('live', 'news', 'classical', 'world') i prefixos; en els altres
+    // idiomes, les emissores són de l'àrea lingüística i sub és un text fix.
+    // rb: nom i país per buscar el flux a l'índex obert Radio Browser si el
+    // flux conegut falla o no se'n coneix cap (audio: null).
+    const RADIO_SETS = {
+      ca: [
+        { id: 'r-rac1', nom: 'RAC1', sub: ['', 'live'], audio: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC_1.mp3', web: 'https://www.rac1.cat/' },
+        { id: 'r-catradio', nom: 'Catalunya Ràdio', sub: ['3Cat'], audio: 'https://shoutcast.ccma.cat/ccma/catalunyaradioHD.mp3', web: 'https://www.3cat.cat/3cat/directes/catalunya-radio/' },
+        { id: 'r-catinfo', nom: 'Catalunya Informació', sub: ['3Cat', 'news'], audio: 'https://shoutcast.ccma.cat/ccma/catalunyainformacioHD.mp3', web: 'https://www.3cat.cat/3cat/directes/catalunya-informacio/' },
+        { id: 'r-rac105', nom: 'RAC105', sub: ['', 'live'], audio: 'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC105.mp3', web: 'https://www.rac105.cat/' },
+        { id: 'r-clasica', nom: 'Radio Clásica', sub: ['RNE', 'classical'], audio: 'https://rtvelivestream.rtve.es/rtvesec/rne/rne_r2_main.m3u8', web: 'https://www.rtve.es/radio/radioclasica/' },
+        { id: 'r-bbc', nom: 'BBC World Service', sub: ['', 'world'], audio: 'https://stream.live.vc.bbcmedia.co.uk/bbc_world_service', web: 'https://www.bbc.com/audio', rb: { name: 'BBC World Service', cc: 'GB' } }
+      ],
+      it: [
+        { id: 'it-rai1', nom: 'Rai Radio 1', sub: 'Notizie · Rai', audio: 'https://icecdn-19d24861e90342cc8decb03c24c8a419.msvdn.net/icecastRelay/S16355530/Q4zh3NTu28Rx/icecast', web: 'https://www.raiplaysound.it/radio1', rb: { name: 'Rai Radio 1', cc: 'IT' } },
+        { id: 'it-rtl', nom: 'RTL 102.5', sub: 'Generalista', audio: 'https://StreamCdnF43-dd782ed59e2a4e86aabf6fc508674b59.msvdn.net/live/S97044836/tbbP8T1ZRPBL/playlist_audio.m3u8', web: 'https://www.rtl.it/', rb: { name: 'RTL 102.5', cc: 'IT' } },
+        { id: 'it-rds', nom: 'RDS', sub: 'Hit', audio: 'https://stream.rds.radio/audio/rds.stream_aac64/chunklist.m3u8', web: 'https://www.rds.it/', rb: { name: 'RDS', cc: 'IT' } },
+        { id: 'it-italia', nom: 'Radio Italia', sub: 'Pop italiano', audio: 'https://radioitaliasmi.akamaized.net/hls/live/2093120/RISMI/stream01/streamPlaylist.m3u8', web: 'https://www.radioitalia.it/', rb: { name: 'Radio Italia', cc: 'IT' } },
+        { id: 'it-rai3c', nom: 'Rai Radio 3 Classica', sub: 'Classica · Rai', audio: 'https://radiotreclassica-live.akamaized.net/hls/live/2032595/radiotreclassica/radiotreclassica/playlist.m3u8', web: 'https://www.raiplaysound.it/radio3classica', rb: { name: 'Rai Radio 3 Classica', cc: 'IT' } },
+        { id: 'it-classica', nom: 'Radio Classica', sub: 'Classica', audio: 'https://stream10.xdevel.com/audio0s978096-2470/stream/icecast.audio', web: 'https://www.radioclassica.fm/', rb: { name: 'Radio Classica', cc: 'IT' } },
+        { id: 'it-raisport', nom: 'Rai Radio 1 Sport', sub: 'Sport · Rai', audio: null, web: 'https://www.raiplaysound.it/radio1sport', rb: { name: 'Rai Radio 1 Sport', cc: 'IT' } },
+        { id: 'it-sportiva', nom: 'Radio Sportiva', sub: 'Sport', audio: 'https://sportiva.inmystream.it/stream/sportiva', web: 'https://www.radiosportiva.com/', rb: { name: 'Radio Sportiva', cc: 'IT' } },
+        { id: 'it-708090', nom: 'Radio 70 80 90', sub: 'Anni 70 80 90', audio: 'https://rblive.it:8020/radio.mp3', web: 'https://radio708090.it/', rb: { name: 'Radio 70 80 90', cc: 'IT' } },
+        { id: 'it-nostalgia', nom: 'Radio Nostalgia', sub: 'Successi di ieri', audio: 'https://rn1.fluidstream.eu/nostalgia_li.mp3', web: 'https://www.nostalgia.it/', rb: { name: 'Radio Nostalgia', cc: 'IT' } }
+      ],
+      de: [
+        { id: 'de-dlf', nom: 'Deutschlandfunk', sub: 'Nachrichten', audio: 'https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3', web: 'https://www.deutschlandfunk.de/', rb: { name: 'Deutschlandfunk', cc: 'DE' } },
+        { id: 'de-br24', nom: 'BR24', sub: 'Nachrichten · BR', audio: 'https://dispatcher.rndfnk.com/br/br24/live/mp3/mid', web: 'https://www.br.de/radio/live/br24/', rb: { name: 'BR24', cc: 'DE' } },
+        { id: 'de-wdr2', nom: 'WDR 2', sub: 'Pop · WDR', audio: 'https://wdr-wdr2-rheinland.icecastssl.wdr.de/wdr/wdr2/rheinland/mp3/128/stream.mp3', web: 'https://www1.wdr.de/radio/wdr2/', rb: { name: 'WDR 2', cc: 'DE' } },
+        { id: 'de-swr3', nom: 'SWR3', sub: 'Pop · SWR', audio: 'https://liveradio.swr.de/sw282p3/swr3/play.mp3', web: 'https://www.swr3.de/', rb: { name: 'SWR3', cc: 'DE' } },
+        { id: 'de-brklassik', nom: 'BR-Klassik', sub: 'Klassik · BR', audio: 'https://dispatcher.rndfnk.com/br/brklassik/live/mp3/high', web: 'https://www.br-klassik.de/', rb: { name: 'BR-Klassik', cc: 'DE' } },
+        { id: 'de-klassik', nom: 'Klassik Radio', sub: 'Klassik', audio: 'https://klassikr.streamabc.net/klr-krdnational-mp3-192-4099384', web: 'https://www.klassikradio.de/', rb: { name: 'Klassik Radio', cc: 'DE' } },
+        { id: 'de-sportschau', nom: 'Sportschau', sub: 'Sport · ARD (live)', audio: 'https://wdr-sportschau-liga1konferenz.icecastssl.wdr.de/wdr/sportschau/liga1konferenz/mp3/128/stream.mp3', web: 'https://www.sportschau.de/audio/', rb: { name: 'Sportschau', cc: 'DE' } },
+        { id: 'de-schwarzwald', nom: 'Schwarzwaldradio', sub: 'Oldies', audio: null, web: 'https://www.schwarzwaldradio.com/', rb: { name: 'Schwarzwaldradio', cc: 'DE' } },
+        { id: 'de-harmony', nom: 'harmony.fm', sub: '70er & 80er', audio: 'https://mp3.harmonyfm.de/harmonyfm/hqlivestream.mp3', web: 'https://www.harmonyfm.de/', rb: { name: 'harmony', cc: 'DE' } }
+      ],
+      fr: [
+        { id: 'fr-franceinfo', nom: 'franceinfo', sub: 'Info · Radio France', audio: 'https://icecast.radiofrance.fr/franceinfo-midfi.mp3?id=radiofrance', web: 'https://www.radiofrance.fr/franceinfo', rb: { name: 'franceinfo', cc: 'FR' } },
+        { id: 'fr-rtl', nom: 'RTL', sub: 'Généraliste', audio: null, web: 'https://www.rtl.fr/ecouter', rb: { name: 'RTL', cc: 'FR' } },
+        { id: 'fr-nrj', nom: 'NRJ', sub: 'Hits', audio: 'https://scdn.nrjaudio.fm/adwz2/fr/30001/mp3_128.mp3?origine=fluxradios', web: 'https://www.nrj.fr/', rb: { name: 'NRJ', cc: 'FR' } },
+        { id: 'fr-inter', nom: 'France Inter', sub: 'Généraliste · Radio France', audio: 'https://icecast.radiofrance.fr/franceinter-midfi.mp3?id=radiofrance', web: 'https://www.radiofrance.fr/franceinter', rb: { name: 'France Inter', cc: 'FR' } },
+        { id: 'fr-musique', nom: 'France Musique', sub: 'Classique · Radio France', audio: 'https://icecast.radiofrance.fr/francemusique-midfi.mp3?id=radiofrance', web: 'https://www.radiofrance.fr/francemusique', rb: { name: 'France Musique', cc: 'FR' } },
+        { id: 'fr-classique', nom: 'Radio Classique', sub: 'Classique', audio: 'https://str0.creacast.com/classique1', web: 'https://www.radioclassique.fr/', rb: { name: 'Radio Classique', cc: 'FR' } },
+        { id: 'fr-rmc', nom: 'RMC', sub: 'Sport · talk', audio: 'https://audio.bfmtv.com/rmcradio_128.mp3', web: 'https://rmc.bfmtv.com/', rb: { name: 'RMC', cc: 'FR' } },
+        { id: 'fr-nostalgie', nom: 'Nostalgie', sub: 'Années 60 70 80', audio: 'https://streaming.nrjaudio.fm/oug7girb92oc?origine=fluxradios', web: 'https://www.nostalgie.fr/', rb: { name: 'Nostalgie', cc: 'FR' } },
+        { id: 'fr-rtl2', nom: 'RTL2', sub: 'Pop-rock', audio: null, web: 'https://www.rtl2.fr/', rb: { name: 'RTL2', cc: 'FR' } }
+      ],
+      en: [
+        { id: 'en-r4', nom: 'BBC Radio 4', sub: 'News · BBC', audio: 'https://lsn.lv/bbcradio.m3u8?station=bbc_radio_fourfm&bitrate=96000', web: 'https://www.bbc.co.uk/sounds/play/live:bbc_radio_fourfm', rb: { name: 'BBC Radio 4', cc: 'GB' } },
+        { id: 'en-lbc', nom: 'LBC', sub: 'Talk · news', audio: 'https://ice-sov.musicradio.com/LBCLondonHD?hdauth=:2000000000:a290d4b39a16153061d4c743008b9fe8d424a7e5ec6469d40acf51fdcd336e80', web: 'https://www.lbc.co.uk/', rb: { name: 'LBC', cc: 'GB' } },
+        { id: 'en-r2', nom: 'BBC Radio 2', sub: 'Pop · BBC', audio: 'https://lsn.lv/bbcradio.m3u8?station=bbc_radio_two&bitrate=96000', web: 'https://www.bbc.co.uk/sounds/play/live:bbc_radio_two', rb: { name: 'BBC Radio 2', cc: 'GB' } },
+        { id: 'en-heart', nom: 'Heart UK', sub: 'Pop', audio: 'https://media-ssl.musicradio.com/HeartUKMP3', web: 'https://www.heart.co.uk/', rb: { name: 'Heart UK', cc: 'GB' } },
+        { id: 'en-r3', nom: 'BBC Radio 3', sub: 'Classical · BBC', audio: 'https://lsn.lv/bbcradio.m3u8?station=bbc_radio_three&bitrate=96000', web: 'https://www.bbc.co.uk/sounds/play/live:bbc_radio_three', rb: { name: 'BBC Radio 3', cc: 'GB' } },
+        { id: 'en-classicfm', nom: 'Classic FM', sub: 'Classical', audio: 'https://media-ssl.musicradio.com/ClassicFM', web: 'https://www.classicfm.com/', rb: { name: 'Classic FM', cc: 'GB' } },
+        { id: 'en-talksport', nom: 'talkSPORT', sub: 'Sport', audio: 'https://radio.talksport.com/stream', web: 'https://talksport.com/', rb: { name: 'talkSPORT', cc: 'GB' } },
+        { id: 'en-r5', nom: 'BBC Radio 5 Live', sub: 'Sport · BBC', audio: 'https://lsn.lv/bbcradio.m3u8?station=bbc_radio_five_live&bitrate=96000', web: 'https://www.bbc.co.uk/sounds/play/live:bbc_radio_five_live', rb: { name: 'BBC Radio 5 Live', cc: 'GB' } },
+        { id: 'en-absolute', nom: 'Absolute Radio', sub: '70s 80s 90s', audio: null, web: 'https://www.absoluteradio.co.uk/', rb: { name: 'Absolute Radio', cc: 'GB' } },
+        { id: 'en-ghr', nom: 'Greatest Hits Radio', sub: '70s 80s 90s', audio: null, web: 'https://www.hellorayo.co.uk/greatest-hits', rb: { name: 'Greatest Hits Radio', cc: 'GB' } }
+      ]
+    };
 
-    (function renderRadios() {
+    function radioSub(r) {
+      if (!Array.isArray(r.sub)) return r.sub;
+      const words = { live: t('live'), news: t('newsWord'), classical: t('classical'), world: t('worldEnglish') };
+      return r.sub.map(p => words[p] || p).filter(Boolean).join(' · ');
+    }
+
+    function radiosForLang() { return RADIO_SETS[currentLang] || RADIO_SETS.ca; }
+
+    function renderRadios() {
       const box = document.getElementById('llista-radios');
-      RADIOS.forEach(r => {
+      box.innerHTML = '';
+      radiosForLang().forEach(r => {
         const b = document.createElement('button');
         b.type = 'button';
         b.className = 'radio';
         b.setAttribute('data-audio-id', r.id);
-        b.setAttribute('aria-label', `${r.nom} en directe`);
+        b.setAttribute('aria-label', `${r.nom} · ${t('live')}`);
         b.innerHTML = '<span class="nom"></span><span class="sub"></span><span class="punt"></span>';
         b.querySelector('.nom').textContent = r.nom;
-        b.querySelector('.sub').textContent = r.sub;
+        b.querySelector('.sub').textContent = radioSub(r);
         b.addEventListener('click', () => {
           if (b.getAttribute('data-nomes-web')) { window.open(r.web, '_blank', 'noopener'); return; }
-          playItem({ id: r.id, titol: r.nom, sub: 'en directe', audio: r.audio, web: r.web, tipus: 'radio' });
+          playItem({ id: r.id, titol: r.nom, sub: t('liveLower'), audio: r.audio, web: r.web, rb: r.rb, tipus: 'radio' });
         });
         box.appendChild(b);
       });
-    })();
+      updatePlayState();
+    }
+    renderRadios();
 
     // ---- Podcasts: La Competència i Via lliure (RAC1) ----
     // Font: API pública d'Omny Studio, on RAC1 publica els podcasts; si no
@@ -3628,7 +4140,6 @@
       competencia: { omny: 'e38e0ded-b456-40ef-a8da-af1000eff5fc', apple: '330984064', n: 25, web: 'https://omny.fm/shows/la-competencia-programa-sencer' },
       via: { omny: '48f190bf-f9df-4d37-961b-af0300af6177', apple: '395147618', n: 80, web: 'https://omny.fm/shows/via-lliure-programa-sencer' }
     };
-    const LONG_DAYS = ['Diumenge', 'Dilluns', 'Dimarts', 'Dimecres', 'Dijous', 'Divendres', 'Dissabte'];
     const DAY_NUM = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
     const fmtMadrid = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Madrid', weekday: 'short', day: 'numeric', month: 'numeric', hour: '2-digit', hourCycle: 'h23' });
 
@@ -3686,7 +4197,7 @@
       b.type = 'button';
       b.className = 'prog' + (latest ? ' darrer' : '');
       b.setAttribute('data-audio-id', cl.id);
-      const dayName = LONG_DAYS[cl.m.dow];
+      const dayName = t('longDays')[cl.m.dow];
       b.innerHTML = '<span class="prog-dia"><b></b><small></small></span>' +
         (withTitle ? '<span class="prog-titol"></span>' : '') +
         `<span class="prog-icona">${ICON_PLAY}${ICON_PAUSE}</span><span class="prog-barra"></span>`;
@@ -3704,7 +4215,7 @@
         a.href = cl.web;
         a.target = '_blank';
         a.rel = 'noopener';
-        a.setAttribute('aria-label', 'Obrir a la web');
+        a.setAttribute('aria-label', t('openWeb'));
         a.innerHTML = ICON_EXT;
         row.appendChild(a);
       }
@@ -3712,35 +4223,50 @@
     }
 
     function programsError(box, prog) {
-      box.innerHTML = '<div class="estat-prog">No s\'han pogut carregar. <a target="_blank" rel="noopener">Obre la web</a></div>';
+      box.innerHTML = '<div class="estat-prog"><span></span> <a target="_blank" rel="noopener"></a></div>';
+      box.querySelector('span').textContent = t('programsError');
+      box.querySelector('a').textContent = t('openSite');
       box.querySelector('a').href = prog.web;
     }
 
     let programsLoadedAt = 0;
     let programsBusy = false;
+    // Darrers programes carregats (llista, o 'error'), per poder-los tornar a
+    // pintar en canviar d'idioma sense tornar-los a demanar
+    const programCache = { competencia: null, via: null };
+
+    function renderPrograms() {
+      const lc = document.getElementById('llista-competencia');
+      const lv = document.getElementById('llista-via');
+      [[programCache.competencia, lc, PROGRAMS.competencia, 'La Competència', true],
+       [programCache.via, lv, PROGRAMS.via, 'Via lliure', false]].forEach(([list, box, prog, name, withTitle]) => {
+        if (!list) return;
+        if (list === 'error') { programsError(box, prog); return; }
+        box.innerHTML = '';
+        list.forEach((cl, i) => box.appendChild(programButton(cl, i === list.length - 1, name, withTitle)));
+      });
+      updatePlayState();
+    }
+
     function loadPrograms(force) {
       if (programsBusy) return;
       if (!force && Date.now() - programsLoadedAt < 10 * 60 * 1000) return;
       programsBusy = true;
-      const lc = document.getElementById('llista-competencia');
-      const lv = document.getElementById('llista-via');
       const p1 = loadClips(PROGRAMS.competencia).then(clips => {
         const list = latestPerDay(clips, [1, 2, 3, 4, 5], null);
         if (!list.length) throw new Error('buit');
-        lc.innerHTML = '';
-        list.forEach((cl, i) => lc.appendChild(programButton(cl, i === list.length - 1, 'La Competència', true)));
-      }).catch(() => programsError(lc, PROGRAMS.competencia));
+        programCache.competencia = list;
+      }).catch(() => { if (!Array.isArray(programCache.competencia)) programCache.competencia = 'error'; });
       const p2 = loadClips(PROGRAMS.via).then(clips => {
         const list = latestPerDay(clips, [6, 0], 7);
         if (!list.length) throw new Error('buit');
-        lv.innerHTML = '';
-        list.forEach((cl, i) => lv.appendChild(programButton(cl, i === list.length - 1, 'Via lliure', false)));
-      }).catch(() => programsError(lv, PROGRAMS.via));
+        programCache.via = list;
+      }).catch(() => { if (!Array.isArray(programCache.via)) programCache.via = 'error'; });
       Promise.all([p1, p2]).then(() => {
         programsBusy = false;
         programsLoadedAt = Date.now();
-        updatePlayState();
-        });
+        renderPrograms();
+      });
     }
 
     // ---- Notícies de l'ACN (secció «Al minut» de la portada d'acn.cat) ----
@@ -3790,27 +4316,127 @@
         .catch(() => headlinesViaProxy(i + 1));
     }
 
-    function headlinesGoogle() {
-      const rss = 'https://news.google.com/rss/search?q=' + encodeURIComponent('site:acn.cat when:1d') + '&hl=ca&gl=ES&ceid=ES:ca';
+    // Google Notícies (RSS): primer directament a través dels intermediaris, i
+    // si no, amb rss2json
+    function googleNewsUrl(query, hl, gl) {
+      return 'https://news.google.com/rss/search?q=' + encodeURIComponent(query) +
+        `&hl=${hl}&gl=${gl}&ceid=${gl}:${hl.slice(0, 2)}`;
+    }
+
+    function itemsFromRss(xml) {
+      const doc = new DOMParser().parseFromString(xml, 'text/xml');
+      return [...doc.querySelectorAll('item')].map(it => ({
+        title: (it.querySelector('title') || {}).textContent || '',
+        link: (it.querySelector('link') || {}).textContent || ''
+      }));
+    }
+
+    function rssViaProxy(rss, i) {
+      if (i >= PROXIES.length) return Promise.reject(new Error('cap'));
+      return withTimeout(fetch(PROXIES[i](rss), { cache: 'no-store' }), 9000)
+        .then(r => { if (!r.ok) throw new Error('http'); return r.text(); })
+        .then(xml => { const items = itemsFromRss(xml); if (!items.length) throw new Error('buit'); return items; })
+        .catch(() => rssViaProxy(rss, i + 1));
+    }
+
+    function rssVia2json(rss) {
       return withTimeout(fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rss)), 9000)
         .then(r => r.json())
         .then(j => {
           const items = (j && j.items) || [];
           if (!items.length) throw new Error('buit');
-          return items.slice(0, MAX_NEWS).map(it => ({
-            titol: cleanText(it.title).replace(/\s+-\s+(ACN|acn\.cat|Agència Catalana de Notícies)\s*$/i, ''), url: it.link
-          }));
+          return items;
         });
     }
 
+    // El mitjà surt al final del titular de Google ("Titular - Mitjà"): es deixa com a "Titular · Mitjà",
+    // o es treu si sempre és el mateix
+    function googleHeadlines(query, hl, gl, dropSource) {
+      const rss = googleNewsUrl(query, hl, gl);
+      return rssVia2json(rss).catch(() => rssViaProxy(rss, 0)).then(items => items.slice(0, MAX_NEWS).map(it => {
+        let titol = cleanText(it.title);
+        titol = dropSource ? titol.replace(dropSource, '') : titol.replace(/\s+-\s+([^-]+)$/, ' · $1');
+        return { titol, url: it.link };
+      }));
+    }
+
+    // Fil RSS d'una agència o mitjà: primer pels intermediaris, i si no, rss2json.
+    // S'ordena per data perquè alguns fils no venen ordenats.
+    function feedHeadlines(rss) {
+      return rssViaProxy(rss, 0).catch(() => rssVia2json(rss)).then(items => items
+        .map(it => ({ titol: cleanText(it.title), url: it.link, d: Date.parse(it.pubDate || '') || 0 }))
+        .filter(it => it.titol && it.url)
+        .sort((x, y) => y.d - x.d)
+        .slice(0, MAX_NEWS));
+    }
+
+    // Fonts de notícies de l'àrea lingüística de cada idioma, per ordre de
+    // preferència: si una no respon, es prova la següent.
+    //  - Català: ACN (secció «Al minut»).
+    //  - Italià: ANSA, Adnkronos, AGI.
+    //  - Alemany: el teletip de dpa que publica ZEIT ONLINE; stern (dpa); AFP.
+    //  - Francès: l'AFP i Reuters no tenen RSS públic: France 24 (fil propi,
+    //    molt basat en l'AFP), i després l'AFP i Reuters via Google Notícies.
+    //  - Anglès: Reuters (via Google Notícies); PA Media no té RSS públic: The
+    //    Independent i l'Evening Standard, que en publiquen el fil.
+    const NEWS_FEEDS = {
+      ca: [
+        { label: 'ACN · Al minut', foot: 'Agència Catalana de Notícies', home: 'https://www.acn.cat/', load: () => headlinesViaProxy(0) },
+        { label: 'ACN · Al minut', foot: 'Agència Catalana de Notícies', home: 'https://www.acn.cat/',
+          load: () => googleHeadlines('site:acn.cat when:1d', 'ca', 'ES', /\s+-\s+(ACN|acn\.cat|Agència Catalana de Notícies)\s*$/i) }
+      ],
+      it: [
+        { label: 'ANSA · Ultima ora', foot: 'ANSA', home: 'https://www.ansa.it/', load: () => feedHeadlines('https://www.ansa.it/sito/notizie/topnews/topnews_rss.xml') },
+        { label: "Adnkronos · Ultim'ora", foot: 'Adnkronos', home: 'https://www.adnkronos.com/', load: () => feedHeadlines('https://www.adnkronos.com/RSS_Ultimora.xml') },
+        { label: 'ANSA', foot: 'ANSA', home: 'https://www.ansa.it/', load: () => feedHeadlines('https://www.ansa.it/sito/ansait_rss.xml') },
+        { label: 'AGI', foot: 'AGI', home: 'https://www.agi.it/', load: () => googleHeadlines('site:agi.it when:1d', 'it', 'IT', /\s+-\s+(AGI|Agenzia Italia|agi\.it).*$/i) }
+      ],
+      de: [
+        { label: 'dpa · Newsticker', foot: 'dpa (ZEIT ONLINE)', home: 'https://www.zeit.de/news/index', load: () => feedHeadlines('https://newsfeed.zeit.de/news/index') },
+        { label: 'stern · dpa', foot: 'stern', home: 'https://www.stern.de/', load: () => feedHeadlines('https://www.stern.de/feed/standard/all/') },
+        { label: 'AFP · Deutschland', foot: 'AFP (Google News)', home: 'https://www.afp.com/de', load: () => googleHeadlines('AFP when:1d', 'de', 'DE') }
+      ],
+      fr: [
+        { label: 'France 24', foot: 'France 24', home: 'https://www.france24.com/fr/', load: () => feedHeadlines('https://www.france24.com/fr/rss') },
+        { label: 'AFP', foot: 'AFP (Google Actualités)', home: 'https://www.afp.com/fr', load: () => googleHeadlines('site:afp.com when:2d', 'fr', 'FR', /\s+-\s+(AFP|afp\.com).*$/i) },
+        { label: 'Reuters', foot: 'Reuters (Google Actualités)', home: 'https://www.reuters.com/', load: () => googleHeadlines('site:reuters.com when:1d', 'fr', 'FR', /\s+-\s+Reuters\s*$/i) }
+      ],
+      en: [
+        { label: 'Reuters · UK', foot: 'Reuters (Google News)', home: 'https://www.reuters.com/world/uk/', load: () => googleHeadlines('site:reuters.com when:1d', 'en-GB', 'GB', /\s+-\s+Reuters\s*$/i) },
+        { label: 'The Independent · PA', foot: 'The Independent', home: 'https://www.independent.co.uk/news/uk', load: () => feedHeadlines('https://www.independent.co.uk/news/uk/rss') },
+        { label: 'Evening Standard', foot: 'Evening Standard', home: 'https://www.standard.co.uk/news/uk', load: () => feedHeadlines('https://www.standard.co.uk/news/uk/rss') }
+      ]
+    };
+
+    // Prova les fonts per ordre; retorna { source, headlines }
+    function loadNewsFrom(sources, i = 0) {
+      if (i >= sources.length) return Promise.reject(new Error('cap'));
+      return sources[i].load()
+        .then(list => { if (!list || !list.length) throw new Error('buit'); return { source: sources[i], headlines: list }; })
+        .catch(() => loadNewsFrom(sources, i + 1));
+    }
+
     let newsLoadedAt = 0;
+    let newsLang = '';
+    let newsToken = 0;
     let newsBusy = false;
-    function loadNews(force) {
-      if (newsBusy) return;
-      if (!force && Date.now() - newsLoadedAt < 5 * 60 * 1000) return;
+    function loadNews(force, langChanged) {
+      if (newsBusy && !langChanged) return;
+      if (!force && newsLang === currentLang && Date.now() - newsLoadedAt < 5 * 60 * 1000) return;
+      const token = ++newsToken;
+      const lang = currentLang;
       newsBusy = true;
       const box = document.getElementById('llista-noticies');
-      headlinesViaProxy(0).catch(headlinesGoogle).then(headlines => {
+      const sources = NEWS_FEEDS[lang];
+      if (newsLang !== lang) document.getElementById('noticies-titol').textContent = sources[0].label;
+      if (newsLang !== lang) {
+        box.innerHTML = '<div class="estat-prog"></div>';
+        box.firstChild.textContent = t('loadingNews');
+        document.getElementById('noticies-peu').textContent = '';
+      }
+      loadNewsFrom(sources).then(({ source, headlines }) => {
+        if (token !== newsToken) return;
+        document.getElementById('noticies-titol').textContent = source.label;
         box.innerHTML = '';
         headlines.forEach((n, i) => {
           const a = document.createElement('a');
@@ -3825,13 +4451,19 @@
           box.appendChild(a);
         });
         const now = new Date();
-        document.getElementById('noticies-peu').textContent = `Agència Catalana de Notícies · actualitzat a les ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
-          newsLoadedAt = Date.now();
+        document.getElementById('noticies-peu').textContent = `${source.foot} · ${t('newsFoot', `${pad2(now.getHours())}:${pad2(now.getMinutes())}`)}`;
+        newsLoadedAt = Date.now();
+        newsLang = lang;
       }).catch(() => {
-        if (!newsLoadedAt) {
-          box.innerHTML = '<div class="estat-prog">No s\'han pogut carregar els titulars. <a href="https://www.acn.cat/" target="_blank" rel="noopener">Obre acn.cat</a></div>';
+        if (token !== newsToken) return;
+        if (newsLang !== lang) {
+          box.innerHTML = '<div class="estat-prog"><span></span> <a target="_blank" rel="noopener"></a></div>';
+          box.querySelector('span').textContent = t('newsError');
+          const a = box.querySelector('a');
+          a.textContent = t('openSite');
+          a.href = sources[0].home;
         }
-      }).then(() => { newsBusy = false; });
+      }).then(() => { if (token === newsToken) newsBusy = false; });
     }
 
     goToFinPage(0, false);
@@ -3847,24 +4479,23 @@
     // ------------------------------------------------------------------
     // Índex europeu de qualitat de l'aire (escala i colors de l'Agència Europea de Medi Ambient)
     const AQI_BANDS = [
-      { max: 20, label: 'Bona', color: '#50f0e6', text: '#0b2b2a' },
-      { max: 40, label: 'Acceptable', color: '#50ccaa', text: '#0b2b22' },
-      { max: 60, label: 'Moderada', color: '#f0e641', text: '#2b2600' },
-      { max: 80, label: 'Dolenta', color: '#ff5050', text: '#ffffff' },
-      { max: 100, label: 'Molt dolenta', color: '#960032', text: '#ffffff' },
-      { max: Infinity, label: 'Extremadament dolenta', color: '#7d2181', text: '#ffffff' }
+      { max: 20, color: '#50f0e6', text: '#0b2b2a' },
+      { max: 40, color: '#50ccaa', text: '#0b2b22' },
+      { max: 60, color: '#f0e641', text: '#2b2600' },
+      { max: 80, color: '#ff5050', text: '#ffffff' },
+      { max: 100, color: '#960032', text: '#ffffff' },
+      { max: Infinity, color: '#7d2181', text: '#ffffff' }
     ];
 
     // Llindars orientatius (grans/m³): baix / moderat / alt / molt alt
     const POLLEN_TYPES = [
-      { key: 'grass_pollen', nom: 'Gramínies', t: [5, 25, 50] },
-      { key: 'olive_pollen', nom: 'Olivera', t: [10, 50, 200] },
-      { key: 'birch_pollen', nom: 'Bedoll', t: [10, 50, 100] },
-      { key: 'alder_pollen', nom: 'Vern', t: [10, 50, 100] },
-      { key: 'mugwort_pollen', nom: 'Artemísia', t: [5, 15, 50] },
-      { key: 'ragweed_pollen', nom: 'Ambròsia', t: [5, 15, 50] }
+      { key: 'grass_pollen', id: 'grass', t: [5, 25, 50] },
+      { key: 'olive_pollen', id: 'olive', t: [10, 50, 200] },
+      { key: 'birch_pollen', id: 'birch', t: [10, 50, 100] },
+      { key: 'alder_pollen', id: 'alder', t: [10, 50, 100] },
+      { key: 'mugwort_pollen', id: 'mugwort', t: [5, 15, 50] },
+      { key: 'ragweed_pollen', id: 'ragweed', t: [5, 15, 50] }
     ];
-    const POLLEN_LEVELS = ['Cap', 'Baix', 'Moderat', 'Alt', 'Molt alt'];
 
     function pollenLevel(value, t) {
       if (!value || value < 0.5) return 0;
@@ -3884,17 +4515,22 @@
       return res.json();
     }
 
+    let lastAir = null;
     function renderAirQuality(data) {
+      lastAir = data;
       const c = data && data.current;
+      const aqLabel = document.getElementById('aq-label');
       if (!c || c.european_aqi == null) {
-        document.getElementById('aq-label').textContent = 'Sense dades';
+        aqLabel.dataset.i18n = 'noData';
+        aqLabel.textContent = t('noData');
         return;
       }
       const aqi = Math.round(c.european_aqi);
       const band = AQI_BANDS.find(b => aqi <= b.max);
       document.getElementById('aq-index').textContent = aqi;
       const label = document.getElementById('aq-label');
-      label.textContent = band.label;
+      label.removeAttribute('data-i18n');
+      label.textContent = t('aqBands')[AQI_BANDS.indexOf(band)];
       label.style.setProperty('--aq-color', band.color);
       label.style.setProperty('--aq-text', band.text);
       const marker = document.getElementById('aq-marker');
@@ -3911,7 +4547,7 @@
       const box = document.getElementById('pollen-llista');
       const h = data && data.hourly;
       if (!h || !h.time) {
-        box.innerHTML = '<div class="estat-prog">Sense dades de pol·len</div>';
+        box.innerHTML = `<div class="estat-prog">${t('noPollen')}</div>`;
         return;
       }
       const currentHour = (data.current && data.current.time ? data.current.time : '').slice(0, 13);
@@ -3927,18 +4563,18 @@
         return { ...p, max, level: max == null ? null : pollenLevel(max, p.t) };
       });
       if (rows.every(r => r.max == null)) {
-        box.innerHTML = '<div class="estat-prog">No hi ha dades de pol·len per a aquesta zona</div>';
+        box.innerHTML = `<div class="estat-prog">${t('noPollenZone')}</div>`;
         return;
       }
       box.innerHTML = '';
       rows.forEach(r => {
         const row = document.createElement('div');
         row.className = 'pollen-fila';
-        const levelText = r.level == null ? 'Sense dades' : POLLEN_LEVELS[r.level];
+        const levelText = r.level == null ? t('noData') : t('pollenLevels')[r.level];
         const pct = r.max == null ? 0 : Math.min(100, (r.max / r.t[2]) * 100);
         row.innerHTML = `<span class="pollen-nom"></span><span class="pollen-nivell n${r.level || 0}"></span>` +
                         `<span class="pollen-barra"><i style="width:${pct}%"></i></span>`;
-        row.querySelector('.pollen-nom').textContent = r.nom;
+        row.querySelector('.pollen-nom').textContent = t('pollen')[r.id];
         row.querySelector('.pollen-nivell').textContent = r.max == null ? levelText : `${levelText} · ${Math.round(r.max)}`;
         box.appendChild(row);
       });
@@ -3951,8 +4587,9 @@
         renderPollen(data);
       } catch (e) {
         if (document.getElementById('aq-index').textContent === '—') {
-          document.getElementById('aq-label').textContent = 'Sense dades';
-          document.getElementById('pollen-llista').innerHTML = '<div class="estat-prog">Sense dades de pol·len</div>';
+          document.getElementById('aq-label').dataset.i18n = 'noData';
+          document.getElementById('aq-label').textContent = t('noData');
+          document.getElementById('pollen-llista').innerHTML = `<div class="estat-prog">${t('noPollen')}</div>`;
         }
       }
     }
@@ -4086,7 +4723,6 @@
       '<path d="M3.5 9.5h8l-8 10h8M14 4h6.5L14 12h6.5"/>' +
       '</svg>';
     const THEME_ICONS = { day: SUN_ICON, night: MOON_ICON, zz: ZZ_ICON };
-    const THEME_NAMES = { day: 'diürn', night: 'nocturn', zz: 'Zz nocturn' };
 
     let sunTimes = null;   // { sunrise: Date, sunset: Date }
     let isCharging = false;
@@ -4128,9 +4764,7 @@
       const btn = document.getElementById('theme-toggle-btn');
       if (btn) {
         btn.innerHTML = THEME_ICONS[theme] + (stored ? '' : '<span class="theme-auto-badge">A</span>');
-        btn.title = stored
-          ? `Tema ${THEME_NAMES[theme]} fix (toca per canviar)`
-          : 'Tema automàtic: dia o nit segons el sol, i Zz quan es carrega de nit (toca per canviar)';
+        btn.title = stored ? t('themeFixed', t('themeNames')[theme]) : t('themeAuto');
       }
     }
 
@@ -4191,7 +4825,7 @@
     }
 
     async function fetchLocality(lat, lon) {
-      const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ca`;
+      const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=${currentLang}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Error de geocodificació');
       return res.json();
@@ -4212,7 +4846,7 @@
         maxProb = Math.max(maxProb, hourly.precipitation_probability[i] || 0);
         snow += (hourly.snowfall && hourly.snowfall[i]) || 0;
       }
-      return { prob: Math.round(maxProb), type: snow > 0 ? 'neu' : 'pluja' };
+      return { prob: Math.round(maxProb), snow: snow > 0 };
     }
 
     async function refreshWeather(lat, lon) {
@@ -4242,27 +4876,47 @@
         document.getElementById('mondaine-alt-text').textContent = altitudeText;
       }
 
-      const fmtCoord = (v, pos, neg) => `${Math.abs(v).toFixed(4).replace('.', ',')}° ${v >= 0 ? pos : neg}`;
-      document.getElementById('ub-coord').textContent = `${fmtCoord(lat, 'N', 'S')} · ${fmtCoord(lon, 'E', 'O')}`;
+      renderCoords();
+      renderLocality(locality);
+    }
 
-      if (locality) {
-        const placeName = locality.city || locality.locality || locality.principalSubdivision || 'Ubicació desconeguda';
-        document.getElementById('data-location').textContent = placeName;
-        // Comunitat autònoma si és a l'Estat espanyol; el país, si és fora
-        const code = (locality.countryCode || '').toUpperCase();
-        const inSpain = !code || code === 'ES';
-        document.getElementById('ub-regio').textContent = inSpain
-          ? (locality.principalSubdivision || '')
-          : (locality.countryName || locality.principalSubdivision || '');
-        scheduleFit(0);
-        // Festes locals del municipi on ets (si és a Catalunya)
+    function renderCoords() {
+      if (!currentCoords) return;
+      const fmtCoord = (v, pos, neg) => `${fmtDecimal(Math.abs(v), 4)}° ${v >= 0 ? pos : neg}`;
+      document.getElementById('ub-coord').textContent =
+        `${fmtCoord(currentCoords.lat, 'N', 'S')} · ${fmtCoord(currentCoords.lon, t('east') || 'E', t('west'))}`;
+    }
+
+    function renderLocality(locality) {
+      const locEl = document.getElementById('data-location');
+      locEl.removeAttribute('data-i18n');
+      if (!locality) {
+        locEl.textContent = t('unknownLoc');
+        return;
+      }
+      const placeName = locality.city || locality.locality || locality.principalSubdivision || t('unknownLoc');
+      locEl.textContent = placeName;
+      // Comunitat autònoma si és a l'Estat espanyol; el país, si és fora
+      const code = (locality.countryCode || '').toUpperCase();
+      const inSpain = !code || code === 'ES';
+      document.getElementById('ub-regio').textContent = inSpain
+        ? (locality.principalSubdivision || '')
+        : (locality.countryName || locality.principalSubdivision || '');
+      scheduleFit(0);
+      // Festes locals del municipi on ets (si és a Catalunya; el nom ha de ser el català)
+      if (currentLang === 'ca') {
         const inCatalonia = normName(locality.principalSubdivision).includes('CATALUNYA') ||
                             normName(locality.principalSubdivision).includes('CATALONIA');
         const town = locality.city || locality.locality;
         if (inCatalonia && town) setHolidayMunicipality(town);
-      } else {
-        document.getElementById('data-location').textContent = 'Ubicació desconeguda';
       }
+    }
+
+    // En canviar d'idioma, el nom del lloc i de la regió en la nova llengua
+    let localityToken = 0;
+    function refreshLocality(lat, lon) {
+      const token = ++localityToken;
+      fetchLocality(lat, lon).then(loc => { if (token === localityToken) renderLocality(loc); }).catch(() => {});
     }
 
     function initInstrumentData() {
@@ -4304,6 +4958,227 @@
     });
     window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
 
+    // ------------------------------------------------------------------
+    // Anunci de l'hora en punt, amb veu i en l'idioma triat. Abans de la
+    // veu sona un ding-dong suau. No parla en mode Zz (nit, carregant) ni
+    // si s'ha silenciat amb el botó de l'altaveu.
+    // Safari (iPhone) només deixa parlar després d'un primer toc a la
+    // pantalla, i només mentre l'app és oberta i la pantalla encesa.
+    // ------------------------------------------------------------------
+    const VOICE_STORAGE_KEY = 'prs516_veu';
+    const SPEAKER_ON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.4a8 8 0 0 1 0 11.2"/></svg>';
+    const SPEAKER_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
+
+    function readVoiceEnabled() {
+      try { return localStorage.getItem(VOICE_STORAGE_KEY) !== 'off'; } catch (e) { return true; }
+    }
+    let voiceEnabled = readVoiceEnabled();
+
+    // Frases amistoses de l'hora en punt (h de 0 a 23)
+    const HOUR_PHRASES = {
+      ca(h) {
+        const w = ['dotze', 'una', 'dues', 'tres', 'quatre', 'cinc', 'sis', 'set', 'vuit', 'nou', 'deu', 'onze'][h % 12];
+        const part = h === 0 ? 'de la nit' : h <= 5 ? 'de la matinada' : h <= 11 ? 'del matí' : h <= 13 ? 'del migdia'
+          : h <= 19 ? 'de la tarda' : h <= 21 ? 'del vespre' : 'de la nit';
+        const hello = h >= 6 && h <= 13 ? 'Bon dia! ' : h >= 14 && h <= 20 ? 'Bona tarda! ' : h === 21 ? 'Bon vespre! '
+          : (h >= 22 || h === 0) ? 'Bona nit! ' : '';
+        return `${hello}${h % 12 === 1 ? 'És la una' : `Són les ${w}`} ${part}.`;
+      },
+      fr(h) {
+        const hello = h >= 5 && h <= 17 ? 'Bonjour ! ' : h >= 18 && h <= 22 ? 'Bonsoir ! ' : '';
+        if (h === 0) return 'Il est minuit.';
+        if (h === 12) return `${hello}Il est midi.`;
+        const n = h % 12;
+        const w = ['', 'une', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix', 'onze'][n];
+        const part = h < 12 ? 'du matin' : h <= 17 ? 'de l\'après-midi' : 'du soir';
+        return `${hello}Il est ${w} heure${n === 1 ? '' : 's'} ${part}.`;
+      },
+      de(h) {
+        const hello = h >= 5 && h <= 10 ? 'Guten Morgen! ' : h >= 11 && h <= 17 ? 'Guten Tag! ' : h >= 18 && h <= 22 ? 'Guten Abend! ' : '';
+        if (h === 0) return 'Es ist Mitternacht.';
+        if (h === 12) return `${hello}Es ist zwölf Uhr mittags.`;
+        const w = ['zwölf', 'ein', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn', 'elf'][h % 12];
+        const part = h <= 4 ? 'nachts' : h <= 10 ? 'morgens' : h === 11 ? 'vormittags' : h <= 17 ? 'nachmittags' : h <= 22 ? 'abends' : 'nachts';
+        return `${hello}Es ist ${w} Uhr ${part}.`;
+      },
+      it(h) {
+        const hello = h >= 5 && h <= 12 ? 'Buongiorno! ' : h >= 13 && h <= 17 ? 'Buon pomeriggio! ' : h >= 18 && h <= 22 ? 'Buonasera! ' : '';
+        if (h === 0) return 'È mezzanotte.';
+        if (h === 12) return `${hello}È mezzogiorno.`;
+        const n = h % 12;
+        const w = ['', 'una', 'due', 'tre', 'quattro', 'cinque', 'sei', 'sette', 'otto', 'nove', 'dieci', 'undici'][n];
+        const part = h <= 4 ? 'di notte' : h <= 11 ? 'del mattino' : h <= 17 ? 'del pomeriggio' : h <= 22 ? 'di sera' : 'di notte';
+        return `${hello}${n === 1 ? "È l'una" : `Sono le ${w}`} ${part}.`;
+      },
+      en(h) {
+        const hello = h >= 5 && h <= 11 ? 'Good morning! ' : h >= 12 && h <= 17 ? 'Good afternoon! ' : h >= 18 && h <= 21 ? 'Good evening! ' : '';
+        if (h === 0) return 'It\'s midnight.';
+        if (h === 12) return `${hello}It's noon.`;
+        const w = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven'][h % 12];
+        const part = h <= 4 ? 'at night' : h <= 11 ? 'in the morning' : h <= 17 ? 'in the afternoon' : h <= 21 ? 'in the evening' : 'at night';
+        return `${hello}It's ${w} o'clock ${part}.`;
+      }
+    };
+
+    // Un toc amable de temperatura, si se sap
+    const TEMP_PHRASES = {
+      ca: n => `A fora fa ${n} ${Math.abs(n) === 1 ? 'grau' : 'graus'}.`,
+      fr: n => `Il fait ${n} degré${Math.abs(n) <= 1 ? '' : 's'} dehors.`,
+      de: n => `Draußen sind es ${n} Grad.`,
+      it: n => `Fuori ci sono ${n} grad${Math.abs(n) === 1 ? 'o' : 'i'}.`,
+      en: n => `It's ${n} degree${Math.abs(n) === 1 ? '' : 's'} outside.`
+    };
+
+    function hourAnnouncement(date) {
+      let text = HOUR_PHRASES[currentLang](date.getHours());
+      const c = lastWeather && lastWeather.current;
+      if (c && c.temperature_2m != null) text += ' ' + TEMP_PHRASES[currentLang](Math.round(c.temperature_2m));
+      return text;
+    }
+
+    const synth = window.speechSynthesis || null;
+
+    function pickVoice(locale) {
+      if (!synth) return null;
+      const voices = synth.getVoices();
+      const base = locale.slice(0, 2).toLowerCase();
+      const norm = v => (v.lang || '').replace('_', '-').toLowerCase();
+      return voices.find(v => norm(v) === locale.toLowerCase()) ||
+             voices.find(v => norm(v).startsWith(base)) || null;
+    }
+    if (synth && 'onvoiceschanged' in synth) synth.onvoiceschanged = () => {};
+
+    function speak(text) {
+      if (!synth || !text) return;
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      const locale = t('locale');
+      u.lang = locale;
+      const voice = pickVoice(locale);
+      if (voice) u.voice = voice;
+      u.rate = 0.95;
+      u.pitch = 1;
+      synth.speak(u);
+    }
+
+    // Ding-dong suau abans de l'anunci
+    let audioCtx = null;
+    function ensureAudioCtx() {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      if (!audioCtx) audioCtx = new AC();
+      if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+      return audioCtx;
+    }
+
+    function chime() {
+      const ctx = ensureAudioCtx();
+      if (!ctx || ctx.state !== 'running') return 0;
+      const t0 = ctx.currentTime + 0.05;
+      [[659.25, 0], [523.25, 0.42]].forEach(([freq, delay]) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, t0 + delay);
+        gain.gain.exponentialRampToValueAtTime(0.18, t0 + delay + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + delay + 1.1);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(t0 + delay);
+        osc.stop(t0 + delay + 1.2);
+      });
+      return 1100;
+    }
+
+    function announceHour(date) {
+      if (!voiceEnabled || document.documentElement.getAttribute('data-theme') === 'zz') return;
+      const text = hourAnnouncement(date);
+      const wait = chime();
+      setTimeout(() => speak(text), wait);
+    }
+
+    // Safari demana un primer gest de l'usuari per poder parlar i fer sonar el ding-dong
+    let speechUnlocked = false;
+    function unlockSpeech() {
+      if (speechUnlocked) return;
+      speechUnlocked = true;
+      ensureAudioCtx();
+      if (synth) {
+        const u = new SpeechSynthesisUtterance(' ');
+        u.volume = 0;
+        synth.speak(u);
+      }
+    }
+    ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, unlockSpeech, { capture: true, passive: true }));
+
+    // Vigila el canvi d'hora (també si la pestanya s'ha alentit en segon pla)
+    let lastAnnouncedKey = `${isoOf(new Date())}T${new Date().getHours()}`;
+    setInterval(() => {
+      const now = new Date();
+      const key = `${isoOf(now)}T${now.getHours()}`;
+      if (key === lastAnnouncedKey) return;
+      lastAnnouncedKey = key;
+      if (now.getMinutes() === 0) announceHour(now);
+    }, 1000);
+
+    function updateVoiceBtn() {
+      const btn = document.getElementById('veu-btn');
+      if (!btn) return;
+      btn.innerHTML = voiceEnabled ? SPEAKER_ON : SPEAKER_OFF;
+      btn.setAttribute('aria-pressed', String(voiceEnabled));
+      btn.title = voiceEnabled ? t('voiceOn') : t('voiceOff');
+      btn.setAttribute('aria-label', btn.title);
+    }
+
+    document.getElementById('veu-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      voiceEnabled = !voiceEnabled;
+      try { localStorage.setItem(VOICE_STORAGE_KEY, voiceEnabled ? 'on' : 'off'); } catch (err) {}
+      updateVoiceBtn();
+      if (voiceEnabled) speak(HOUR_PHRASES[currentLang](new Date().getHours()).replace(/^[^!]*! /, ''));
+      else if (synth) synth.cancel();
+    });
+
+    // ------------------------------------------------------------------
+    // Canvi d'idioma: es tradueix tot el que es veu i es tornen a demanar
+    // les dades que depenen de l'idioma (nom del lloc i notícies)
+    // ------------------------------------------------------------------
+    function setLanguage(lang, fromUser) {
+      if (!LANGS.includes(lang)) return;
+      const changed = lang !== currentLang;
+      currentLang = lang;
+      try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch (e) {}
+      document.documentElement.lang = lang;
+      applyStaticTexts();
+      updateVoiceBtn();
+      applyTheme();
+      if (changed) {
+        hideHolidayTip();
+        lastDateKey = '';
+        renderCalendar();
+        renderRadios();
+        renderPrograms();
+        if (lastWeather) renderWeatherView(lastWeather);
+        if (lastAir) { renderAirQuality(lastAir); renderPollen(lastAir); }
+        renderCoords();
+        if (currentCoords) refreshLocality(currentCoords.lat, currentCoords.lon);
+        loadNews(true, true);
+      }
+      refreshFinDots();
+      updateFinTitle();
+      scheduleFit(0);
+      if (fromUser && voiceEnabled) speak(t('hello'));
+    }
+
+    document.querySelectorAll('.lang-btn[data-lang]').forEach(b => {
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        unlockSpeech();
+        setLanguage(b.dataset.lang, true);
+      });
+    });
+
+    setLanguage(currentLang, false);
     initInstrumentData();
     setInterval(() => {
       if (currentCoords) refreshWeather(currentCoords.lat, currentCoords.lon);
