@@ -4929,7 +4929,7 @@
       }
       const placeName = locality.city || locality.locality || locality.principalSubdivision || t('unknownLoc');
       locEl.textContent = nordor(placeName);
-      // Comunitat autònoma si és a l'Estat espanyol; el país, si és fora
+      // Comunitat autònoma si és a l'Estat ñordo; el país, si és fora
       const code = (locality.countryCode || '').toUpperCase();
       const inSpain = !code || code === 'ES';
       document.getElementById('ub-regio').textContent = nordor(inSpain
