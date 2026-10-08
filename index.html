@@ -540,15 +540,23 @@
       text-align: center;
     }
 
+    /* Finestreta de mida fixa: el dia (2 o 3 lletres segons l'idioma) i la
+       data sempre centrats, sense que la finestra canviï d'amplada ni es mogui */
     .calendar-day {
       border-right: 1.8px solid #1a1a1a;
-      min-width: 6.67cqw;
+      width: 7.9cqw;
+      padding-left: 0;
+      padding-right: 0;
       background: linear-gradient(180deg, #f0f0f0, #fcfcfc);
+      white-space: nowrap;
     }
 
     .calendar-date {
-      min-width: 5.24cqw;
+      width: 5.6cqw;
+      padding-left: 0;
+      padding-right: 0;
       background: linear-gradient(180deg, #fafafa, #ffffff);
+      font-variant-numeric: tabular-nums;
     }
 
     /* Índexs de les hores */
@@ -3187,6 +3195,15 @@
       tissotDayEl.style.color = festiuColor || '';
       tissotDateEl.style.color = festiuColor || '';
       mondaineDayEl.textContent = t('watchDays')[now.getDay()];
+      // Les tres lletres han de cabre dins la meitat esquerra de la finestreta
+      mondaineDayEl.removeAttribute('textLength');
+      mondaineDayEl.removeAttribute('lengthAdjust');
+      try {
+        if (mondaineDayEl.getComputedTextLength() > 12) {
+          mondaineDayEl.setAttribute('textLength', '12');
+          mondaineDayEl.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+        }
+      } catch (e) {}
       mondaineDateEl.textContent = now.getDate();
       mondaineDayEl.setAttribute('fill', festiuColor || '#1c1c1c');
       mondaineDateEl.setAttribute('fill', festiuColor || '#1c1c1c');
@@ -4929,7 +4946,7 @@
       }
       const placeName = locality.city || locality.locality || locality.principalSubdivision || t('unknownLoc');
       locEl.textContent = nordor(placeName);
-      // Comunitat autònoma si és a l'Estat ñordo; el país, si és fora
+      // Comunitat autònoma si és a l'Estat espanyol; el país, si és fora
       const code = (locality.countryCode || '').toUpperCase();
       const inSpain = !code || code === 'ES';
       document.getElementById('ub-regio').textContent = nordor(inSpain
