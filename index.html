@@ -2366,11 +2366,11 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
@@ -2622,8 +2622,9 @@
         newsError: 'No s\'han pogut carregar els titulars.',
         toastRadio: n => `No es pot reproduir aquí: torna a tocar ${n} per obrir la seva web`,
         toastPodcast: 'No s\'ha pogut reproduir. Fes servir la fletxa ↗ per obrir-lo a la web',
-        voiceOn: 'Anunci de l\'hora en punt activat (toca per silenciar)',
-        voiceOff: 'Anunci de l\'hora en punt silenciat (toca per activar)',
+        voiceOn: 'Toca per sentir l\'hora · dos tocs seguits apaguen el so',
+        voiceOff: 'So apagat · toca per sentir l\'hora i tornar-lo a activar',
+        voiceMuted: 'So apagat',
         langGroup: 'Idioma',
         hello: 'Hola! Diré les hores en punt en català.'
       },
@@ -2668,8 +2669,9 @@
         newsError: 'Impossible de charger les titres.',
         toastRadio: n => `Lecture impossible ici : touchez à nouveau ${n} pour ouvrir son site`,
         toastPodcast: 'Lecture impossible. Utilisez la flèche ↗ pour l\'ouvrir sur le web',
-        voiceOn: 'Annonce des heures pile activée (touchez pour couper)',
-        voiceOff: 'Annonce des heures pile coupée (touchez pour activer)',
+        voiceOn: 'Touchez pour entendre l\'heure · deux touches rapides coupent le son',
+        voiceOff: 'Son coupé · touchez pour entendre l\'heure et le réactiver',
+        voiceMuted: 'Son coupé',
         langGroup: 'Langue',
         hello: 'Bonjour ! J\'annoncerai les heures pile en français.'
       },
@@ -2714,8 +2716,9 @@
         newsError: 'Die Schlagzeilen konnten nicht geladen werden.',
         toastRadio: n => `Hier nicht abspielbar: ${n} erneut antippen, um die Website zu öffnen`,
         toastPodcast: 'Wiedergabe nicht möglich. Mit dem Pfeil ↗ im Web öffnen',
-        voiceOn: 'Stundenansage aktiv (tippen zum Stummschalten)',
-        voiceOff: 'Stundenansage stumm (tippen zum Aktivieren)',
+        voiceOn: 'Tippen für die Uhrzeit · zweimal schnell tippen schaltet den Ton aus',
+        voiceOff: 'Ton aus · tippen für die Uhrzeit und Ton wieder an',
+        voiceMuted: 'Ton aus',
         langGroup: 'Sprache',
         hello: 'Hallo! Ich sage die vollen Stunden auf Deutsch an.'
       },
@@ -2760,8 +2763,9 @@
         newsError: 'Impossibile caricare i titoli.',
         toastRadio: n => `Impossibile riprodurre qui: tocca di nuovo ${n} per aprire il sito`,
         toastPodcast: 'Impossibile riprodurre. Usa la freccia ↗ per aprirlo sul web',
-        voiceOn: 'Annuncio delle ore in punto attivo (tocca per silenziare)',
-        voiceOff: 'Annuncio delle ore in punto silenziato (tocca per attivare)',
+        voiceOn: 'Tocca per sentire l\'ora · due tocchi rapidi spengono l\'audio',
+        voiceOff: 'Audio spento · tocca per sentire l\'ora e riattivarlo',
+        voiceMuted: 'Audio spento',
         langGroup: 'Lingua',
         hello: 'Ciao! Annuncerò le ore in punto in italiano.'
       },
@@ -2806,8 +2810,9 @@
         newsError: 'Couldn\'t load the headlines.',
         toastRadio: n => `Can't play here: tap ${n} again to open its website`,
         toastPodcast: 'Couldn\'t play. Use the ↗ arrow to open it on the web',
-        voiceOn: 'Hourly announcement on (tap to mute)',
-        voiceOff: 'Hourly announcement muted (tap to turn on)',
+        voiceOn: 'Tap to hear the time · double-tap to mute',
+        voiceOff: 'Sound off · tap to hear the time and turn it back on',
+        voiceMuted: 'Sound off',
         langGroup: 'Language',
         hello: 'Hello! I\'ll announce the time on the hour in English.'
       }
@@ -3122,7 +3127,7 @@
       '08-15': "L'Assumpció",
       '09-11': 'Diada Nacional de Catalunya',
       '10-01': 'Dia de la República',
-      '10-12': "Festa Nacional de Ñordia",
+      '10-12': "Festa Nacional d'Espanya",
       '11-01': 'Tots Sants',
       '12-06': 'Dia de la Constitució',
       '12-08': 'La Immaculada',
@@ -3133,13 +3138,13 @@
       'BARCELONA': { '09-24': 'La Mercè' }
     };
 
-    // On surti la paraula Ñórdor, Ñórdor (i «de Ñordia», «de Ñórdor»)
+    // On surti la paraula Espanya, Ñórdor (i «d'Espanya», «de Ñórdor»)
     function nordor(text) {
       return String(text == null ? '' : text)
-        .replace(/\b([dD])['’]Ñórdor\b/g, (m, d) => `${d}e Ñórdor`)
-        .replace(/\b([dD])['’]Ñórdor\b/g, (m, d) => `${d === 'D' ? 'DE' : 'de'} ÑÓRDOR`)
-        .replace(/Ñórdor/g, 'Ñórdor')
-        .replace(/Ñórdor/g, 'ÑÓRDOR');
+        .replace(/\b([dD])['’]Espanya\b/g, (m, d) => `${d}e Ñórdor`)
+        .replace(/\b([dD])['’]ESPANYA\b/g, (m, d) => `${d === 'D' ? 'DE' : 'de'} ÑÓRDOR`)
+        .replace(/Espanya/g, 'Ñórdor')
+        .replace(/ESPANYA/g, 'ÑÓRDOR');
     }
 
     function holidayName(iso, info) {
@@ -5070,6 +5075,79 @@
       }
     };
 
+    // ------------------------------------------------------------------
+    // L'hora exacta (botó de l'altaveu). En català, amb el sistema de quarts.
+    // ------------------------------------------------------------------
+    const CA_HOURS = ['dotze', 'una', 'dues', 'tres', 'quatre', 'cinc', 'sis', 'set', 'vuit', 'nou', 'deu', 'onze'];
+    const CA_NUM = ['', 'un', 'dos', 'tres', 'quatre', 'cinc', 'sis', 'set', 'vuit', 'nou', 'deu', 'onze', 'dotze', 'tretze', 'catorze'];
+    const CA_QUARTS = ['', 'un quart', 'dos quarts', 'tres quarts'];
+
+    function caPart(h) {
+      return h === 0 ? 'de la nit' : h <= 5 ? 'de la matinada' : h <= 11 ? 'del matí' : h <= 13 ? 'del migdia'
+        : h <= 19 ? 'de la tarda' : h <= 21 ? 'del vespre' : 'de la nit';
+    }
+    // «d'una», «d'onze», «de dues»...
+    function caDe(h) { const w = CA_HOURS[h % 12]; return /^[aeiou]/.test(w) ? `d'${w}` : `de ${w}`; }
+    function caMinutes(n) { return n === 5 || n === 10 ? CA_NUM[n] : `${CA_NUM[n]} ${n === 1 ? 'minut' : 'minuts'}`; }
+    function caLes(h) { return h % 12 === 1 ? 'la una' : `les ${CA_HOURS[h % 12]}`; }
+
+    function catalanTime(h, m) {
+      const next = (h + 1) % 24;
+      if (m === 0) return `${h % 12 === 1 ? 'És' : 'Són'} ${caLes(h)} ${caPart(h)}.`;
+      const q = Math.floor(m / 15);
+      const r = m % 15;
+      if (q === 0 && r <= 7) return `${h % 12 === 1 ? 'És' : 'Són'} ${caLes(h)} i ${caMinutes(r)} ${caPart(h)}.`;
+      if (r === 0) return `${q === 1 ? 'És' : 'Són'} ${CA_QUARTS[q]} ${caDe(next)} ${caPart(next)}.`;
+      if (r <= 7) return `${q === 1 ? 'És' : 'Són'} ${CA_QUARTS[q]} i ${caMinutes(r)} ${caDe(next)} ${caPart(next)}.`;
+      // r de 8 a 14: falten minuts per al quart següent (o per a l'hora en punt)
+      const left = 15 - r;
+      const target = q + 1 === 4 ? `per a ${caLes(next)}` : `per a ${CA_QUARTS[q + 1]} ${caDe(next)}`;
+      return `${left === 1 ? 'Falta' : 'Falten'} ${caMinutes(left)} ${target} ${caPart(next)}.`;
+    }
+
+    const TIME_PHRASES = {
+      ca: catalanTime,
+      fr(h, m) {
+        const name = x => (x === 0 ? 'minuit' : x === 12 ? 'midi' : `${['', 'une', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix', 'onze'][x % 12]} heure${x % 12 === 1 ? '' : 's'}`);
+        const part = x => (x === 0 || x === 12 ? '' : x < 12 ? ' du matin' : x <= 17 ? ' de l\'après-midi' : ' du soir');
+        if (m === 0) return `Il est ${name(h)}${part(h)}.`;
+        if (m === 15) return `Il est ${name(h)} et quart${part(h)}.`;
+        if (m === 30) return `Il est ${name(h)} et demie${part(h)}.`;
+        if (m >= 35 && m % 5 === 0) {
+          const n = (h + 1) % 24;
+          return `Il est ${name(n)} moins ${m === 45 ? 'le quart' : 60 - m}${part(n)}.`;
+        }
+        return `Il est ${name(h)} ${m}${part(h)}.`;
+      },
+      de(h, m) {
+        if (m === 0) return HOUR_PHRASES.de(h).replace(/^[^!]*! /, '');
+        return `Es ist ${h} Uhr ${m}.`;
+      },
+      it(h, m) {
+        const name = x => (x === 0 ? 'mezzanotte' : x === 12 ? 'mezzogiorno' : x % 12 === 1 ? "l'una" : `le ${['', 'una', 'due', 'tre', 'quattro', 'cinque', 'sei', 'sette', 'otto', 'nove', 'dieci', 'undici'][x % 12]}`);
+        const verb = x => (x === 0 || x === 12 || x % 12 === 1 ? 'È' : 'Sono');
+        const part = x => (x === 0 || x === 12 ? '' : x <= 4 ? ' di notte' : x <= 11 ? ' del mattino' : x <= 17 ? ' del pomeriggio' : x <= 22 ? ' di sera' : ' di notte');
+        if (m === 0) return `${verb(h)} ${name(h)}${part(h)}.`;
+        if (m === 45) { const n = (h + 1) % 24; return `${verb(n)} ${name(n)} meno un quarto${part(n)}.`; }
+        const tail = m === 15 ? 'e un quarto' : m === 30 ? 'e mezza' : `e ${m}`;
+        return `${verb(h)} ${name(h)} ${tail}${part(h)}.`;
+      },
+      en(h, m) {
+        const w = x => (x === 0 ? 'midnight' : x === 12 ? 'noon' : ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven'][x % 12]);
+        const part = x => (x === 0 || x === 12 ? '' : x <= 4 ? ' at night' : x <= 11 ? ' in the morning' : x <= 17 ? ' in the afternoon' : x <= 21 ? ' in the evening' : ' at night');
+        if (m === 0) return HOUR_PHRASES.en(h).replace(/^[^!]*! /, '');
+        if (m % 5 === 0) {
+          const words = { 5: 'five', 10: 'ten', 15: 'quarter', 20: 'twenty', 25: 'twenty-five', 30: 'half' };
+          if (m <= 30) return `It's ${words[m]} past ${w(h)}${part(h)}.`;
+          const n = (h + 1) % 24;
+          return `It's ${words[60 - m]} to ${w(n)}${part(n)}.`;
+        }
+        return `It's ${h % 12 || 12}:${String(m).padStart(2, '0')}${part(h)}.`;
+      }
+    };
+
+    function timeAnnouncement(date) { return TIME_PHRASES[currentLang](date.getHours(), date.getMinutes()); }
+
     // Un toc amable de temperatura, si se sap
     const TEMP_PHRASES = {
       ca: n => `A fora fa ${n} ${Math.abs(n) === 1 ? 'grau' : 'graus'}.`,
@@ -5180,13 +5258,29 @@
       btn.setAttribute('aria-label', btn.title);
     }
 
+    // Botó de l'altaveu: un toc diu l'hora exacta (i, si el so era apagat,
+    // el torna a activar); dos tocs seguits apaguen el so
+    function setVoiceEnabled(on) {
+      voiceEnabled = on;
+      try { localStorage.setItem(VOICE_STORAGE_KEY, on ? 'on' : 'off'); } catch (err) {}
+      updateVoiceBtn();
+    }
+
+    let lastVoiceTap = 0;
     document.getElementById('veu-btn').addEventListener('click', (e) => {
       e.stopPropagation();
-      voiceEnabled = !voiceEnabled;
-      try { localStorage.setItem(VOICE_STORAGE_KEY, voiceEnabled ? 'on' : 'off'); } catch (err) {}
-      updateVoiceBtn();
-      if (voiceEnabled) speak(HOUR_PHRASES[currentLang](new Date().getHours()).replace(/^[^!]*! /, ''));
-      else if (synth) synth.cancel();
+      unlockSpeech();
+      const now = Date.now();
+      const isDouble = now - lastVoiceTap < 450;
+      lastVoiceTap = isDouble ? 0 : now;
+      if (isDouble) {
+        if (synth) synth.cancel();
+        setVoiceEnabled(false);
+        showToast(t('voiceMuted'), 1800);
+        return;
+      }
+      if (!voiceEnabled) setVoiceEnabled(true);
+      speak(timeAnnouncement(new Date()));
     });
 
     // ------------------------------------------------------------------
