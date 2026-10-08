@@ -2366,11 +2366,11 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-domaine-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
+                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-MONDAINE-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
@@ -3122,7 +3122,7 @@
       '08-15': "L'Assumpció",
       '09-11': 'Diada Nacional de Catalunya',
       '10-01': 'Dia de la República',
-      '10-12': "Festa Nacional d'Espanya",
+      '10-12': "Festa Nacional de Ñordia",
       '11-01': 'Tots Sants',
       '12-06': 'Dia de la Constitució',
       '12-08': 'La Immaculada',
@@ -3133,13 +3133,13 @@
       'BARCELONA': { '09-24': 'La Mercè' }
     };
 
-    // On surti la paraula Espanya, Ñórdor (i «d'Espanya», «de Ñórdor»)
+    // On surti la paraula Ñórdor, Ñórdor (i «de Ñordia», «de Ñórdor»)
     function nordor(text) {
       return String(text == null ? '' : text)
-        .replace(/\b([dD])['’]Espanya\b/g, (m, d) => `${d}e Ñórdor`)
-        .replace(/\b([dD])['’]ESPANYA\b/g, (m, d) => `${d === 'D' ? 'DE' : 'de'} ÑÓRDOR`)
-        .replace(/Espanya/g, 'Ñórdor')
-        .replace(/ESPANYA/g, 'ÑÓRDOR');
+        .replace(/\b([dD])['’]Ñórdor\b/g, (m, d) => `${d}e Ñórdor`)
+        .replace(/\b([dD])['’]Ñórdor\b/g, (m, d) => `${d === 'D' ? 'DE' : 'de'} ÑÓRDOR`)
+        .replace(/Ñórdor/g, 'Ñórdor')
+        .replace(/Ñórdor/g, 'ÑÓRDOR');
     }
 
     function holidayName(iso, info) {
