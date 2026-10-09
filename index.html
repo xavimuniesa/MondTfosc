@@ -1247,55 +1247,169 @@
     .aq-grid .wx-value { font-size: 6.2cqw; }
 
     /* Pol·len */
-    .pollen-llista {
+    /* Alarmes */
+    .fin-alarmes { gap: 8px; }
+
+    .alarm-llista {
       display: flex;
       flex-direction: column;
-      gap: 2.4cqw;
+      gap: 8px;
     }
 
-    .pollen-fila {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 1cqw 3cqw;
-    }
-
-    .pollen-nom {
-      font-size: 4.4cqw;
-      font-weight: 700;
-      color: var(--cell-color);
-    }
-
-    .pollen-nivell {
-      font-size: 3.4cqw;
-      font-weight: 800;
-      padding: 0.5cqw 2.6cqw;
-      border-radius: 999px;
+    .alarm {
       border: 1px solid var(--data-item-border);
+      border-radius: 12px;
+      padding: 8px 10px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      transition: border-color 0.2s ease, opacity 0.2s ease;
+      opacity: 0.62;
+    }
+
+    .alarm.on { opacity: 1; border-color: var(--accent); }
+
+    .alarm-fila {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .alarm-hora {
+      appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--cell-color);
+      font: inherit;
+      font-size: 1.9rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      padding: 0;
+      min-width: 0;
+      width: 5.6rem;
+      cursor: pointer;
+    }
+
+    .alarm-hora::-webkit-calendar-picker-indicator { display: none; }
+    .alarm-hora::-webkit-date-and-time-value { text-align: left; }
+
+    .alarm-resum {
+      flex: 1;
+      min-width: 0;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
       color: var(--weekday-color);
       white-space: nowrap;
-    }
-
-    .pollen-nivell.n1 { border-color: #3f9b5a; color: #3f9b5a; }
-    .pollen-nivell.n2 { background: #e0b100; border-color: #e0b100; color: #1b1b1f; }
-    .pollen-nivell.n3 { background: #e0612b; border-color: #e0612b; color: #ffffff; }
-    .pollen-nivell.n4 { background: #c62828; border-color: #c62828; color: #ffffff; }
-
-    .pollen-barra {
-      grid-column: 1 / -1;
-      height: 1.1cqw;
-      border-radius: 999px;
-      background: var(--data-item-border);
       overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .pollen-barra i {
-      display: block;
-      height: 100%;
-      width: 0;
+    .alarm-switch {
+      flex: none;
+      position: relative;
+      width: 46px;
+      height: 27px;
       border-radius: 999px;
-      background: var(--weekday-color);
+      border: 1px solid var(--today-btn-border);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
+
+    .alarm-switch i {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: var(--weekday-color);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .alarm-switch[aria-checked="true"] { background: var(--accent); border-color: var(--accent); }
+    .alarm-switch[aria-checked="true"] i { transform: translateX(19px); background: var(--accent-text); }
+
+    .alarm-dies {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .alarm-dia {
+      appearance: none;
+      border: 1px solid var(--data-item-border);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--weekday-color);
+      font: inherit;
+      font-size: 0.66rem;
+      font-weight: 800;
+      padding: 4px 0;
+      cursor: pointer;
+    }
+
+    .alarm-dia.on { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+
+    /* Avís d'alarma a pantalla completa */
+    .alarm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3vh;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .alarm-overlay[hidden] { display: none; }
+
+    .alarm-ov-titol {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      animation: polsa 1.4s ease-in-out infinite;
+    }
+
+    .alarm-ov-hora {
+      font-size: min(28vw, 30vh);
+      font-weight: 800;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .alarm-ov-botons {
+      display: flex;
+      gap: 14px;
+      width: min(100%, 460px);
+    }
+
+    .alarm-ov-botons button {
+      flex: 1;
+      appearance: none;
+      border-radius: 18px;
+      padding: 22px 10px;
+      font: inherit;
+      font-size: 1.25rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: 2px solid var(--accent);
+    }
+
+    #alarm-ov-stop { background: var(--accent); color: var(--accent-text); }
+    #alarm-ov-snooze { background: transparent; color: var(--accent); }
 
     .fin-noticies .noticies {
       flex: none;
@@ -2366,19 +2480,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -2505,10 +2619,10 @@
               <div class="peu-dades" data-i18n="aqFoot">µg/m³ · ara · font: Copernicus (Open-Meteo)</div>
             </section>
 
-            <section class="fin-pag fin-pollen" data-key="pollen" data-nom="Pol·len">
-              <div class="visor-titol" data-i18n="pollenTitle">Màxim de les properes 24 hores</div>
-              <div class="pollen-llista" id="pollen-llista"><div class="estat-prog" data-i18n="loading">Carregant…</div></div>
-              <div class="peu-dades" data-i18n="pollenFoot">grans/m³ · nivells orientatius · font: Copernicus (Open-Meteo)</div>
+            <section class="fin-pag fin-alarmes" data-key="alarmes" data-nom="Alarmes">
+              <div class="visor-titol" id="alarm-next"></div>
+              <div class="alarm-llista" id="alarm-llista"></div>
+              <div class="peu-dades" data-i18n="alarmNote"></div>
             </section>
 
             <section class="fin-pag" data-key="radio" data-nom="Ràdio">
@@ -2560,6 +2674,16 @@
 
   <div class="holiday-tip" id="holiday-tip" role="tooltip" hidden></div>
 
+  <!-- Alarma sonant -->
+  <div class="alarm-overlay" id="alarm-overlay" role="alertdialog" aria-live="assertive" hidden>
+    <div class="alarm-ov-titol" id="alarm-ov-titol"></div>
+    <div class="alarm-ov-hora" id="alarm-ov-hora"></div>
+    <div class="alarm-ov-botons">
+      <button type="button" id="alarm-ov-snooze"></button>
+      <button type="button" id="alarm-ov-stop"></button>
+    </div>
+  </div>
+
   <!-- Filtre del mode Zz: converteix cada punt a taronja segons la seva lluminositat -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="zz-tint" color-interpolation-filters="sRGB">
@@ -2594,15 +2718,13 @@
               'Ruixats de neu', 'Ruixats de neu intensos', 'Tempesta', 'Tempesta amb calamarsa', 'Tempesta amb calamarsa forta'],
         windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'], west: 'O',
         aqBands: ['Bona', 'Acceptable', 'Moderada', 'Dolenta', 'Molt dolenta', 'Extremadament dolenta'],
-        pollen: { grass: 'Gramínies', olive: 'Olivera', birch: 'Bedoll', alder: 'Vern', mugwort: 'Artemísia', ragweed: 'Ambròsia' },
-        pollenLevels: ['Cap', 'Baix', 'Moderat', 'Alt', 'Molt alt'],
         themeNames: { day: 'diürn', night: 'nocturn', zz: 'Zz nocturn' },
         today: 'Avui', titleDbl: 'Toca 2 cops per tornar al mes actual', install: 'Instal·la com a app',
         themeAria: 'Tema diürn o nocturn',
         themeFixed: n => `Tema ${n} fix (toca per canviar)`,
         themeAuto: 'Tema automàtic: dia o nit segons el sol, i Zz quan es carrega de nit (toca per canviar)',
         viewDots: 'Llisca avall per veure les finestres', pausePlay: 'Pausar o reprendre',
-        pages: { avisos: 'Avisos', ubicacio: 'Ubicació', temps: 'El temps', aire: "Qualitat de l'aire", pollen: 'Pol·len', radio: 'Ràdio', podcasts: 'Podcasts', noticies: 'Notícies' },
+        pages: { avisos: 'Avisos', ubicacio: 'Ubicació', temps: 'El temps', aire: "Qualitat de l'aire", alarmes: 'Alarmes', radio: 'Ràdio', podcasts: 'Podcasts', noticies: 'Notícies' },
         next12: 'Properes 12 hores', locating: 'Localitzant…', unknownLoc: 'Ubicació desconeguda',
         altitude: 'Altitud', coords: 'Coordenades', loadingWx: 'Carregant el temps…', loading: 'Carregant…',
         feels: 'Sensació', humidity: 'Humitat', wind: 'Vent', precip6: 'Pluja 6 h', rain: 'pluja', snow: 'neu', gusts: 'ratxes',
@@ -2612,8 +2734,7 @@
         gustsText: n => `Ratxes de ${n} km/h`,
         aqSub: "Índex europeu de qualitat de l'aire", pm25: 'PM2,5', no2: 'Diòxid de nitrogen', o3: 'Ozó',
         aqFoot: 'µg/m³ · ara · font: Copernicus (Open-Meteo)', noData: 'Sense dades',
-        pollenTitle: 'Màxim de les properes 24 hores', pollenFoot: 'grans/m³ · nivells orientatius · font: Copernicus (Open-Meteo)',
-        noPollen: 'Sense dades de pol·len', noPollenZone: 'No hi ha dades de pol·len per a aquesta zona',
+        alarmWord: 'Alarma', alarmOnce: 'Un sol cop', alarmDaily: 'Cada dia', alarmWeekdays: 'De dilluns a divendres', alarmWeekend: 'Cap de setmana', alarmNone: 'Cap alarma activada', alarmToday: 'avui', alarmTomorrow: 'demà', alarmNext: (w, h) => `Propera alarma: ${w} a les ${h}`, alarmStop: 'Atura', alarmSnooze: n => `+${n} min`, alarmNote: "Sonen amb l'app oberta (la pantalla no s'apaga). Toca l'hora per canviar-la.",
         live: 'En directe', liveLower: 'en directe', newsWord: 'notícies', classical: 'clàssica', worldEnglish: 'Europa · anglès',
         loadingPrograms: 'Carregant programes…', via7: '7 h',
         programsError: 'No s\'han pogut carregar.', openSite: 'Obre la web', openWeb: 'Obrir a la web',
@@ -2641,15 +2762,13 @@
               'Averses de neige', 'Fortes averses de neige', 'Orage', 'Orage avec grêle', 'Orage avec forte grêle'],
         windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'], west: 'O',
         aqBands: ['Bonne', 'Correcte', 'Moyenne', 'Mauvaise', 'Très mauvaise', 'Extrêmement mauvaise'],
-        pollen: { grass: 'Graminées', olive: 'Olivier', birch: 'Bouleau', alder: 'Aulne', mugwort: 'Armoise', ragweed: 'Ambroisie' },
-        pollenLevels: ['Aucun', 'Faible', 'Modéré', 'Élevé', 'Très élevé'],
         themeNames: { day: 'jour', night: 'nuit', zz: 'Zz nuit' },
         today: 'Auj.', titleDbl: 'Touchez 2 fois pour revenir au mois actuel', install: 'Installer comme app',
         themeAria: 'Thème jour ou nuit',
         themeFixed: n => `Thème ${n} fixe (touchez pour changer)`,
         themeAuto: 'Thème automatique : jour ou nuit selon le soleil, et Zz en charge la nuit (touchez pour changer)',
         viewDots: 'Glissez vers le bas pour voir les fenêtres', pausePlay: 'Pause ou reprise',
-        pages: { avisos: 'Alertes', ubicacio: 'Lieu', temps: 'Météo', aire: "Qualité de l'air", pollen: 'Pollen', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Actualités' },
+        pages: { avisos: 'Alertes', ubicacio: 'Lieu', temps: 'Météo', aire: "Qualité de l'air", alarmes: 'Réveils', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Actualités' },
         next12: '12 prochaines heures', locating: 'Localisation…', unknownLoc: 'Lieu inconnu',
         altitude: 'Altitude', coords: 'Coordonnées', loadingWx: 'Chargement de la météo…', loading: 'Chargement…',
         feels: 'Ressenti', humidity: 'Humidité', wind: 'Vent', precip6: 'Pluie 6 h', rain: 'pluie', snow: 'neige', gusts: 'rafales',
@@ -2659,8 +2778,7 @@
         gustsText: n => `Rafales à ${n} km/h`,
         aqSub: "Indice européen de la qualité de l'air", pm25: 'PM2,5', no2: "Dioxyde d'azote", o3: 'Ozone',
         aqFoot: 'µg/m³ · maintenant · source : Copernicus (Open-Meteo)', noData: 'Pas de données',
-        pollenTitle: 'Maximum des prochaines 24 heures', pollenFoot: 'grains/m³ · niveaux indicatifs · source : Copernicus (Open-Meteo)',
-        noPollen: 'Pas de données de pollen', noPollenZone: 'Pas de données de pollen pour cette zone',
+        alarmWord: 'Réveil', alarmOnce: 'Une seule fois', alarmDaily: 'Tous les jours', alarmWeekdays: 'Du lundi au vendredi', alarmWeekend: 'Week-end', alarmNone: 'Aucun réveil activé', alarmToday: "aujourd'hui", alarmTomorrow: 'demain', alarmNext: (w, h) => `Prochain réveil : ${w} à ${h}`, alarmStop: 'Arrêter', alarmSnooze: n => `+${n} min`, alarmNote: "Ils sonnent avec l'app ouverte (l'écran reste allumé). Touchez l'heure pour la changer.",
         live: 'En direct', liveLower: 'en direct', newsWord: 'infos', classical: 'classique', worldEnglish: 'Europe · anglais',
         loadingPrograms: 'Chargement des émissions…', via7: '7 h',
         programsError: 'Impossible de charger.', openSite: 'Ouvrir le site', openWeb: 'Ouvrir sur le web',
@@ -2688,15 +2806,13 @@
               'Schneeschauer', 'Starke Schneeschauer', 'Gewitter', 'Gewitter mit Hagel', 'Gewitter mit starkem Hagel'],
         windDirs: ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'], west: 'W', east: 'O',
         aqBands: ['Gut', 'Akzeptabel', 'Mäßig', 'Schlecht', 'Sehr schlecht', 'Extrem schlecht'],
-        pollen: { grass: 'Gräser', olive: 'Olive', birch: 'Birke', alder: 'Erle', mugwort: 'Beifuß', ragweed: 'Ambrosia' },
-        pollenLevels: ['Keine', 'Niedrig', 'Mäßig', 'Hoch', 'Sehr hoch'],
         themeNames: { day: 'Tag', night: 'Nacht', zz: 'Zz-Nacht' },
         today: 'Heute', titleDbl: 'Zweimal tippen, um zum aktuellen Monat zurückzukehren', install: 'Als App installieren',
         themeAria: 'Tag- oder Nachtmodus',
         themeFixed: n => `Modus ${n} fest (tippen zum Ändern)`,
         themeAuto: 'Automatischer Modus: Tag oder Nacht je nach Sonnenstand, Zz beim nächtlichen Laden (tippen zum Ändern)',
         viewDots: 'Nach unten wischen, um die Fenster zu sehen', pausePlay: 'Pause oder fortsetzen',
-        pages: { avisos: 'Warnungen', ubicacio: 'Standort', temps: 'Wetter', aire: 'Luftqualität', pollen: 'Pollen', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Nachrichten' },
+        pages: { avisos: 'Warnungen', ubicacio: 'Standort', temps: 'Wetter', aire: 'Luftqualität', alarmes: 'Wecker', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Nachrichten' },
         next12: 'Nächste 12 Stunden', locating: 'Standort wird ermittelt…', unknownLoc: 'Unbekannter Standort',
         altitude: 'Höhe', coords: 'Koordinaten', loadingWx: 'Wetter wird geladen…', loading: 'Wird geladen…',
         feels: 'Gefühlt', humidity: 'Feuchte', wind: 'Wind', precip6: 'Regen 6 h', rain: 'Regen', snow: 'Schnee', gusts: 'Böen',
@@ -2706,8 +2822,7 @@
         gustsText: n => `Böen bis ${n} km/h`,
         aqSub: 'Europäischer Luftqualitätsindex', pm25: 'PM2,5', no2: 'Stickstoffdioxid', o3: 'Ozon',
         aqFoot: 'µg/m³ · jetzt · Quelle: Copernicus (Open-Meteo)', noData: 'Keine Daten',
-        pollenTitle: 'Höchstwert der nächsten 24 Stunden', pollenFoot: 'Körner/m³ · Richtwerte · Quelle: Copernicus (Open-Meteo)',
-        noPollen: 'Keine Pollendaten', noPollenZone: 'Keine Pollendaten für diese Region',
+        alarmWord: 'Wecker', alarmOnce: 'Einmalig', alarmDaily: 'Täglich', alarmWeekdays: 'Montag bis Freitag', alarmWeekend: 'Wochenende', alarmNone: 'Kein Wecker aktiv', alarmToday: 'heute', alarmTomorrow: 'morgen', alarmNext: (w, h) => `Nächster Wecker: ${w} um ${h}`, alarmStop: 'Stopp', alarmSnooze: n => `+${n} Min.`, alarmNote: 'Klingelt bei geöffneter App (der Bildschirm bleibt an). Zum Ändern auf die Uhrzeit tippen.',
         live: 'Live', liveLower: 'live', newsWord: 'Nachrichten', classical: 'Klassik', worldEnglish: 'Europa · Englisch',
         loadingPrograms: 'Sendungen werden geladen…', via7: '7 Uhr',
         programsError: 'Konnte nicht geladen werden.', openSite: 'Website öffnen', openWeb: 'Im Web öffnen',
@@ -2735,15 +2850,13 @@
               'Rovesci di neve', 'Forti rovesci di neve', 'Temporale', 'Temporale con grandine', 'Temporale con forte grandine'],
         windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'], west: 'O',
         aqBands: ['Buona', 'Discreta', 'Moderata', 'Scadente', 'Molto scadente', 'Estremamente scadente'],
-        pollen: { grass: 'Graminacee', olive: 'Olivo', birch: 'Betulla', alder: 'Ontano', mugwort: 'Artemisia', ragweed: 'Ambrosia' },
-        pollenLevels: ['Assente', 'Basso', 'Moderato', 'Alto', 'Molto alto'],
         themeNames: { day: 'diurno', night: 'notturno', zz: 'Zz notturno' },
         today: 'Oggi', titleDbl: 'Tocca 2 volte per tornare al mese corrente', install: 'Installa come app',
         themeAria: 'Tema giorno o notte',
         themeFixed: n => `Tema ${n} fisso (tocca per cambiare)`,
         themeAuto: 'Tema automatico: giorno o notte secondo il sole, e Zz quando si ricarica di notte (tocca per cambiare)',
         viewDots: 'Scorri verso il basso per vedere le finestre', pausePlay: 'Pausa o riprendi',
-        pages: { avisos: 'Allerte', ubicacio: 'Posizione', temps: 'Meteo', aire: "Qualità dell'aria", pollen: 'Pollini', radio: 'Radio', podcasts: 'Podcast', noticies: 'Notizie' },
+        pages: { avisos: 'Allerte', ubicacio: 'Posizione', temps: 'Meteo', aire: "Qualità dell'aria", alarmes: 'Sveglie', radio: 'Radio', podcasts: 'Podcast', noticies: 'Notizie' },
         next12: 'Prossime 12 ore', locating: 'Localizzazione…', unknownLoc: 'Posizione sconosciuta',
         altitude: 'Altitudine', coords: 'Coordinate', loadingWx: 'Caricamento meteo…', loading: 'Caricamento…',
         feels: 'Percepita', humidity: 'Umidità', wind: 'Vento', precip6: 'Pioggia 6 h', rain: 'pioggia', snow: 'neve', gusts: 'raffiche',
@@ -2753,8 +2866,7 @@
         gustsText: n => `Raffiche di ${n} km/h`,
         aqSub: "Indice europeo della qualità dell'aria", pm25: 'PM2,5', no2: 'Biossido di azoto', o3: 'Ozono',
         aqFoot: 'µg/m³ · ora · fonte: Copernicus (Open-Meteo)', noData: 'Nessun dato',
-        pollenTitle: 'Massimo delle prossime 24 ore', pollenFoot: 'granuli/m³ · livelli indicativi · fonte: Copernicus (Open-Meteo)',
-        noPollen: 'Nessun dato sui pollini', noPollenZone: 'Nessun dato sui pollini per questa zona',
+        alarmWord: 'Sveglia', alarmOnce: 'Una sola volta', alarmDaily: 'Ogni giorno', alarmWeekdays: 'Dal lunedì al venerdì', alarmWeekend: 'Fine settimana', alarmNone: 'Nessuna sveglia attiva', alarmToday: 'oggi', alarmTomorrow: 'domani', alarmNext: (w, h) => `Prossima sveglia: ${w} alle ${h}`, alarmStop: 'Ferma', alarmSnooze: n => `+${n} min`, alarmNote: "Suonano con l'app aperta (lo schermo resta acceso). Tocca l'ora per cambiarla.",
         live: 'In diretta', liveLower: 'in diretta', newsWord: 'notizie', classical: 'classica', worldEnglish: 'Europa · inglese',
         loadingPrograms: 'Caricamento programmi…', via7: 'ore 7',
         programsError: 'Impossibile caricare.', openSite: 'Apri il sito', openWeb: 'Apri sul web',
@@ -2782,15 +2894,13 @@
               'Snow showers', 'Heavy snow showers', 'Thunderstorm', 'Thunderstorm with hail', 'Thunderstorm with heavy hail'],
         windDirs: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], west: 'W',
         aqBands: ['Good', 'Fair', 'Moderate', 'Poor', 'Very poor', 'Extremely poor'],
-        pollen: { grass: 'Grass', olive: 'Olive', birch: 'Birch', alder: 'Alder', mugwort: 'Mugwort', ragweed: 'Ragweed' },
-        pollenLevels: ['None', 'Low', 'Moderate', 'High', 'Very high'],
         themeNames: { day: 'day', night: 'night', zz: 'Zz night' },
         today: 'Today', titleDbl: 'Tap twice to return to the current month', install: 'Install as app',
         themeAria: 'Day or night theme',
         themeFixed: n => `Fixed ${n} theme (tap to change)`,
         themeAuto: 'Automatic theme: day or night by the sun, and Zz when charging at night (tap to change)',
         viewDots: 'Swipe down to see the panels', pausePlay: 'Pause or resume',
-        pages: { avisos: 'Alerts', ubicacio: 'Location', temps: 'Weather', aire: 'Air quality', pollen: 'Pollen', radio: 'Radio', podcasts: 'Podcasts', noticies: 'News' },
+        pages: { avisos: 'Alerts', ubicacio: 'Location', temps: 'Weather', aire: 'Air quality', alarmes: 'Alarms', radio: 'Radio', podcasts: 'Podcasts', noticies: 'News' },
         next12: 'Next 12 hours', locating: 'Locating…', unknownLoc: 'Unknown location',
         altitude: 'Altitude', coords: 'Coordinates', loadingWx: 'Loading weather…', loading: 'Loading…',
         feels: 'Feels like', humidity: 'Humidity', wind: 'Wind', precip6: 'Rain 6 h', rain: 'rain', snow: 'snow', gusts: 'gusts',
@@ -2800,8 +2910,7 @@
         gustsText: n => `Gusts of ${n} km/h`,
         aqSub: 'European Air Quality Index', pm25: 'PM2.5', no2: 'Nitrogen dioxide', o3: 'Ozone',
         aqFoot: 'µg/m³ · now · source: Copernicus (Open-Meteo)', noData: 'No data',
-        pollenTitle: 'Peak over the next 24 hours', pollenFoot: 'grains/m³ · indicative levels · source: Copernicus (Open-Meteo)',
-        noPollen: 'No pollen data', noPollenZone: 'No pollen data for this area',
+        alarmWord: 'Alarm', alarmOnce: 'Once', alarmDaily: 'Every day', alarmWeekdays: 'Weekdays', alarmWeekend: 'Weekends', alarmNone: 'No alarm set', alarmToday: 'today', alarmTomorrow: 'tomorrow', alarmNext: (w, h) => `Next alarm: ${w} at ${h}`, alarmStop: 'Stop', alarmSnooze: n => `Snooze ${n} min`, alarmNote: 'Alarms ring while the app is open (the screen stays on). Tap the time to change it.',
         live: 'Live', liveLower: 'live', newsWord: 'news', classical: 'classical', worldEnglish: 'Europe · English',
         loadingPrograms: 'Loading shows…', via7: '7 am',
         programsError: 'Couldn\'t load.', openSite: 'Open the website', openWeb: 'Open on the web',
@@ -2849,6 +2958,9 @@
       document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
       document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
       document.querySelectorAll('.fin-pag[data-key]').forEach(el => { el.dataset.nom = t('pages')[el.dataset.key]; });
+      // La finestra de podcasts (La Competència, Via lliure) només en català
+      const podcasts = document.querySelector('.fin-pag[data-key="podcasts"]');
+      if (podcasts) podcasts.hidden = currentLang !== 'ca';
       const heads = document.querySelectorAll('#weekday-row .weekday-header');
       t('weekShort').forEach((d, i) => { if (heads[i]) heads[i].textContent = d; });
       const group = document.getElementById('lang-fila');
@@ -3583,6 +3695,7 @@
       // Teclat: ↓ obre les finestres, ↑ o Esc tornen al calendari, ← → passen finestres o mesos
       document.addEventListener('keydown', (e) => {
         if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.target && e.target.closest && e.target.closest('input, select, textarea, .alarm-overlay')) return;
         if (weatherViewActive) {
           if (e.key === 'ArrowRight') shiftFinPage(1);
           else if (e.key === 'ArrowLeft') shiftFinPage(-1);
@@ -4542,28 +4655,9 @@
       { max: Infinity, color: '#7d2181', text: '#ffffff' }
     ];
 
-    // Llindars orientatius (grans/m³): baix / moderat / alt / molt alt
-    const POLLEN_TYPES = [
-      { key: 'grass_pollen', id: 'grass', t: [5, 25, 50] },
-      { key: 'olive_pollen', id: 'olive', t: [10, 50, 200] },
-      { key: 'birch_pollen', id: 'birch', t: [10, 50, 100] },
-      { key: 'alder_pollen', id: 'alder', t: [10, 50, 100] },
-      { key: 'mugwort_pollen', id: 'mugwort', t: [5, 15, 50] },
-      { key: 'ragweed_pollen', id: 'ragweed', t: [5, 15, 50] }
-    ];
-
-    function pollenLevel(value, t) {
-      if (!value || value < 0.5) return 0;
-      if (value < t[0]) return 1;
-      if (value < t[1]) return 2;
-      if (value < t[2]) return 3;
-      return 4;
-    }
-
     async function fetchAirQuality(lat, lon) {
       const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}` +
         `&current=european_aqi,pm10,pm2_5,nitrogen_dioxide,ozone` +
-        `&hourly=${POLLEN_TYPES.map(p => p.key).join(',')}` +
         `&forecast_days=2&timezone=auto`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Error de qualitat de l\'aire');
@@ -4598,53 +4692,14 @@
       document.getElementById('aq-o3').textContent = fmt(c.ozone);
     }
 
-    function renderPollen(data) {
-      const box = document.getElementById('pollen-llista');
-      const h = data && data.hourly;
-      if (!h || !h.time) {
-        box.innerHTML = `<div class="estat-prog">${t('noPollen')}</div>`;
-        return;
-      }
-      const currentHour = (data.current && data.current.time ? data.current.time : '').slice(0, 13);
-      let start = h.time.findIndex(t => t.slice(0, 13) >= currentHour);
-      if (start < 0) start = 0;
-      const end = Math.min(start + 24, h.time.length);
-      const rows = POLLEN_TYPES.map(p => {
-        let max = null;
-        for (let i = start; i < end; i++) {
-          const v = h[p.key] ? h[p.key][i] : null;
-          if (v != null) max = Math.max(max == null ? 0 : max, v);
-        }
-        return { ...p, max, level: max == null ? null : pollenLevel(max, p.t) };
-      });
-      if (rows.every(r => r.max == null)) {
-        box.innerHTML = `<div class="estat-prog">${t('noPollenZone')}</div>`;
-        return;
-      }
-      box.innerHTML = '';
-      rows.forEach(r => {
-        const row = document.createElement('div');
-        row.className = 'pollen-fila';
-        const levelText = r.level == null ? t('noData') : t('pollenLevels')[r.level];
-        const pct = r.max == null ? 0 : Math.min(100, (r.max / r.t[2]) * 100);
-        row.innerHTML = `<span class="pollen-nom"></span><span class="pollen-nivell n${r.level || 0}"></span>` +
-                        `<span class="pollen-barra"><i style="width:${pct}%"></i></span>`;
-        row.querySelector('.pollen-nom').textContent = t('pollen')[r.id];
-        row.querySelector('.pollen-nivell').textContent = r.max == null ? levelText : `${levelText} · ${Math.round(r.max)}`;
-        box.appendChild(row);
-      });
-    }
-
     async function refreshAir(lat, lon) {
       try {
         const data = await fetchAirQuality(lat, lon);
         renderAirQuality(data);
-        renderPollen(data);
       } catch (e) {
         if (document.getElementById('aq-index').textContent === '—') {
           document.getElementById('aq-label').dataset.i18n = 'noData';
           document.getElementById('aq-label').textContent = t('noData');
-          document.getElementById('pollen-llista').innerHTML = `<div class="estat-prog">${t('noPollen')}</div>`;
         }
       }
     }
@@ -5220,6 +5275,7 @@
 
     function announceHour(date) {
       if (!voiceEnabled || document.documentElement.getAttribute('data-theme') === 'zz') return;
+      if (alarmDueNow(date)) return;   // si sona una alarma, ja diu l'hora ella
       const text = hourAnnouncement(date);
       const wait = chime();
       setTimeout(() => speak(text), wait);
@@ -5303,13 +5359,13 @@
         renderRadios();
         renderPrograms();
         if (lastWeather) renderWeatherView(lastWeather);
-        if (lastAir) { renderAirQuality(lastAir); renderPollen(lastAir); }
+        if (lastAir) renderAirQuality(lastAir);
+        renderAlarms();
         renderCoords();
         if (currentCoords) refreshLocality(currentCoords.lat, currentCoords.lon);
         loadNews(true, true);
       }
-      refreshFinDots();
-      updateFinTitle();
+      goToFinPage(Math.min(finIndex, finPages().length - 1), false);
       scheduleFit(0);
       if (fromUser && voiceEnabled) speak(t('hello'));
     }
@@ -5321,6 +5377,245 @@
         setLanguage(b.dataset.lang, true);
       });
     });
+
+    // ------------------------------------------------------------------
+    // Alarmes: tres alarmes fixes, cadascuna amb interruptor, hora i dies.
+    // Sense cap dia marcat, sona un sol cop i es desactiva. Sonen mentre
+    // l'app és oberta (la pantalla no s'apaga): to que va pujant, l'hora
+    // dita en veu alta, vibració si el telèfon en té, i botons per aturar
+    // o posposar 5 minuts. Sonen encara que el so de l'altaveu sigui apagat.
+    // ------------------------------------------------------------------
+    const ALARM_STORAGE_KEY = 'prs516_alarms';
+    const ALARM_DEFAULTS = [
+      { on: false, time: '07:00', days: [1, 2, 3, 4, 5] },
+      { on: false, time: '08:00', days: [0, 6] },
+      { on: false, time: '09:00', days: [] }
+    ];
+    const SNOOZE_MIN = 5;
+    const ALARM_MAX_MS = 10 * 60 * 1000;   // s'atura sola als 10 minuts
+
+    function readAlarms() {
+      try {
+        const v = JSON.parse(localStorage.getItem(ALARM_STORAGE_KEY));
+        if (Array.isArray(v) && v.length === 3) {
+          return v.map((a, i) => ({
+            on: !!a.on,
+            time: /^\d{2}:\d{2}$/.test(a.time) ? a.time : ALARM_DEFAULTS[i].time,
+            days: Array.isArray(a.days) ? a.days.filter(d => d >= 0 && d <= 6) : []
+          }));
+        }
+      } catch (e) {}
+      return ALARM_DEFAULTS.map(a => ({ ...a, days: [...a.days] }));
+    }
+    let alarms = readAlarms();
+    function saveAlarms() {
+      try { localStorage.setItem(ALARM_STORAGE_KEY, JSON.stringify(alarms)); } catch (e) {}
+    }
+
+    // Ordre de les fitxes de dies: de dilluns a diumenge (getDay: 1..6, 0)
+    const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
+
+    function alarmDaysText(a) {
+      const d = [...a.days].sort().join(',');
+      if (!a.days.length) return t('alarmOnce');
+      if (a.days.length === 7) return t('alarmDaily');
+      if (d === '1,2,3,4,5') return t('alarmWeekdays');
+      if (d === '0,6') return t('alarmWeekend');
+      return WEEK_ORDER.filter(x => a.days.includes(x)).map(x => t('weekShort')[WEEK_ORDER.indexOf(x)]).join(' ');
+    }
+
+    // Propera vegada que sonarà una alarma (dins dels pròxims 8 dies)
+    function nextAlarmDate(a, from = new Date()) {
+      if (!a.on) return null;
+      const [hh, mm] = a.time.split(':').map(Number);
+      for (let k = 0; k < 8; k++) {
+        const d = new Date(from.getFullYear(), from.getMonth(), from.getDate() + k, hh, mm, 0, 0);
+        if (d <= from) continue;
+        if (!a.days.length || a.days.includes(d.getDay())) return d;
+      }
+      return null;
+    }
+
+    function renderNextAlarm() {
+      const el = document.getElementById('alarm-next');
+      if (!el) return;
+      const now = new Date();
+      let best = null;
+      alarms.forEach(a => { const d = nextAlarmDate(a, now); if (d && (!best || d < best)) best = d; });
+      if (!best) { el.textContent = t('alarmNone'); return; }
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const when = isoOf(best) === isoOf(now) ? t('alarmToday')
+        : isoOf(best) === isoOf(tomorrow) ? t('alarmTomorrow')
+        : (['de', 'en'].includes(currentLang) ? t('longDays')[best.getDay()] : t('longDays')[best.getDay()].toLowerCase());
+      el.textContent = t('alarmNext', when, `${pad2(best.getHours())}:${pad2(best.getMinutes())}`);
+    }
+
+    function renderAlarms() {
+      const box = document.getElementById('alarm-llista');
+      if (!box) return;
+      box.innerHTML = '';
+      alarms.forEach((a, i) => {
+        const card = document.createElement('div');
+        card.className = 'alarm' + (a.on ? ' on' : '');
+        card.innerHTML =
+          '<div class="alarm-fila">' +
+            '<input type="time" class="alarm-hora" step="60" required>' +
+            '<span class="alarm-resum"></span>' +
+            '<button type="button" class="alarm-switch" role="switch"><i></i></button>' +
+          '</div>' +
+          '<div class="alarm-dies"></div>';
+        const input = card.querySelector('.alarm-hora');
+        input.value = a.time;
+        input.setAttribute('aria-label', `${t('alarmWord')} ${i + 1}`);
+        card.querySelector('.alarm-resum').textContent = alarmDaysText(a);
+        const sw = card.querySelector('.alarm-switch');
+        sw.setAttribute('aria-checked', String(a.on));
+        sw.setAttribute('aria-label', `${t('alarmWord')} ${i + 1}`);
+        const dies = card.querySelector('.alarm-dies');
+        WEEK_ORDER.forEach((dow, k) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'alarm-dia' + (a.days.includes(dow) ? ' on' : '');
+          b.textContent = t('weekShort')[k];
+          b.setAttribute('aria-pressed', String(a.days.includes(dow)));
+          b.addEventListener('click', (e) => {
+            e.stopPropagation();
+            a.days = a.days.includes(dow) ? a.days.filter(x => x !== dow) : a.days.concat(dow);
+            a.on = true;   // tocar els dies ja l'activa
+            saveAlarms(); renderAlarms();
+          });
+          dies.appendChild(b);
+        });
+        sw.addEventListener('click', (e) => {
+          e.stopPropagation();
+          unlockSpeech();
+          a.on = !a.on;
+          saveAlarms(); renderAlarms();
+        });
+        // Canviar l'hora ja activa l'alarma
+        input.addEventListener('change', () => {
+          if (!/^\d{2}:\d{2}$/.test(input.value)) { input.value = a.time; return; }
+          a.time = input.value;
+          a.on = true;
+          saveAlarms(); renderAlarms();
+        });
+        ['click', 'pointerdown', 'touchstart', 'mousedown'].forEach(ev => input.addEventListener(ev, e => e.stopPropagation(), { passive: true }));
+        box.appendChild(card);
+      });
+      renderNextAlarm();
+    }
+
+    // ---- So de l'alarma: tres tocs que van pujant de volum ----
+    let ringing = null;   // { index, started, timer, label }
+    let snoozeUntil = 0;
+    let snoozeIndex = -1;
+
+    function alarmBeeps(level) {
+      const ctx = ensureAudioCtx();
+      if (!ctx) return;
+      if (ctx.state !== 'running') { ctx.resume().catch(() => {}); return; }
+      const t0 = ctx.currentTime + 0.03;
+      [0, 0.22, 0.44].forEach((delay, k) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = k === 2 ? 1046.5 : 880;
+        gain.gain.setValueAtTime(0.0001, t0 + delay);
+        gain.gain.exponentialRampToValueAtTime(level, t0 + delay + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + delay + 0.18);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(t0 + delay);
+        osc.stop(t0 + delay + 0.2);
+      });
+    }
+
+    function showAlarmOverlay(index) {
+      const ov = document.getElementById('alarm-overlay');
+      const now = new Date();
+      document.getElementById('alarm-ov-hora').textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+      document.getElementById('alarm-ov-titol').textContent = `${t('alarmWord')} ${index + 1}`;
+      document.getElementById('alarm-ov-stop').textContent = t('alarmStop');
+      document.getElementById('alarm-ov-snooze').textContent = t('alarmSnooze', SNOOZE_MIN);
+      ov.hidden = false;
+    }
+
+    function startAlarm(index) {
+      if (ringing) return;
+      const started = Date.now();
+      ringing = { index, started };
+      showAlarmOverlay(index);
+      if (navigator.vibrate) { try { navigator.vibrate([400, 200, 400, 200, 400]); } catch (e) {} }
+      // Primer l'hora en veu alta (amb salutació a l'hora en punt), després el to
+      const now = new Date();
+      const text = now.getMinutes() === 0 ? HOUR_PHRASES[currentLang](now.getHours()) : timeAnnouncement(now);
+      speak(text);
+      let tick = 0;
+      ringing.timer = setInterval(() => {
+        const elapsed = Date.now() - started;
+        if (elapsed > ALARM_MAX_MS) { stopAlarm(false); return; }
+        const nowT = new Date();
+        document.getElementById('alarm-ov-hora').textContent = `${pad2(nowT.getHours())}:${pad2(nowT.getMinutes())}`;
+        tick++;
+        if (tick < 3) return;   // deixa acabar la frase
+        alarmBeeps(Math.min(0.6, 0.12 + elapsed / 60000 * 0.5));
+        if (navigator.vibrate && tick % 4 === 0) { try { navigator.vibrate(300); } catch (e) {} }
+        if (tick % 40 === 0) speak(timeAnnouncement(new Date()));
+      }, 1500);
+    }
+
+    function stopAlarm(snooze) {
+      if (!ringing) return;
+      clearInterval(ringing.timer);
+      const index = ringing.index;
+      ringing = null;
+      document.getElementById('alarm-overlay').hidden = true;
+      if (synth) synth.cancel();
+      if (navigator.vibrate) { try { navigator.vibrate(0); } catch (e) {} }
+      if (snooze) {
+        snoozeUntil = Date.now() + SNOOZE_MIN * 60 * 1000;
+        snoozeIndex = index;
+      } else {
+        if (snoozeIndex === index) snoozeUntil = 0;   // només la posposició d'aquesta alarma
+        // Una alarma sense dies només sona un cop
+        if (!alarms[index].days.length) { alarms[index].on = false; saveAlarms(); }
+      }
+      renderAlarms();
+    }
+
+    document.getElementById('alarm-ov-stop').addEventListener('click', (e) => { e.stopPropagation(); stopAlarm(false); });
+    document.getElementById('alarm-ov-snooze').addEventListener('click', (e) => { e.stopPropagation(); stopAlarm(true); });
+
+    // Comprovació cada segon (també recupera el minut si la pestanya s'ha alentit)
+    const alarmFired = {};
+    function checkAlarms() {
+      const now = new Date();
+      if (snoozeUntil && Date.now() >= snoozeUntil && !ringing) {
+        const i = snoozeIndex;
+        snoozeUntil = 0;
+        startAlarm(i);
+        return true;
+      }
+      const hm = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+      const key = `${isoOf(now)} ${hm}`;
+      let fired = false;
+      alarms.forEach((a, i) => {
+        if (!a.on || a.time !== hm || alarmFired[i] === key) return;
+        if (a.days.length && !a.days.includes(now.getDay())) return;
+        alarmFired[i] = key;
+        if (!ringing) { startAlarm(i); fired = true; }
+      });
+      return fired;
+    }
+    setInterval(checkAlarms, 1000);
+    // La propera alarma es torna a calcular cada minut (passa la mitjanit, etc.)
+    setInterval(renderNextAlarm, 60 * 1000);
+    renderAlarms();
+
+    function alarmDueNow(date) {
+      if (ringing) return true;
+      const hm = `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
+      return alarms.some(a => a.on && a.time === hm && (!a.days.length || a.days.includes(date.getDay())));
+    }
 
     // ------------------------------------------------------------------
     // Pantalla sempre encesa mentre l'app és oberta i visible (Screen Wake
