@@ -1116,7 +1116,44 @@
 
     .ara-sona-fila[hidden] { display: none; }
 
-    .ara-sona-fila .ara-sona { max-width: 100%; }
+    .ara-sona-fila { gap: 6px; align-items: center; }
+
+    .ara-sona-fila .ara-sona { max-width: 100%; flex: 0 1 auto; }
+
+    /* Botó del temporitzador, al costat de la placa «Ara sona» */
+    .ara-sona-temps {
+      flex: none;
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 26px;
+      padding: 0 9px;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--accent);
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .ara-sona-temps svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linejoin: round;
+    }
+
+    .ara-sona-temps .ts-tx:empty { display: none; }
+
+    .ara-sona-temps.on { background: var(--accent); color: var(--accent-text); }
+    .ara-sona-temps.on svg { fill: currentColor; }
 
     /* Botons d'idioma, al peu del calendari */
     .lang-fila {
@@ -2480,19 +2517,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -2658,6 +2695,10 @@
         <button type="button" class="ara-sona" id="ara-sona" data-i18n-aria="pausePlay" aria-label="Pausar o reprendre">
           <span class="ara-sona-ic" id="ara-sona-ic"></span><span class="ara-sona-tx" id="ara-sona-tx"></span>
         </button>
+        <!-- Temporitzador: cada toc passa per 15, 30, 45, 60, 90 minuts i desactivat -->
+        <button type="button" class="ara-sona-temps" id="ara-sona-temps">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg><span class="ts-tx" id="ara-sona-temps-tx"></span>
+        </button>
       </div>
 
       <!-- Idioma de l'app (i de l'anunci de l'hora en punt) -->
@@ -2746,6 +2787,8 @@
         voiceOn: 'Toca per sentir l\'hora · dos tocs seguits apaguen el so',
         voiceOff: 'So apagat · toca per sentir l\'hora i tornar-lo a activar',
         voiceMuted: 'So apagat',
+        sleepOff: 'Temporitzador desactivat (toca per apagar la ràdio d\'aquí a 15, 30, 45, 60 o 90 minuts)',
+        sleepOn: n => `La ràdio s'apagarà d'aquí a ${n} min (toca per canviar-ho)`,
         langGroup: 'Idioma',
         hello: 'Hola! Diré les hores en punt en català.'
       },
@@ -2790,6 +2833,8 @@
         voiceOn: 'Touchez pour entendre l\'heure · deux touches rapides coupent le son',
         voiceOff: 'Son coupé · touchez pour entendre l\'heure et le réactiver',
         voiceMuted: 'Son coupé',
+        sleepOff: 'Minuterie désactivée (touchez pour couper la radio dans 15, 30, 45, 60 ou 90 minutes)',
+        sleepOn: n => `La radio s'arrêtera dans ${n} min (touchez pour changer)`,
         langGroup: 'Langue',
         hello: 'Bonjour ! J\'annoncerai les heures pile en français.'
       },
@@ -2834,6 +2879,8 @@
         voiceOn: 'Tippen für die Uhrzeit · zweimal schnell tippen schaltet den Ton aus',
         voiceOff: 'Ton aus · tippen für die Uhrzeit und Ton wieder an',
         voiceMuted: 'Ton aus',
+        sleepOff: 'Sleep-Timer aus (tippen, um das Radio in 15, 30, 45, 60 oder 90 Minuten auszuschalten)',
+        sleepOn: n => `Das Radio geht in ${n} Min. aus (tippen zum Ändern)`,
         langGroup: 'Sprache',
         hello: 'Hallo! Ich sage die vollen Stunden auf Deutsch an.'
       },
@@ -2878,6 +2925,8 @@
         voiceOn: 'Tocca per sentire l\'ora · due tocchi rapidi spengono l\'audio',
         voiceOff: 'Audio spento · tocca per sentire l\'ora e riattivarlo',
         voiceMuted: 'Audio spento',
+        sleepOff: 'Timer disattivato (tocca per spegnere la radio tra 15, 30, 45, 60 o 90 minuti)',
+        sleepOn: n => `La radio si spegnerà tra ${n} min (tocca per cambiare)`,
         langGroup: 'Lingua',
         hello: 'Ciao! Annuncerò le ore in punto in italiano.'
       },
@@ -2922,6 +2971,8 @@
         voiceOn: 'Tap to hear the time · double-tap to mute',
         voiceOff: 'Sound off · tap to hear the time and turn it back on',
         voiceMuted: 'Sound off',
+        sleepOff: 'Sleep timer off (tap to turn the radio off in 15, 30, 45, 60 or 90 minutes)',
+        sleepOn: n => `The radio will turn off in ${n} min (tap to change)`,
         langGroup: 'Language',
         hello: 'Hello! I\'ll announce the time on the hour in English.'
       }
@@ -4200,6 +4251,86 @@
       if (!nowPlaying) return;
       if (player.paused) player.play().catch(() => {}); else player.pause();
     });
+
+    // ---- Temporitzador de la ràdio (i dels podcasts) ----
+    // Cada toc: 15 → 30 → 45 → 60 → 90 min → desactivat. En acabar, el volum
+    // baixa a poc a poc durant uns segons i el so s'atura. (A l'iPhone, Safari
+    // no deixa canviar el volum des d'una pàgina: allà s'atura sense esvair-se.)
+    const SLEEP_STEPS = [0, 15, 30, 45, 60, 90];
+    const SLEEP_FADE_MS = 8000;
+    let sleepStep = 0;
+    let sleepEnd = 0;
+    let sleepTimer = null;
+    let sleepFade = null;
+    let sleepVolume = 1;
+
+    function sleepMinutesLeft() { return Math.max(1, Math.ceil((sleepEnd - Date.now()) / 60000)); }
+
+    function renderSleepBtn() {
+      const b = document.getElementById('ara-sona-temps');
+      if (!b) return;
+      const on = sleepEnd > 0 || !!sleepFade;
+      b.classList.toggle('on', on);
+      const mins = sleepEnd > 0 ? sleepMinutesLeft() : 0;
+      document.getElementById('ara-sona-temps-tx').textContent = sleepFade ? '…' : on ? `${mins} min` : '';
+      b.title = sleepEnd > 0 ? t('sleepOn', mins) : t('sleepOff');
+      b.setAttribute('aria-label', b.title);
+    }
+
+    function cancelSleepFade() {
+      if (!sleepFade) return;
+      clearInterval(sleepFade);
+      sleepFade = null;
+      try { player.volume = sleepVolume; } catch (e) {}
+    }
+
+    function setSleep(step) {
+      cancelSleepFade();
+      clearInterval(sleepTimer);
+      sleepTimer = null;
+      sleepStep = step;
+      sleepEnd = SLEEP_STEPS[step] ? Date.now() + SLEEP_STEPS[step] * 60000 : 0;
+      if (sleepEnd) sleepTimer = setInterval(tickSleep, 1000);
+      renderSleepBtn();
+    }
+
+    function tickSleep() {
+      if (!nowPlaying) { setSleep(0); return; }
+      if (Date.now() >= sleepEnd) {
+        clearInterval(sleepTimer);
+        sleepTimer = null;
+        sleepEnd = 0;
+        sleepStep = 0;
+        fadeOutAndStop();
+        return;
+      }
+      renderSleepBtn();
+    }
+
+    function fadeOutAndStop() {
+      sleepVolume = player.volume || 1;
+      const t0 = Date.now();
+      sleepFade = setInterval(() => {
+        const k = Math.min(1, (Date.now() - t0) / SLEEP_FADE_MS);
+        try { player.volume = Math.max(0, sleepVolume * (1 - k) * (1 - k)); } catch (e) {}
+        if (k >= 1) {
+          clearInterval(sleepFade);
+          sleepFade = null;
+          player.pause();
+          try { player.volume = sleepVolume; } catch (e) {}
+          renderSleepBtn();
+        }
+      }, 100);
+      renderSleepBtn();
+    }
+
+    document.getElementById('ara-sona-temps').addEventListener('click', (e) => {
+      e.stopPropagation();
+      setSleep((sleepStep + 1) % SLEEP_STEPS.length);
+    });
+    // Si es torna a engegar a mà mentre s'esvaeix, recupera el volum
+    player.addEventListener('play', () => { if (sleepFade) { cancelSleepFade(); renderSleepBtn(); } });
+    renderSleepBtn();
     if ('mediaSession' in navigator) {
       try {
         navigator.mediaSession.setActionHandler('play', () => player.play().catch(() => {}));
@@ -5351,6 +5482,7 @@
       document.documentElement.lang = lang;
       applyStaticTexts();
       updateVoiceBtn();
+      if (typeof renderSleepBtn === 'function') renderSleepBtn();
       applyTheme();
       if (changed) {
         hideHolidayTip();
