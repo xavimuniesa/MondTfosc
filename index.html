@@ -1220,6 +1220,14 @@
     .placa-lloc-slot .placa { padding-top: 3px; padding-bottom: 3px; max-width: 100%; min-width: 0; }
     .placa-lloc-slot .placa .txt { min-width: 0; }
     .placa-lloc-slot .placa .val { overflow: hidden; text-overflow: ellipsis; }
+    .placa-lloc-slot .placa .val.dues {
+      white-space: normal;
+      line-height: 1.08;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow-wrap: anywhere;
+    }
     .placa-lloc-slot .placa-sona { max-width: 100%; padding: 2px 3px; }
     .placa-lloc-slot .placa-sona .val { max-width: 9.5rem; }
 
@@ -3167,11 +3175,11 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
@@ -3198,7 +3206,6 @@
                   <circle cx="100" cy="100" r="2" fill="#d0102a"/>
                   <circle cx="100" cy="100" r="0.8" fill="#1c1c1c"/>
                 </g>
-                <text id="mondaine-alt-text" x="100" y="146" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="7" font-weight="600" letter-spacing="0.3" fill="#1c1c1c">-- m</text>
               </svg>
             </div>
           </div>
@@ -5987,7 +5994,6 @@
       if (elevation && elevation.elevation && elevation.elevation.length) {
         const altitudeText = `${Math.round(elevation.elevation[0])} m`;
         document.getElementById('wx-altitude').textContent = altitudeText;
-        document.getElementById('mondaine-alt-text').textContent = altitudeText;
       }
 
       renderCoords();
@@ -6012,6 +6018,7 @@
       const placeName = locality.city || locality.locality || locality.principalSubdivision || t('unknownLoc');
       locEl.textContent = nordor(placeName);
       document.getElementById('pl-lloc').textContent = nordor(placeName);
+      requestAnimationFrame(fitPlaqueName);
       // Comunitat autònoma si és a l'Estat espanyol; el país, si és fora
       const code = (locality.countryCode || '').toUpperCase();
       const inSpain = !code || code === 'ES';
@@ -6393,11 +6400,34 @@
     // tocs obren l'aniversari); quan sona alguna cosa, «Ara sona»; el dia de
     // l'aniversari, «Per molts anys».
     // ------------------------------------------------------------------
+    // El nom de la població, sencer: primer s'encongeix la lletra (fins al 70%);
+    // si encara no hi cap, passa a dues línies; i només si tampoc, «…»
+    function fitPlaqueName() {
+      const v = document.getElementById('pl-lloc');
+      if (!v || !v.clientWidth) return;
+      v.classList.remove('dues');
+      v.style.fontSize = '';
+      const base = parseFloat(getComputedStyle(v).fontSize);
+      let size = base;
+      const over = () => v.scrollWidth > v.clientWidth || v.getBoundingClientRect().width < v.scrollWidth - 0.5;
+      while (over() && size > base * 0.7) {
+        size -= 0.5;
+        v.style.fontSize = `${size}px`;
+      }
+      if (!over() && size < base) v.style.fontSize = `${size - 0.5}px`;   // marge per als decimals de píxel
+      if (over()) {
+        v.style.fontSize = `${Math.max(base * 0.78, size)}px`;
+        v.classList.add('dues');
+      }
+    }
+    window.addEventListener('resize', () => setTimeout(fitPlaqueName, 80));
+
     function updatePlaqueSlot() {
       const playing = !!nowPlaying;
       const bday = !!window.__bdayToday;
       document.getElementById('placa-lloc').hidden = playing || bday;
       document.getElementById('placa-aniv').hidden = playing || !bday;
+      requestAnimationFrame(fitPlaqueName);
     }
     (function setupPlaques() {
       const lloc = document.getElementById('placa-lloc');
