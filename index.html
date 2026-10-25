@@ -2447,6 +2447,623 @@
         font-size: 0.56rem;
       }
     }
+
+    /* ==================================================================
+       Estructura del República: cinta de plaques i finestres verticals
+       ================================================================== */
+
+    /* ---- Cinta de plaques: llisca de costat amb el dit (o arrossegant amb el ratolí) ---- */
+    .cinta {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin: 0 -4px 14px;
+      padding: 1px 4px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 6px, #000 calc(100% - 6px), transparent);
+      mask-image: linear-gradient(to right, transparent, #000 6px, #000 calc(100% - 6px), transparent);
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .cinta::-webkit-scrollbar { display: none; }
+
+    .placa {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 11px 5px 8px;
+      border: 1px solid var(--data-item-border);
+      border-radius: 12px;
+      color: var(--cell-color);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .placa[hidden] { display: none; }
+
+    .placa > svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .placa .txt {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.12;
+      min-width: 0;
+    }
+
+    .placa .etq {
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--weekday-color);
+      white-space: nowrap;
+    }
+
+    .placa .val {
+      font-size: 0.86rem;
+      font-weight: 800;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Ara sona: la placa destacada, amb reproduir/aturar, temporitzador i tancar */
+    .placa-sona {
+      gap: 6px;
+      padding: 3px 4px 3px 4px;
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-text);
+      max-width: 82%;
+      cursor: default;
+    }
+
+    .placa-sona .etq { color: inherit; opacity: 0.75; }
+    .placa-sona .txt { flex: 1; }
+    .placa-sona .val { overflow: hidden; text-overflow: ellipsis; max-width: 11rem; }
+
+    .ps-boto, .ps-tanca {
+      flex: none;
+      appearance: none;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      color: inherit;
+      display: grid;
+      place-items: center;
+    }
+
+    .ps-boto .ara-sona-ic { width: 26px; height: 26px; }
+    .ps-tanca { width: 24px; height: 24px; }
+    .ps-tanca svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+
+    .placa-sona .ara-sona-temps {
+      height: 24px;
+      padding: 0 7px;
+      border-color: var(--accent-text);
+      color: var(--accent-text);
+    }
+
+    .placa-sona .ara-sona-temps.on { background: var(--accent-text); color: var(--accent); }
+
+    /* Avís: vermell, lletra blanca */
+    .placa-avis {
+      background: #c62828;
+      border-color: #c62828;
+      color: #ffffff;
+    }
+
+    .placa-avis > svg { stroke: #ffffff; }
+    .placa-avis .etq { color: #ffffff; opacity: 0.8; }
+
+    .placa-aniv { border-color: var(--accent); }
+
+    /* ---- Finestres apilades: cada una ocupa l'espai del calendari ---- */
+    .fulls {
+      position: relative;
+      overflow: hidden;
+      margin: 0 -6px;
+      padding: 0 6px;
+    }
+
+    .full {
+      position: absolute;
+      inset: 0 6px;
+      will-change: transform;
+    }
+
+    .full[hidden] { display: none; }
+
+    .fulls > .full.fin-pag { width: auto; height: auto; flex: none; }
+
+    /* Dins les finestres res no s'encongeix: si no hi cap, la finestra es desplaça */
+    .fin-pag > *, .ll-pane > * { flex-shrink: 0; }
+
+    /* El calendari és el que dona l'alçada al conjunt */
+    .full-cal {
+      position: relative;
+      inset: auto;
+      touch-action: none;
+    }
+
+    .fin-pag { touch-action: pan-y; }
+
+    /* Finestres amb subpanells laterals (El temps, Avui, Notícies) */
+    .fin-pag.amb-ll {
+      overflow: hidden;
+      padding: 0;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .lliscador {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ll-pista {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+    }
+
+    .ll-pane {
+      flex: 0 0 100%;
+      width: 100%;
+      min-width: 0;
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-width: none;
+      touch-action: pan-y;
+      display: flex;
+      flex-direction: column;
+      padding: 2px 4px 6px;
+    }
+
+    .ll-pane::-webkit-scrollbar { display: none; }
+
+    .ll-pane.fin-temps > :first-child { margin-top: auto; }
+    .ll-pane.fin-temps > :last-child { margin-bottom: auto; }
+
+    .ll-punts {
+      flex: none;
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      height: 12px;
+      align-items: center;
+    }
+
+    .ll-punts button {
+      appearance: none;
+      width: 5px;
+      height: 5px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: var(--weekday-color);
+      opacity: 0.4;
+      cursor: pointer;
+    }
+
+    .ll-punts button.on { background: var(--accent); opacity: 1; }
+
+    /* Punts verticals: una finestra per punt */
+    .view-dots { gap: 4px; }
+
+    .view-dots button {
+      appearance: none;
+      width: 4px;
+      height: 4px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: var(--weekday-color);
+      opacity: 0.35;
+      cursor: pointer;
+      transition: opacity 0.3s ease, background 0.3s ease, height 0.3s ease;
+    }
+
+    .view-dots button.on { background: var(--accent); opacity: 1; height: 9px; border-radius: 3px; }
+
+    /* ---- El temps: màxima i mínima, properes 12 hores i propers 5 dies ---- */
+    .wx-maxmin {
+      margin-top: 3px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--weekday-color);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .h12 {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px 2px;
+      align-content: center;
+    }
+
+    .h12 > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      padding: 3px 0;
+      border-radius: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .h12 .hh { font-size: 0.62rem; font-weight: 700; color: var(--weekday-color); }
+    .h12 .tt { font-size: 0.92rem; font-weight: 800; color: var(--cell-color); }
+    .h12 .pp { font-size: 0.6rem; font-weight: 700; color: var(--rain-color); min-height: 0.75rem; }
+
+    .h12 svg, .d5 svg {
+      width: 26px;
+      height: 26px;
+      fill: none;
+      stroke: var(--month-title-color);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .h12 .wx-sun, .d5 .wx-sun { stroke: var(--accent); }
+    .h12 .wx-water, .d5 .wx-water { stroke: var(--rain-color); }
+    .h12 .wx-bolt, .d5 .wx-bolt { stroke: var(--alert); }
+
+    .d5 {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .d5 > div {
+      display: grid;
+      grid-template-columns: 2.3rem 30px 2rem 1fr 2rem;
+      align-items: center;
+      gap: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .d5 .dd { font-size: 0.8rem; font-weight: 800; color: var(--cell-color); }
+    .d5 .mn { font-size: 0.8rem; font-weight: 700; color: var(--weekday-color); text-align: right; }
+    .d5 .mx { font-size: 0.86rem; font-weight: 800; color: var(--cell-color); }
+    .d5 .pp { font-size: 0.6rem; color: var(--rain-color); }
+
+    .d5 .barra {
+      position: relative;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--data-item-border);
+    }
+
+    .d5 .barra i {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--rain-color), var(--accent));
+    }
+
+    /* ---- Avui: data, sant i efemèride, sol i lluna ---- */
+    .av-data { justify-content: center; align-items: center; gap: 2.2cqw; text-align: center; }
+
+    .av-fila {
+      display: flex;
+      align-items: center;
+      gap: 4cqw;
+    }
+
+    .av-num {
+      font-size: 24cqw;
+      font-weight: 800;
+      line-height: 0.9;
+      color: var(--cell-color);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .av-text { text-align: left; }
+    .av-dia { font-size: 6.4cqw; font-weight: 800; color: var(--month-title-color); text-transform: capitalize; }
+    .av-mes { font-size: 5cqw; font-weight: 700; color: var(--cell-color); }
+    .av-any { font-size: 4.4cqw; font-weight: 700; color: var(--weekday-color); }
+    .av-detall { font-size: 3.6cqw; font-weight: 700; color: var(--weekday-color); }
+
+    .av-sant { justify-content: center; gap: 3.5cqw; }
+    .ef-bloc[hidden] { display: none; }
+    .ef-sant { font-size: 4.8cqw; font-weight: 800; color: var(--month-title-color); line-height: 1.25; }
+    .ef-text { font-size: 4cqw; font-weight: 600; color: var(--cell-color); line-height: 1.35; }
+    .ef-text b { color: var(--accent); }
+
+    .sl-graella {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4cqw;
+      align-content: center;
+    }
+
+    .sl-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2cqw;
+      text-align: center;
+    }
+
+    .sl-ic {
+      width: 15cqw;
+      height: 15cqw;
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .sl-ic .sl-fosc { fill: var(--data-item-border); stroke: none; }
+    .sl-ic .sl-fase { fill: var(--accent); stroke: none; }
+
+    .sl-nom { font-size: 4.4cqw; font-weight: 800; color: var(--month-title-color); }
+    .sl-fila { display: flex; gap: 2cqw; font-size: 3.8cqw; color: var(--weekday-color); font-weight: 700; }
+    .sl-fila b { color: var(--cell-color); font-variant-numeric: tabular-nums; }
+    .sl-nota { font-size: 3.2cqw; font-weight: 600; color: var(--weekday-color); }
+
+    /* ---- Properament: properes festes amb compte enrere ---- */
+    .fe-llista {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: auto 0;
+    }
+
+    .fe-fila {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 7px 10px;
+      border: 1px solid var(--data-item-border);
+      border-radius: 10px;
+    }
+
+    .fe-fila.prop { border-color: var(--accent); }
+    .fe-nom { font-size: 0.88rem; font-weight: 800; color: var(--cell-color); }
+    .fe-data { font-size: 0.66rem; font-weight: 700; color: var(--weekday-color); }
+    .fe-dies { text-align: right; flex: none; }
+    .fe-dies b { display: block; font-size: 1.15rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    .fe-dies span { font-size: 0.6rem; font-weight: 700; color: var(--weekday-color); text-transform: uppercase; }
+
+    /* Avisos: missatge quan no n'hi ha i festius d'avui o de demà */
+    .avisos-llista .avis-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--cell-color);
+    }
+
+    .avisos-llista .avis-info svg { width: 18px; height: 18px; flex: none; fill: none; stroke: var(--accent); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Botó «posa-la al rellotge del mòbil» de cada alarma */
+    .alarm-mobil {
+      flex: none;
+      appearance: none;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--today-btn-border);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .alarm-mobil[hidden] { display: none; }
+    .alarm-mobil svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ---- Diàlegs (drecera de l'iPhone, aniversari) ---- */
+    .dialeg {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .dialeg[hidden] { display: none; }
+
+    .dialeg-cara {
+      position: relative;
+      width: min(100%, 380px);
+      max-height: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 22px 20px 18px;
+      border-radius: 18px;
+      background: var(--bg);
+      color: var(--cell-color);
+      border: 1px solid var(--today-btn-border);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    .dialeg-titol { font-size: 1.1rem; font-weight: 800; color: var(--month-title-color); padding-right: 28px; }
+    .dialeg-nota { font-size: 0.78rem; font-weight: 600; color: var(--weekday-color); line-height: 1.35; }
+    .dialeg label { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--weekday-color); margin-top: 4px; }
+
+    .dialeg-tanca {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--weekday-color);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .dialeg-tanca svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+    .dr-passos { padding-left: 1.3em; display: flex; flex-direction: column; gap: 7px; font-size: 0.86rem; line-height: 1.35; }
+
+    .dialeg-botons { display: flex; gap: 10px; margin-top: 6px; }
+
+    .dialeg-b {
+      flex: 1;
+      appearance: none;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 11px 8px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font: inherit;
+      font-size: 0.86rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .dialeg-b.secundari { background: transparent; color: var(--accent); }
+
+    .aniv-camp {
+      appearance: none;
+      width: 100%;
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid var(--today-btn-border);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--cell-color);
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .aniv-camp option { color: #111; }
+
+    .aniv-dates { display: grid; grid-template-columns: 1fr 1.8fr 1.3fr; gap: 8px; }
+
+    /* Mode Zz: altres tons fosforescents (tocar el rellotge els va canviant) */
+    html[data-theme="zz"][data-zz="red"] {
+      --text: #ff5a45;
+      --panel-border: rgba(255, 90, 69, 0.16);
+      --weekday-color: #9c372a;
+      --cell-color: #ff5a45;
+      --weekend-color: #c94737;
+      --month-title-color: #ff6450;
+      --data-item-border: rgba(255, 90, 69, 0.16);
+      --data-label-color: #9c372a;
+      --data-value-color: #ff5a45;
+      --data-location-color: #a83b2e;
+      --today-btn-border: rgba(255, 90, 69, 0.30);
+      --theme-btn-border: rgba(255, 90, 69, 0.30);
+      --accent: #ff6450;
+      --btn-hover-bg: rgba(255, 90, 69, 0.08);
+      --today-ring: #ff5a45;
+      --today-ring-glow: rgba(255, 90, 69, 0.45);
+      --tip-bg: #ff5a45;
+      --alert: #ff5a45;
+      --rain-color: #d94c3b;
+    }
+    html[data-theme="zz"][data-zz="red"] .calendar-day-cell.holiday::before { background: #b84132; }
+    html[data-theme="zz"][data-zz="yellow"] {
+      --text: #f2c53d;
+      --panel-border: rgba(242, 197, 61, 0.16);
+      --weekday-color: #947825;
+      --cell-color: #f2c53d;
+      --weekend-color: #bf9c30;
+      --month-title-color: #f3c849;
+      --data-item-border: rgba(242, 197, 61, 0.16);
+      --data-label-color: #947825;
+      --data-value-color: #f2c53d;
+      --data-location-color: #a08228;
+      --today-btn-border: rgba(242, 197, 61, 0.30);
+      --theme-btn-border: rgba(242, 197, 61, 0.30);
+      --accent: #f3c849;
+      --btn-hover-bg: rgba(242, 197, 61, 0.08);
+      --today-ring: #f2c53d;
+      --today-ring-glow: rgba(242, 197, 61, 0.45);
+      --tip-bg: #f2c53d;
+      --alert: #f2c53d;
+      --rain-color: #cea734;
+    }
+    html[data-theme="zz"][data-zz="yellow"] .calendar-day-cell.holiday::before { background: #ae8e2c; }
+    html[data-theme="zz"][data-zz="green"] {
+      --text: #3ddc84;
+      --panel-border: rgba(61, 220, 132, 0.16);
+      --weekday-color: #258651;
+      --cell-color: #3ddc84;
+      --weekend-color: #30ae68;
+      --month-title-color: #49de8b;
+      --data-item-border: rgba(61, 220, 132, 0.16);
+      --data-label-color: #258651;
+      --data-value-color: #3ddc84;
+      --data-location-color: #289157;
+      --today-btn-border: rgba(61, 220, 132, 0.30);
+      --theme-btn-border: rgba(61, 220, 132, 0.30);
+      --accent: #49de8b;
+      --btn-hover-bg: rgba(61, 220, 132, 0.08);
+      --today-ring: #3ddc84;
+      --today-ring-glow: rgba(61, 220, 132, 0.45);
+      --tip-bg: #3ddc84;
+      --alert: #3ddc84;
+      --rain-color: #34bb70;
+    }
+    html[data-theme="zz"][data-zz="green"] .calendar-day-cell.holiday::before { background: #2c9e5f; }
+    html[data-theme="zz"][data-zz="blue"] {
+      --text: #4aa6ff;
+      --panel-border: rgba(74, 166, 255, 0.16);
+      --weekday-color: #2d659c;
+      --cell-color: #4aa6ff;
+      --weekend-color: #3a83c9;
+      --month-title-color: #55abff;
+      --data-item-border: rgba(74, 166, 255, 0.16);
+      --data-label-color: #2d659c;
+      --data-value-color: #4aa6ff;
+      --data-location-color: #316ea8;
+      --today-btn-border: rgba(74, 166, 255, 0.30);
+      --theme-btn-border: rgba(74, 166, 255, 0.30);
+      --accent: #55abff;
+      --btn-hover-bg: rgba(74, 166, 255, 0.08);
+      --today-ring: #4aa6ff;
+      --today-ring-glow: rgba(74, 166, 255, 0.45);
+      --tip-bg: #4aa6ff;
+      --alert: #4aa6ff;
+      --rain-color: #3f8dd9;
+    }
+    html[data-theme="zz"][data-zz="blue"] .calendar-day-cell.holiday::before { background: #3578b8; }
   </style>
 </head>
 <body translate="no">
@@ -2517,19 +3134,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -2559,8 +3176,53 @@
 
     <!-- Secció Dreta: Calendari Mensual -->
     <div class="calendar-section">
+      <!-- Cinta de plaques (com al República): llisca de costat amb el dit -->
+      <div class="cinta" id="cinta">
+        <div class="placa placa-sona" id="ara-sona-fila" hidden>
+          <button type="button" class="ps-boto" id="ara-sona" data-i18n-aria="pausePlay" aria-label="Pausar o reprendre"><span class="ara-sona-ic" id="ara-sona-ic"></span></button>
+          <div class="txt"><span class="etq" data-i18n="araSona">Ara sona</span><span class="val" id="ara-sona-tx">—</span></div>
+          <!-- Temporitzador: cada toc passa per 15, 30, 45, 60, 90 minuts i desactivat -->
+          <button type="button" class="ara-sona-temps" id="ara-sona-temps">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg><span class="ts-tx" id="ara-sona-temps-tx"></span>
+          </button>
+          <button type="button" class="ps-tanca" id="ara-sona-tanca" data-i18n-aria="close" aria-label="Tanca"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
+        </div>
+        <div class="placa placa-aniv" id="placa-aniv" role="button" tabindex="0" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 20.5h17M5 20.5v-7h14v7"/><path d="M5 16.3c1.4 1 2.8 1 4.2 0s2.8-1 4.2 0 2.8 1 5.6 0"/><path d="M12 13.5V10.2"/><path d="M12 8c-1-.9-1-2.1 0-3.5 1 1.4 1 2.6 0 3.5z"/></svg>
+          <div class="txt"><span class="etq" data-i18n="pma">Per molts anys</span><span class="val" id="pl-aniv">—</span></div>
+        </div>
+        <div class="placa" id="placa-lloc" role="button" tabindex="0">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11A6.5 6.5 0 0 1 18.5 10c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+          <div class="txt"><span class="etq" data-i18n="plPoblacio">Població</span><span class="val" id="pl-lloc">—</span></div>
+        </div>
+        <div class="placa placa-avis" id="placa-avis" role="button" tabindex="0" data-go="avisos" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.2" r=".6"/></svg>
+          <div class="txt"><span class="etq" data-i18n="alertWord">Avís</span><span class="val" id="pl-avis">—</span></div>
+        </div>
+        <div class="placa" role="button" tabindex="0" data-go="temps">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.5V5a2 2 0 0 1 4 0v9.5a4 4 0 1 1-4 0z"/><path d="M12 9v7"/><circle cx="12" cy="17.5" r="1.2"/></svg>
+          <div class="txt"><span class="etq" data-i18n="plTemp">Temperatura</span><span class="val" id="pl-temp">--°C</span></div>
+        </div>
+        <div class="placa" role="button" tabindex="0" data-go="temps">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5s-6 6.8-6 11a6 6 0 0 0 12 0c0-4.2-6-11-6-11z"/><path d="M9 15a3 3 0 0 0 3 3"/></svg>
+          <div class="txt"><span class="etq" data-i18n="humidity">Humitat</span><span class="val" id="pl-hum">--%</span></div>
+        </div>
+        <div class="placa" role="button" tabindex="0" data-go="temps">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h11a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 12h15a3 3 0 1 1-3 3"/><path d="M3 16h7"/></svg>
+          <div class="txt"><span class="etq" data-i18n="feels">Sensació</span><span class="val" id="pl-sens">--°C</span></div>
+        </div>
+        <div class="placa" id="placa-pluja" role="button" tabindex="0" data-go="temps" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6.5a2 2 0 0 1-4 0"/></svg>
+          <div class="txt"><span class="etq" data-i18n="precip6">Pluja 6 h</span><span class="val" id="pl-pluja">--%</span></div>
+        </div>
+        <div class="placa" role="button" tabindex="0" data-go="ubicacio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 19.5l6.5-11 4 6.5 2.5-3.8 6 8.3z"/><path d="M7.4 11.2l1.6 1.4 1.4-1.2"/></svg>
+          <div class="txt"><span class="etq" data-i18n="altitude">Altitud</span><span class="val" id="pl-alt">-- m</span></div>
+        </div>
+      </div>
+
       <div class="calendar-header">
-        <div class="month-year-title" id="month-year-title" data-i18n-title="titleDbl" title="Toca 2 cops per tornar al mes actual">Agost 2026</div>
+        <div class="month-year-title" id="month-year-title" data-i18n-title="titleDbl" title="Toca 2 cops per tornar al mes actual">Octubre 2026</div>
         <div class="calendar-header-actions">
           <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Canvia entre tema diürn i nocturn" data-i18n-aria="themeAria" aria-label="Tema diürn o nocturn"></button>
           <button type="button" class="theme-toggle-btn" id="install-btn" data-i18n-title="install" data-i18n-aria="install" title="Instal·la com a app" aria-label="Instal·la com a app" hidden>
@@ -2569,136 +3231,182 @@
           <button type="button" class="calendar-today-btn" id="calendar-today-btn" data-i18n="today">Avui</button>
         </div>
       </div>
-      
-      <!-- El calendari i la vista del temps comparteixen el mateix espai:
-           lliscant amunt o avall es passa d'una a l'altra -->
+
+      <!-- Finestres (com al República): apilades en vertical i en cercle.
+           Amunt o avall: finestra següent o anterior (després de l'última torna
+           el calendari). De costat: mes (calendari) o subpanell (punts). -->
       <div class="cal-views" id="cal-views">
-        <div class="cal-view cal-view-calendar" id="view-calendar">
-          <div class="calendar-grid" id="weekday-row">
-            <div class="weekday-header">Dl</div>
-            <div class="weekday-header">Dt</div>
-            <div class="weekday-header">Dc</div>
-            <div class="weekday-header">Dj</div>
-            <div class="weekday-header">Dv</div>
-            <div class="weekday-header">Ds</div>
-            <div class="weekday-header">Dg</div>
-          </div>
+        <div class="fulls" id="fulls">
+          <section class="full full-cal" data-key="calendari" data-nom="Calendari">
+            <div class="calendar-grid" id="weekday-row">
+              <div class="weekday-header">Dl</div>
+              <div class="weekday-header">Dt</div>
+              <div class="weekday-header">Dc</div>
+              <div class="weekday-header">Dj</div>
+              <div class="weekday-header">Dv</div>
+              <div class="weekday-header">Ds</div>
+              <div class="weekday-header">Dg</div>
+            </div>
+            <div class="calendar-grid" id="days-container"></div>
+          </section>
 
-          <div class="calendar-grid" id="days-container"></div>
+          <section class="full fin-pag amb-ll" data-key="temps" data-nom="El temps">
+            <div class="lliscador"><div class="ll-pista">
+              <div class="ll-pane fin-temps">
+                <div class="wx-main">
+                  <div class="wx-icon" id="wx-icon"></div>
+                  <div class="wx-temp-block">
+                    <div class="wx-temp" id="wx-temp">—</div>
+                    <div class="wx-desc" id="wx-desc" data-i18n="loadingWx">Carregant el temps…</div>
+                    <div class="wx-maxmin" id="wx-maxmin"></div>
+                  </div>
+                </div>
+                <div class="wx-grid">
+                  <div class="wx-item">
+                    <span class="wx-label" data-i18n="feels">Sensació</span>
+                    <span class="wx-value" id="wx-feels">—</span>
+                  </div>
+                  <div class="wx-item">
+                    <span class="wx-label" data-i18n="humidity">Humitat</span>
+                    <span class="wx-value" id="wx-humidity">—</span>
+                  </div>
+                  <div class="wx-item">
+                    <span class="wx-label" data-i18n="wind">Vent</span>
+                    <span class="wx-value" id="wx-wind">—</span>
+                    <span class="wx-sub" id="wx-gusts"></span>
+                  </div>
+                  <div class="wx-item">
+                    <span class="wx-label" data-i18n="precip6">Pluja 6 h</span>
+                    <span class="wx-value" id="wx-precip">—</span>
+                  </div>
+                </div>
+                <div class="wx-alerts" id="wx-alerts"></div>
+              </div>
+              <div class="ll-pane">
+                <div class="visor-titol" data-i18n="t12">Properes 12 hores</div>
+                <div class="h12" id="wx-h12"></div>
+              </div>
+              <div class="ll-pane">
+                <div class="visor-titol" data-i18n="t5">Propers 5 dies</div>
+                <div class="d5" id="wx-d5"></div>
+              </div>
+            </div><div class="ll-punts"></div></div>
+          </section>
+
+          <section class="full fin-pag amb-ll" data-key="avui" data-nom="Avui">
+            <div class="lliscador"><div class="ll-pista">
+              <div class="ll-pane av-data">
+                <div class="av-fila">
+                  <div class="av-num" id="av-num">–</div>
+                  <div class="av-text">
+                    <div class="av-dia" id="av-dia">—</div>
+                    <div class="av-mes" id="av-mes">—</div>
+                    <div class="av-any" id="av-any">—</div>
+                  </div>
+                </div>
+                <div class="av-detall" id="av-detall">—</div>
+                <div class="av-detall" id="av-fase">—</div>
+              </div>
+              <div class="ll-pane av-sant">
+                <div class="ef-bloc" id="av-sant-bloc"><div class="visor-titol" data-i18n="sant">Sant del dia</div><div class="ef-sant" id="av-sant">—</div></div>
+                <div class="ef-bloc"><div class="visor-titol" id="av-efem-etq" data-i18n="efem">Efemèride</div><div class="ef-text" id="av-efem">…</div></div>
+              </div>
+              <div class="ll-pane av-sol">
+                <div class="sl-graella">
+                  <div class="sl-col">
+                    <svg class="sl-ic" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="8.5"/><path d="M24 5v6M24 37v6M5 24h6M37 24h6M10.6 10.6l4.2 4.2M33.2 33.2l4.2 4.2M10.6 37.4l4.2-4.2M33.2 14.8l4.2-4.2"/></svg>
+                    <div class="sl-nom" data-i18n="solT">Sol</div>
+                    <div class="sl-fila"><span data-i18n="surt">Surt</span><b id="sl-sol-s">--:--</b></div>
+                    <div class="sl-fila"><span data-i18n="pon">Es pon</span><b id="sl-sol-p">--:--</b></div>
+                    <div class="sl-nota" id="sl-llum">—</div>
+                    <div class="sl-nota" id="sl-dif">—</div>
+                  </div>
+                  <div class="sl-col">
+                    <svg class="sl-ic" viewBox="0 0 48 48" aria-hidden="true"><circle class="sl-fosc" cx="24" cy="24" r="15"/><path class="sl-fase" id="sl-fase" d=""/><circle cx="24" cy="24" r="15"/></svg>
+                    <div class="sl-nom" data-i18n="llunaT">Lluna</div>
+                    <div class="sl-fila"><span data-i18n="surt">Surt</span><b id="sl-ll-s">--:--</b></div>
+                    <div class="sl-fila"><span data-i18n="pon">Es pon</span><b id="sl-ll-p">--:--</b></div>
+                    <div class="sl-nota" id="sl-il">—</div>
+                    <div class="sl-nota" id="sl-prop">—</div>
+                  </div>
+                </div>
+              </div>
+            </div><div class="ll-punts"></div></div>
+          </section>
+
+          <section class="full fin-pag" data-key="festes" data-nom="Properament">
+            <div class="fe-llista" id="fe-llista"></div>
+          </section>
+
+          <section class="full fin-pag fin-ubicacio" data-key="ubicacio" data-nom="Ubicació">
+            <div class="ub-poblacio" id="data-location" data-i18n="locating">Localitzant…</div>
+            <div class="ub-regio" id="ub-regio"></div>
+            <div class="ub-dades">
+              <div class="wx-item"><span class="wx-label" data-i18n="altitude">Altitud</span><span class="wx-value" id="wx-altitude">—</span></div>
+              <div class="wx-item"><span class="wx-label" data-i18n="coords">Coordenades</span><span class="wx-value ub-coord" id="ub-coord">—</span></div>
+            </div>
+          </section>
+
+          <section class="full fin-pag" id="pag-avisos" data-key="avisos" data-nom="Avisos">
+            <div class="visor-titol" data-i18n="next12">Properes 12 hores</div>
+            <div class="avisos-llista" id="avisos-llista"></div>
+          </section>
+
+          <section class="full fin-pag fin-aire" data-key="aire" data-nom="Qualitat de l'aire">
+            <div class="aq-main">
+              <div class="aq-index" id="aq-index">—</div>
+              <div class="aq-text">
+                <div class="aq-label" id="aq-label" data-i18n="loading">Carregant…</div>
+                <div class="aq-sub" data-i18n="aqSub">Índex europeu de qualitat de l'aire</div>
+              </div>
+            </div>
+            <div class="aq-scale" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+              <i class="aq-marker" id="aq-marker"></i>
+            </div>
+            <div class="wx-grid aq-grid">
+              <div class="wx-item"><span class="wx-label" data-i18n="pm25">PM2,5</span><span class="wx-value" id="aq-pm25">—</span></div>
+              <div class="wx-item"><span class="wx-label">PM10</span><span class="wx-value" id="aq-pm10">—</span></div>
+              <div class="wx-item"><span class="wx-label" data-i18n="no2">Diòxid de nitrogen</span><span class="wx-value" id="aq-no2">—</span></div>
+              <div class="wx-item"><span class="wx-label" data-i18n="o3">Ozó</span><span class="wx-value" id="aq-o3">—</span></div>
+            </div>
+            <div class="peu-dades" data-i18n="aqFoot">µg/m³ · ara · font: Copernicus (Open-Meteo)</div>
+          </section>
+
+          <section class="full fin-pag" data-key="radio" data-nom="Ràdio">
+            <div class="visor-titol" data-i18n="live">En directe</div>
+            <div class="radios" id="llista-radios"></div>
+          </section>
+
+          <section class="full fin-pag" data-key="podcasts" data-nom="Podcasts">
+            <div class="visor-titol">La Competència · RAC1</div>
+            <div class="llista-prog" id="llista-competencia"><div class="estat-prog" data-i18n="loadingPrograms">Carregant programes…</div></div>
+            <div class="via-fila">
+              <div class="via-etiqueta">Via lliure<small data-i18n="via7">7 h</small></div>
+              <div class="via-lliure" id="llista-via"><div class="estat-prog" data-i18n="loading">Carregant…</div></div>
+            </div>
+          </section>
+
+          <section class="full fin-pag amb-ll fin-noticies" data-key="noticies" data-nom="Notícies">
+            <div class="lliscador"><div class="ll-pista">
+              <div class="ll-pane">
+                <div class="visor-titol" id="noticies-titol">ACN · Al minut</div>
+                <div class="noticies" id="llista-noticies"><div class="estat-prog" data-i18n="loadingNews">Carregant titulars…</div></div>
+              </div>
+              <div class="ll-pane">
+                <div class="noticies" id="llista-noticies2"></div>
+                <div class="peu-dades" id="noticies-peu"></div>
+              </div>
+            </div><div class="ll-punts"></div></div>
+          </section>
+
+          <section class="full fin-pag fin-alarmes" data-key="alarmes" data-nom="Alarmes">
+            <div class="visor-titol" id="alarm-next"></div>
+            <div class="alarm-llista" id="alarm-llista"></div>
+            <div class="peu-dades" data-i18n="alarmNote"></div>
+          </section>
         </div>
-
-        <!-- Finestres: ocupen l'espai del calendari (lliscar amunt/avall) i es
-             passen lliscant a dreta o esquerra -->
-        <div class="cal-view cal-view-fin" id="view-fin" aria-hidden="true">
-          <div class="fin-track" id="fin-track">
-            <section class="fin-pag" id="pag-avisos" data-key="avisos" data-nom="Avisos" hidden>
-              <div class="visor-titol" data-i18n="next12">Properes 12 hores</div>
-              <div class="avisos-llista" id="avisos-llista"></div>
-            </section>
-
-            <section class="fin-pag fin-ubicacio" data-key="ubicacio" data-nom="Ubicació">
-              <div class="ub-poblacio" id="data-location" data-i18n="locating">Localitzant…</div>
-              <div class="ub-regio" id="ub-regio"></div>
-              <div class="ub-dades">
-                <div class="wx-item"><span class="wx-label" data-i18n="altitude">Altitud</span><span class="wx-value" id="wx-altitude">—</span></div>
-                <div class="wx-item"><span class="wx-label" data-i18n="coords">Coordenades</span><span class="wx-value ub-coord" id="ub-coord">—</span></div>
-              </div>
-            </section>
-
-            <section class="fin-pag fin-temps" data-key="temps" data-nom="El temps">
-              <div class="wx-main">
-                <div class="wx-icon" id="wx-icon"></div>
-                <div class="wx-temp-block">
-                  <div class="wx-temp" id="wx-temp">—</div>
-                  <div class="wx-desc" id="wx-desc" data-i18n="loadingWx">Carregant el temps…</div>
-                </div>
-              </div>
-              <div class="wx-grid">
-                <div class="wx-item">
-                  <span class="wx-label" data-i18n="feels">Sensació</span>
-                  <span class="wx-value" id="wx-feels">—</span>
-                </div>
-                <div class="wx-item">
-                  <span class="wx-label" data-i18n="humidity">Humitat</span>
-                  <span class="wx-value" id="wx-humidity">—</span>
-                </div>
-                <div class="wx-item">
-                  <span class="wx-label" data-i18n="wind">Vent</span>
-                  <span class="wx-value" id="wx-wind">—</span>
-                  <span class="wx-sub" id="wx-gusts"></span>
-                </div>
-                <div class="wx-item">
-                  <span class="wx-label" data-i18n="precip6">Pluja 6 h</span>
-                  <span class="wx-value" id="wx-precip">—</span>
-                </div>
-              </div>
-              <div class="wx-alerts" id="wx-alerts"></div>
-            </section>
-
-            <section class="fin-pag fin-aire" data-key="aire" data-nom="Qualitat de l'aire">
-              <div class="aq-main">
-                <div class="aq-index" id="aq-index">—</div>
-                <div class="aq-text">
-                  <div class="aq-label" id="aq-label" data-i18n="loading">Carregant…</div>
-                  <div class="aq-sub" data-i18n="aqSub">Índex europeu de qualitat de l'aire</div>
-                </div>
-              </div>
-              <div class="aq-scale" aria-hidden="true">
-                <span></span><span></span><span></span><span></span><span></span><span></span>
-                <i class="aq-marker" id="aq-marker"></i>
-              </div>
-              <div class="wx-grid aq-grid">
-                <div class="wx-item"><span class="wx-label" data-i18n="pm25">PM2,5</span><span class="wx-value" id="aq-pm25">—</span></div>
-                <div class="wx-item"><span class="wx-label">PM10</span><span class="wx-value" id="aq-pm10">—</span></div>
-                <div class="wx-item"><span class="wx-label" data-i18n="no2">Diòxid de nitrogen</span><span class="wx-value" id="aq-no2">—</span></div>
-                <div class="wx-item"><span class="wx-label" data-i18n="o3">Ozó</span><span class="wx-value" id="aq-o3">—</span></div>
-              </div>
-              <div class="peu-dades" data-i18n="aqFoot">µg/m³ · ara · font: Copernicus (Open-Meteo)</div>
-            </section>
-
-            <section class="fin-pag fin-alarmes" data-key="alarmes" data-nom="Alarmes">
-              <div class="visor-titol" id="alarm-next"></div>
-              <div class="alarm-llista" id="alarm-llista"></div>
-              <div class="peu-dades" data-i18n="alarmNote"></div>
-            </section>
-
-            <section class="fin-pag" data-key="radio" data-nom="Ràdio">
-              <div class="visor-titol" data-i18n="live">En directe</div>
-              <div class="radios" id="llista-radios"></div>
-            </section>
-
-            <section class="fin-pag" data-key="podcasts" data-nom="Podcasts">
-              <div class="visor-titol">La Competència · RAC1</div>
-              <div class="llista-prog" id="llista-competencia"><div class="estat-prog" data-i18n="loadingPrograms">Carregant programes…</div></div>
-              <div class="via-fila">
-                <div class="via-etiqueta">Via lliure<small data-i18n="via7">7 h</small></div>
-                <div class="via-lliure" id="llista-via"><div class="estat-prog" data-i18n="loading">Carregant…</div></div>
-              </div>
-            </section>
-
-            <section class="fin-pag fin-noticies" data-key="noticies" data-nom="Notícies">
-              <div class="visor-titol" id="noticies-titol">ACN · Al minut</div>
-              <div class="noticies" id="llista-noticies"><div class="estat-prog" data-i18n="loadingNews">Carregant titulars…</div></div>
-              <div class="peu-dades" id="noticies-peu"></div>
-            </section>
-          </div>
-          <div class="fin-punts" id="fin-punts"></div>
-        </div>
-
-        <div class="view-dots" id="view-dots" data-i18n-title="viewDots" title="Llisca avall per veure les finestres">
-          <span class="on"></span><span></span>
-        </div>
-      </div>
-
-      <!-- Fila prima que només apareix quan sona una ràdio o un podcast -->
-      <div class="ara-sona-fila" id="ara-sona-fila" hidden>
-        <button type="button" class="ara-sona" id="ara-sona" data-i18n-aria="pausePlay" aria-label="Pausar o reprendre">
-          <span class="ara-sona-ic" id="ara-sona-ic"></span><span class="ara-sona-tx" id="ara-sona-tx"></span>
-        </button>
-        <!-- Temporitzador: cada toc passa per 15, 30, 45, 60, 90 minuts i desactivat -->
-        <button type="button" class="ara-sona-temps" id="ara-sona-temps">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg><span class="ts-tx" id="ara-sona-temps-tx"></span>
-        </button>
+        <div class="view-dots" id="view-dots"></div>
       </div>
 
       <!-- Idioma de l'app (i de l'anunci de l'hora en punt) -->
@@ -2723,6 +3431,42 @@
       <button type="button" id="alarm-ov-snooze"></button>
       <button type="button" id="alarm-ov-stop"></button>
     </div>
+  </div>
+
+
+  <!-- Com passar les alarmes al rellotge de l'iPhone (només el primer cop) -->
+  <div class="dialeg" id="dr-dialeg" role="dialog" aria-modal="true" hidden>
+    <div class="dialeg-cara">
+      <button type="button" class="dialeg-tanca" id="dr-tanca" data-i18n-aria="close" aria-label="Tanca"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
+      <div class="dialeg-titol" id="dr-titol"></div>
+      <ol class="dr-passos" id="dr-passos"></ol>
+      <div class="dialeg-nota" id="dr-nota"></div>
+      <div class="dialeg-botons">
+        <button type="button" class="dialeg-b secundari" id="dr-obre"></button>
+        <button type="button" class="dialeg-b" id="dr-feta"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aniversari (secret: doble toc a la placa de Població) -->
+  <div class="dialeg" id="aniv-dialeg" role="dialog" aria-modal="true" hidden>
+    <form class="dialeg-cara" id="aniv-form" autocomplete="off">
+      <button type="button" class="dialeg-tanca" id="aniv-tanca" data-i18n-aria="close" aria-label="Tanca"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
+      <div class="dialeg-titol" data-i18n="aniv">Aniversari</div>
+      <div class="dialeg-nota" data-i18n="anivSub">Opcional · només es desa en aquest aparell</div>
+      <label for="aniv-nom" data-i18n="anivNom">Nom</label>
+      <input class="aniv-camp" id="aniv-nom" type="text" maxlength="24" autocapitalize="words" spellcheck="false">
+      <label for="aniv-dia" data-i18n="anivNaix">Data de naixement</label>
+      <div class="aniv-dates">
+        <select class="aniv-camp" id="aniv-dia"></select>
+        <select class="aniv-camp" id="aniv-mes"></select>
+        <input class="aniv-camp" id="aniv-any" type="number" inputmode="numeric" min="1900" max="2100">
+      </div>
+      <div class="dialeg-botons">
+        <button type="button" class="dialeg-b secundari" id="aniv-esborra" data-i18n="anivEsborra">Esborra</button>
+        <button type="submit" class="dialeg-b" id="aniv-desa" data-i18n="anivDesa">Desa</button>
+      </div>
+    </form>
   </div>
 
   <!-- Filtre del mode Zz: converteix cada punt a taronja segons la seva lluminositat -->
@@ -2765,7 +3509,7 @@
         themeFixed: n => `Tema ${n} fix (toca per canviar)`,
         themeAuto: 'Tema automàtic: dia o nit segons el sol, i Zz quan es carrega de nit (toca per canviar)',
         viewDots: 'Llisca avall per veure les finestres', pausePlay: 'Pausar o reprendre',
-        pages: { avisos: 'Avisos', ubicacio: 'Ubicació', temps: 'El temps', aire: "Qualitat de l'aire", alarmes: 'Alarmes', radio: 'Ràdio', podcasts: 'Podcasts', noticies: 'Notícies' },
+        pages: { calendari: 'Calendari', avui: 'Avui', festes: 'Properament', avisos: 'Avisos', ubicacio: 'Ubicació', temps: 'El temps', aire: "Qualitat de l'aire", alarmes: 'Alarmes', radio: 'Ràdio', podcasts: 'Podcasts', noticies: 'Notícies' },
         next12: 'Properes 12 hores', locating: 'Localitzant…', unknownLoc: 'Ubicació desconeguda',
         altitude: 'Altitud', coords: 'Coordenades', loadingWx: 'Carregant el temps…', loading: 'Carregant…',
         feels: 'Sensació', humidity: 'Humitat', wind: 'Vent', precip6: 'Pluja 6 h', rain: 'pluja', snow: 'neu', gusts: 'ratxes',
@@ -2790,6 +3534,21 @@
         sleepOff: 'Temporitzador desactivat (toca per apagar la ràdio d\'aquí a 15, 30, 45, 60 o 90 minuts)',
         sleepOn: n => `La ràdio s'apagarà d'aquí a ${n} min (toca per canviar-ho)`,
         langGroup: 'Idioma',
+        araSona: 'Ara sona', plPoblacio: 'Població', plTemp: 'Temperatura', close: 'Tanca',
+        t12: 'Properes 12 hores', t5: 'Propers 5 dies', maxMin: (a, b) => `Màx ${a}° · Mín ${b}°`,
+        sant: 'Sant del dia', efem: 'Efemèride', curio: 'Curiositat', solT: 'Sol', llunaT: 'Lluna', surt: 'Surt', pon: 'Es pon',
+        daylight: (h, m) => `${h} h ${m} min de llum`, daylightDiff: m => (m === 0 ? 'Igual que ahir' : m > 0 ? `${m} min més que ahir` : `${-m} min menys que ahir`),
+        fullIn: n => (n === 0 ? 'Lluna plena avui' : n === 1 ? 'Plena demà' : `Plena d'aquí a ${n} dies`), newIn: n => (n === 0 ? 'Lluna nova avui' : n === 1 ? 'Nova demà' : `Nova d'aquí a ${n} dies`),
+        illuminated: p => `${p}% il·luminada`, todayWord: 'Avui', tomorrowWord: 'Demà', daysWord: 'dies',
+        dayOfYear: (n, w) => `Dia ${n} de l'any · Setmana ${w}`,
+        phases: ['Lluna nova', 'Lluna creixent', 'Quart creixent', 'Gibosa creixent', 'Lluna plena', 'Gibosa minvant', 'Quart minvant', 'Lluna minvant'],
+        ofMonth: m => { const n = I18N.ca.months[m].toLowerCase(); return (/^[aeiou]/.test(n) ? "d'" : 'de ') + n; },
+        holidayToday: n => `Avui és festiu: ${n}`, holidayTomorrow: n => `Demà és festiu: ${n}`,
+        aniv: 'Aniversari', anivSub: 'Opcional · només es desa en aquest aparell', anivNom: 'Nom', anivNaix: 'Data de naixement', anivDesa: 'Desa', anivEsborra: 'Esborra',
+        pma: 'Per molts anys', years: 'anys', birthdaySpeech: n => (n ? `Per molts anys, ${n}!` : 'Per molts anys!'),
+        alMobile: 'Posa-la al rellotge del mòbil', drTitle: "Alarmes al rellotge de l'iPhone",
+        drSteps: s => ["Obre l'app Dreceres i crea una drecera nova (+).", "Afegeix-hi l'acció «Crear alarma» i, a «Hora», tria «Entrada de la drecera».", `Posa-li el nom exacte «${s}» i desa-la.`],
+        drOpen: 'Obre Dreceres', drDone: "Ja la tinc: crea l'alarma", drNote: 'Només cal fer-ho un cop. La repetició (feiners, cap de setmana…) es tria al rellotge del mòbil.',
         hello: 'Hola! Diré les hores en punt en català.'
       },
       fr: {
@@ -2811,7 +3570,7 @@
         themeFixed: n => `Thème ${n} fixe (touchez pour changer)`,
         themeAuto: 'Thème automatique : jour ou nuit selon le soleil, et Zz en charge la nuit (touchez pour changer)',
         viewDots: 'Glissez vers le bas pour voir les fenêtres', pausePlay: 'Pause ou reprise',
-        pages: { avisos: 'Alertes', ubicacio: 'Lieu', temps: 'Météo', aire: "Qualité de l'air", alarmes: 'Réveils', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Actualités' },
+        pages: { calendari: 'Calendrier', avui: "Aujourd'hui", festes: 'Prochainement', avisos: 'Alertes', ubicacio: 'Lieu', temps: 'Météo', aire: "Qualité de l'air", alarmes: 'Réveils', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Actualités' },
         next12: '12 prochaines heures', locating: 'Localisation…', unknownLoc: 'Lieu inconnu',
         altitude: 'Altitude', coords: 'Coordonnées', loadingWx: 'Chargement de la météo…', loading: 'Chargement…',
         feels: 'Ressenti', humidity: 'Humidité', wind: 'Vent', precip6: 'Pluie 6 h', rain: 'pluie', snow: 'neige', gusts: 'rafales',
@@ -2836,6 +3595,20 @@
         sleepOff: 'Minuterie désactivée (touchez pour couper la radio dans 15, 30, 45, 60 ou 90 minutes)',
         sleepOn: n => `La radio s'arrêtera dans ${n} min (touchez pour changer)`,
         langGroup: 'Langue',
+        araSona: 'En écoute', plPoblacio: 'Localité', plTemp: 'Température', close: 'Fermer',
+        t12: 'Les 12 prochaines heures', t5: 'Les 5 prochains jours', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
+        sant: 'Saint du jour', efem: 'Éphéméride', curio: 'Curiosité', solT: 'Soleil', llunaT: 'Lune', surt: 'Lever', pon: 'Coucher',
+        daylight: (h, m) => `${h} h ${m} min de jour`, daylightDiff: m => (m === 0 ? 'Comme hier' : m > 0 ? `${m} min de plus qu'hier` : `${-m} min de moins qu'hier`),
+        fullIn: n => (n === 0 ? "Pleine lune aujourd'hui" : n === 1 ? 'Pleine lune demain' : `Pleine lune dans ${n} jours`), newIn: n => (n === 0 ? "Nouvelle lune aujourd'hui" : n === 1 ? 'Nouvelle lune demain' : `Nouvelle lune dans ${n} jours`),
+        illuminated: p => `${p} % éclairée`, todayWord: "Aujourd'hui", tomorrowWord: 'Demain', daysWord: 'jours',
+        dayOfYear: (n, w) => `${n}e jour de l'année · Semaine ${w}`,
+        phases: ['Nouvelle lune', 'Premier croissant', 'Premier quartier', 'Gibbeuse croissante', 'Pleine lune', 'Gibbeuse décroissante', 'Dernier quartier', 'Dernier croissant'],
+        ofMonth: m => I18N.fr.months[m].toLowerCase(),
+        aniv: 'Anniversaire', anivSub: 'Facultatif · enregistré uniquement sur cet appareil', anivNom: 'Prénom', anivNaix: 'Date de naissance', anivDesa: 'Enregistrer', anivEsborra: 'Effacer',
+        pma: 'Joyeux anniversaire', years: 'ans', birthdaySpeech: n => (n ? `Joyeux anniversaire, ${n} !` : 'Joyeux anniversaire !'),
+        alMobile: "L'ajouter à l'horloge du téléphone", drTitle: "Alarmes dans l'horloge de l'iPhone",
+        drSteps: s => ["Ouvrez l'app Raccourcis et créez un nouveau raccourci (+).", "Ajoutez l'action « Créer une alarme » et, pour « Heure », choisissez « Entrée du raccourci ».", `Nommez-le exactement « ${s} » et enregistrez-le.`],
+        drOpen: 'Ouvrir Raccourcis', drDone: "C'est fait : créer l'alarme", drNote: "À faire une seule fois. La répétition se règle dans l'horloge du téléphone.",
         hello: 'Bonjour ! J\'annoncerai les heures pile en français.'
       },
       de: {
@@ -2857,7 +3630,7 @@
         themeFixed: n => `Modus ${n} fest (tippen zum Ändern)`,
         themeAuto: 'Automatischer Modus: Tag oder Nacht je nach Sonnenstand, Zz beim nächtlichen Laden (tippen zum Ändern)',
         viewDots: 'Nach unten wischen, um die Fenster zu sehen', pausePlay: 'Pause oder fortsetzen',
-        pages: { avisos: 'Warnungen', ubicacio: 'Standort', temps: 'Wetter', aire: 'Luftqualität', alarmes: 'Wecker', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Nachrichten' },
+        pages: { calendari: 'Kalender', avui: 'Heute', festes: 'Demnächst', avisos: 'Warnungen', ubicacio: 'Standort', temps: 'Wetter', aire: 'Luftqualität', alarmes: 'Wecker', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Nachrichten' },
         next12: 'Nächste 12 Stunden', locating: 'Standort wird ermittelt…', unknownLoc: 'Unbekannter Standort',
         altitude: 'Höhe', coords: 'Koordinaten', loadingWx: 'Wetter wird geladen…', loading: 'Wird geladen…',
         feels: 'Gefühlt', humidity: 'Feuchte', wind: 'Wind', precip6: 'Regen 6 h', rain: 'Regen', snow: 'Schnee', gusts: 'Böen',
@@ -2882,6 +3655,20 @@
         sleepOff: 'Sleep-Timer aus (tippen, um das Radio in 15, 30, 45, 60 oder 90 Minuten auszuschalten)',
         sleepOn: n => `Das Radio geht in ${n} Min. aus (tippen zum Ändern)`,
         langGroup: 'Sprache',
+        araSona: 'Läuft gerade', plPoblacio: 'Ort', plTemp: 'Temperatur', close: 'Schließen',
+        t12: 'Nächste 12 Stunden', t5: 'Nächste 5 Tage', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
+        sant: 'Tagesheilige', efem: 'An diesem Tag', curio: 'Wussten Sie?', solT: 'Sonne', llunaT: 'Mond', surt: 'Aufgang', pon: 'Untergang',
+        daylight: (h, m) => `${h} Std. ${m} Min. Tageslicht`, daylightDiff: m => (m === 0 ? 'Wie gestern' : m > 0 ? `${m} Min. länger als gestern` : `${-m} Min. kürzer als gestern`),
+        fullIn: n => (n === 0 ? 'Heute Vollmond' : n === 1 ? 'Morgen Vollmond' : `Vollmond in ${n} Tagen`), newIn: n => (n === 0 ? 'Heute Neumond' : n === 1 ? 'Morgen Neumond' : `Neumond in ${n} Tagen`),
+        illuminated: p => `${p} % beleuchtet`, todayWord: 'Heute', tomorrowWord: 'Morgen', daysWord: 'Tage',
+        dayOfYear: (n, w) => `${n}. Tag des Jahres · Woche ${w}`,
+        phases: ['Neumond', 'Zunehmende Sichel', 'Erstes Viertel', 'Zunehmender Mond', 'Vollmond', 'Abnehmender Mond', 'Letztes Viertel', 'Abnehmende Sichel'],
+        ofMonth: m => I18N.de.months[m],
+        aniv: 'Geburtstag', anivSub: 'Optional · nur auf diesem Gerät gespeichert', anivNom: 'Name', anivNaix: 'Geburtsdatum', anivDesa: 'Speichern', anivEsborra: 'Löschen',
+        pma: 'Alles Gute zum Geburtstag', years: 'Jahre', birthdaySpeech: n => (n ? `Alles Gute zum Geburtstag, ${n}!` : 'Alles Gute zum Geburtstag!'),
+        alMobile: 'In die Uhr des Handys übernehmen', drTitle: 'Wecker in der iPhone-Uhr',
+        drSteps: s => ['Öffne die App Kurzbefehle und erstelle einen neuen Kurzbefehl (+).', 'Füge die Aktion „Wecker erstellen“ hinzu und wähle bei „Uhrzeit“ die „Kurzbefehleingabe“.', `Nenne ihn genau „${s}“ und sichere ihn.`],
+        drOpen: 'Kurzbefehle öffnen', drDone: 'Erledigt: Wecker erstellen', drNote: 'Nur einmal nötig. Wiederholungen stellst du in der Uhr des Handys ein.',
         hello: 'Hallo! Ich sage die vollen Stunden auf Deutsch an.'
       },
       it: {
@@ -2903,7 +3690,7 @@
         themeFixed: n => `Tema ${n} fisso (tocca per cambiare)`,
         themeAuto: 'Tema automatico: giorno o notte secondo il sole, e Zz quando si ricarica di notte (tocca per cambiare)',
         viewDots: 'Scorri verso il basso per vedere le finestre', pausePlay: 'Pausa o riprendi',
-        pages: { avisos: 'Allerte', ubicacio: 'Posizione', temps: 'Meteo', aire: "Qualità dell'aria", alarmes: 'Sveglie', radio: 'Radio', podcasts: 'Podcast', noticies: 'Notizie' },
+        pages: { calendari: 'Calendario', avui: 'Oggi', festes: 'Prossimamente', avisos: 'Allerte', ubicacio: 'Posizione', temps: 'Meteo', aire: "Qualità dell'aria", alarmes: 'Sveglie', radio: 'Radio', podcasts: 'Podcast', noticies: 'Notizie' },
         next12: 'Prossime 12 ore', locating: 'Localizzazione…', unknownLoc: 'Posizione sconosciuta',
         altitude: 'Altitudine', coords: 'Coordinate', loadingWx: 'Caricamento meteo…', loading: 'Caricamento…',
         feels: 'Percepita', humidity: 'Umidità', wind: 'Vento', precip6: 'Pioggia 6 h', rain: 'pioggia', snow: 'neve', gusts: 'raffiche',
@@ -2928,6 +3715,20 @@
         sleepOff: 'Timer disattivato (tocca per spegnere la radio tra 15, 30, 45, 60 o 90 minuti)',
         sleepOn: n => `La radio si spegnerà tra ${n} min (tocca per cambiare)`,
         langGroup: 'Lingua',
+        araSona: 'In ascolto', plPoblacio: 'Località', plTemp: 'Temperatura', close: 'Chiudi',
+        t12: 'Prossime 12 ore', t5: 'Prossimi 5 giorni', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
+        sant: 'Santo del giorno', efem: 'Ricorrenza', curio: 'Curiosità', solT: 'Sole', llunaT: 'Luna', surt: 'Sorge', pon: 'Tramonta',
+        daylight: (h, m) => `${h} h ${m} min di luce`, daylightDiff: m => (m === 0 ? 'Come ieri' : m > 0 ? `${m} min in più di ieri` : `${-m} min in meno di ieri`),
+        fullIn: n => (n === 0 ? 'Luna piena oggi' : n === 1 ? 'Luna piena domani' : `Luna piena tra ${n} giorni`), newIn: n => (n === 0 ? 'Luna nuova oggi' : n === 1 ? 'Luna nuova domani' : `Luna nuova tra ${n} giorni`),
+        illuminated: p => `${p}% illuminata`, todayWord: 'Oggi', tomorrowWord: 'Domani', daysWord: 'giorni',
+        dayOfYear: (n, w) => `Giorno ${n} dell'anno · Settimana ${w}`,
+        phases: ['Luna nuova', 'Luna crescente', 'Primo quarto', 'Gibbosa crescente', 'Luna piena', 'Gibbosa calante', 'Ultimo quarto', 'Luna calante'],
+        ofMonth: m => I18N.it.months[m].toLowerCase(),
+        aniv: 'Compleanno', anivSub: 'Facoltativo · salvato solo su questo dispositivo', anivNom: 'Nome', anivNaix: 'Data di nascita', anivDesa: 'Salva', anivEsborra: 'Cancella',
+        pma: 'Buon compleanno', years: 'anni', birthdaySpeech: n => (n ? `Buon compleanno, ${n}!` : 'Buon compleanno!'),
+        alMobile: "Aggiungila all'orologio del telefono", drTitle: "Sveglie nell'Orologio dell'iPhone",
+        drSteps: s => ["Apri l'app Comandi e crea un nuovo comando (+).", "Aggiungi l'azione «Crea sveglia» e, in «Ora», scegli «Input comando».", `Chiamalo esattamente «${s}» e salvalo.`],
+        drOpen: 'Apri Comandi', drDone: 'Fatto: crea la sveglia', drNote: "Basta farlo una volta. La ripetizione si sceglie nell'orologio del telefono.",
         hello: 'Ciao! Annuncerò le ore in punto in italiano.'
       },
       en: {
@@ -2949,7 +3750,7 @@
         themeFixed: n => `Fixed ${n} theme (tap to change)`,
         themeAuto: 'Automatic theme: day or night by the sun, and Zz when charging at night (tap to change)',
         viewDots: 'Swipe down to see the panels', pausePlay: 'Pause or resume',
-        pages: { avisos: 'Alerts', ubicacio: 'Location', temps: 'Weather', aire: 'Air quality', alarmes: 'Alarms', radio: 'Radio', podcasts: 'Podcasts', noticies: 'News' },
+        pages: { calendari: 'Calendar', avui: 'Today', festes: 'Coming up', avisos: 'Alerts', ubicacio: 'Location', temps: 'Weather', aire: 'Air quality', alarmes: 'Alarms', radio: 'Radio', podcasts: 'Podcasts', noticies: 'News' },
         next12: 'Next 12 hours', locating: 'Locating…', unknownLoc: 'Unknown location',
         altitude: 'Altitude', coords: 'Coordinates', loadingWx: 'Loading weather…', loading: 'Loading…',
         feels: 'Feels like', humidity: 'Humidity', wind: 'Wind', precip6: 'Rain 6 h', rain: 'rain', snow: 'snow', gusts: 'gusts',
@@ -2974,6 +3775,20 @@
         sleepOff: 'Sleep timer off (tap to turn the radio off in 15, 30, 45, 60 or 90 minutes)',
         sleepOn: n => `The radio will turn off in ${n} min (tap to change)`,
         langGroup: 'Language',
+        araSona: 'Now playing', plPoblacio: 'Town', plTemp: 'Temperature', close: 'Close',
+        t12: 'Next 12 hours', t5: 'Next 5 days', maxMin: (a, b) => `High ${a}° · Low ${b}°`,
+        sant: 'Saint of the day', efem: 'On this day', curio: 'Did you know?', solT: 'Sun', llunaT: 'Moon', surt: 'Rise', pon: 'Set',
+        daylight: (h, m) => `${h} h ${m} min of daylight`, daylightDiff: m => (m === 0 ? 'Same as yesterday' : m > 0 ? `${m} min more than yesterday` : `${-m} min less than yesterday`),
+        fullIn: n => (n === 0 ? 'Full moon today' : n === 1 ? 'Full moon tomorrow' : `Full moon in ${n} days`), newIn: n => (n === 0 ? 'New moon today' : n === 1 ? 'New moon tomorrow' : `New moon in ${n} days`),
+        illuminated: p => `${p}% illuminated`, todayWord: 'Today', tomorrowWord: 'Tomorrow', daysWord: 'days',
+        dayOfYear: (n, w) => `Day ${n} of the year · Week ${w}`,
+        phases: ['New moon', 'Waxing crescent', 'First quarter', 'Waxing gibbous', 'Full moon', 'Waning gibbous', 'Last quarter', 'Waning crescent'],
+        ofMonth: m => I18N.en.months[m],
+        aniv: 'Birthday', anivSub: 'Optional · saved only on this device', anivNom: 'Name', anivNaix: 'Date of birth', anivDesa: 'Save', anivEsborra: 'Delete',
+        pma: 'Happy birthday', years: 'years', birthdaySpeech: n => (n ? `Happy birthday, ${n}!` : 'Happy birthday!'),
+        alMobile: "Add it to the phone's clock", drTitle: 'Alarms in the iPhone Clock',
+        drSteps: s => ['Open the Shortcuts app and create a new shortcut (+).', 'Add the “Create Alarm” action and set “Time” to “Shortcut Input”.', `Name it exactly “${s}” and save it.`],
+        drOpen: 'Open Shortcuts', drDone: 'Done: create the alarm', drNote: "You only need to do this once. Repeat days are set in the phone's Clock.",
         hello: 'Hello! I\'ll announce the time on the hour in English.'
       }
     };
@@ -3008,10 +3823,13 @@
       document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
       document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
       document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
-      document.querySelectorAll('.fin-pag[data-key]').forEach(el => { el.dataset.nom = t('pages')[el.dataset.key]; });
+      document.querySelectorAll('.full[data-key]').forEach(el => { el.dataset.nom = t('pages')[el.dataset.key]; });
       // La finestra de podcasts (La Competència, Via lliure) només en català
       const podcasts = document.querySelector('.fin-pag[data-key="podcasts"]');
       if (podcasts) podcasts.hidden = currentLang !== 'ca';
+      // Properament (festes) també només en català, com les festes del calendari
+      const festes = document.querySelector('.fin-pag[data-key="festes"]');
+      if (festes) festes.hidden = currentLang !== 'ca';
       const heads = document.querySelectorAll('#weekday-row .weekday-header');
       t('weekShort').forEach((d, i) => { if (heads[i]) heads[i].textContent = d; });
       const group = document.getElementById('lang-fila');
@@ -3615,14 +4433,11 @@
       return ['storm', 'rain', 'snow', 'ice', 'wind', 'fog'].filter(k => found[k]).map(k => ({ type: k, ...found[k] }));
     }
 
-    // Alertes (fons vermell, lletra blanca) a la primera pàgina de la finestra
-    // lliscable. Si no n'hi ha cap, la pàgina no apareix. Quan n'arriba una
-    // de nova, la finestra s'hi posa sola perquè es vegi.
-    let lastAlertsKey = '';
+    // Finestra d'avisos (sempre hi és): avisos de les properes hores, festius
+    // d'avui i de demà, o «sense avisos». El primer avís surt també a la cinta.
+    const CAL_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15" r="2"/></svg>';
     function renderDataAlerts(alerts) {
-      const page = document.getElementById('pag-avisos');
       const list = document.getElementById('avisos-llista');
-      const currentPage = typeof currentFinPage === 'function' ? currentFinPage() : null;
       list.innerHTML = '';
       alerts.forEach(a => {
         const el = document.createElement('div');
@@ -3632,13 +4447,28 @@
                        `<span class="data-alert-text">${a.text}</span>`;
         list.appendChild(el);
       });
-      page.hidden = alerts.length === 0;
-      const key = alerts.map(a => a.type).join(',');
-      const isNew = key && key !== lastAlertsKey;
-      lastAlertsKey = key;
-      if (typeof goToFinPage === 'function') {
-        if (isNew) goToFinPage(0, false);
-        else goToFinPage(Math.max(0, finPages().indexOf(currentPage)), false);
+      if (currentLang === 'ca') {
+        const now = new Date();
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        [[now, 'holidayToday'], [tomorrow, 'holidayTomorrow']].forEach(([d, key]) => {
+          const info = getHolidayInfoSync(d.getFullYear());
+          const iso = isoOf(d);
+          if (!info.dates.has(iso)) return;
+          const el = document.createElement('div');
+          el.className = 'avis-info';
+          el.innerHTML = `${CAL_ICON}<span></span>`;
+          el.querySelector('span').textContent = t(key, holidayName(iso, info));
+          list.appendChild(el);
+        });
+      }
+      if (!list.children.length) {
+        list.innerHTML = '<div class="estat-prog"></div>';
+        list.firstChild.textContent = t('noAlerts', ALERT_HOURS);
+      }
+      const plaque = document.getElementById('placa-avis');
+      plaque.hidden = !alerts.length;
+      if (alerts.length) {
+        document.getElementById('pl-avis').textContent = `${alerts[0].text} · ${alerts[0].when}` + (alerts.length > 1 ? ` · +${alerts.length - 1}` : '');
       }
     }
 
@@ -3675,92 +4505,183 @@
         ? alerts.map(a => `<span class="wx-alert">${ALERT_ICONS[a.type]}${a.text} · ${a.when}</span>`).join('')
         : `<span class="wx-alert none">${t('noAlerts', ALERT_HOURS)}</span>`;
       renderDataAlerts(alerts);
+      renderWeatherPlaques(weather);
+      renderForecast(weather);
     }
 
-    function setWeatherView(active, swipeDir) {
-      if (active === weatherViewActive) return;
-      weatherViewActive = active;
-      hideHolidayTip();
-      const views = document.getElementById('cal-views');
-      views.style.setProperty('--swipe-dir', swipeDir === 'down' ? 1 : -1);
-      views.classList.toggle('show-weather', active);
-      document.getElementById('view-fin').setAttribute('aria-hidden', String(!active));
-      document.getElementById('view-calendar').setAttribute('aria-hidden', String(active));
-      const dots = document.querySelectorAll('#view-dots span');
-      dots[0].classList.toggle('on', !active);
-      dots[1].classList.toggle('on', active);
+    // ------------------------------------------------------------------
+    // Finestres (com al República): apilades en vertical i en cercle. Cada
+    // finestra se situa segons la distància a l'actual, de manera que
+    // després de l'última torna el calendari i abans del calendari hi ha
+    // l'última. Dins d'algunes finestres hi ha subpanells laterals.
+    // ------------------------------------------------------------------
+    const fullsBox = document.getElementById('fulls');
+    const fullDots = document.getElementById('view-dots');
+    const FULL_SEP = 40;
+    let fullIndex = 0;              // 0 = calendari
+    const fullPrev = new WeakMap(); // posició anterior de cada finestra (per als salts de cercle)
+
+    function fullsList() { return [...fullsBox.children].filter(f => f.classList.contains('full') && !f.hidden); }
+    function currentFull() { const list = fullsList(); return list[fullIndex] || list[0]; }
+    function isCalendarFull() { const f = currentFull(); return !f || f.dataset.key === 'calendari'; }
+
+    // L'element que es desplaça amunt i avall dins la finestra actual (el subpanell, si n'hi ha)
+    function currentScroller() {
+      const f = currentFull();
+      if (!f || f.dataset.key === 'calendari') return null;
+      return f._ll ? f._ll.current() : f;
+    }
+
+    function updateFullTitle() {
       const titleEl = document.getElementById('month-year-title');
-      titleEl.classList.toggle('wx-mode', active);
-      if (active) {
-        // Com a l'índex: s'obre sempre per la primera finestra, amb les cintes al principi
-        document.querySelectorAll('.fin-pag').forEach(page => { page.scrollTop = 0; });
-        goToFinPage(0, false);
-        updateFinTitle();
-        requestAnimationFrame(fitLocation);
-      } else {
-        titleEl.textContent = calendarTitleText;
-      }
+      const f = currentFull();
+      const cal = !f || f.dataset.key === 'calendari';
+      titleEl.classList.toggle('wx-mode', !cal);
+      titleEl.textContent = cal ? calendarTitleText : (f.dataset.nom || '');
     }
 
-    function toggleWeatherView(swipeDir) { setWeatherView(!weatherViewActive, swipeDir); }
+    function refreshFullDots() {
+      const list = fullsList();
+      if (fullDots.children.length !== list.length) {
+        fullDots.innerHTML = '';
+        list.forEach((f, i) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.addEventListener('click', (e) => { e.stopPropagation(); goFull(i); });
+          fullDots.appendChild(b);
+        });
+      }
+      [...fullDots.children].forEach((b, i) => {
+        b.classList.toggle('on', i === fullIndex);
+        const nom = list[i] && (list[i].dataset.key === 'calendari' ? calendarTitleText : list[i].dataset.nom);
+        b.title = nom || '';
+        b.setAttribute('aria-label', nom || '');
+      });
+    }
 
-    (function setupWeatherViewControls() {
-      document.getElementById('view-dots').addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleWeatherView('up');
+    function positionFulls(animate) {
+      const list = fullsList();
+      const N = list.length;
+      list.forEach((f, i) => {
+        let o = ((i - fullIndex) % N + N) % N;
+        if (o > N / 2) o -= N;
+        const prev = fullPrev.get(f);
+        const jump = prev !== undefined && Math.abs(o - prev) > 1;   // passa per fora de la vista
+        f.style.transition = animate && !jump ? 'transform 0.5s cubic-bezier(.22,.9,.3,1)' : 'none';
+        f.style.transform = o === 0 ? 'translate3d(0,0,0)' : `translate3d(0, calc(${o} * (100% + ${FULL_SEP}px)), 0)`;
+        f.style.visibility = Math.abs(o) > 1 ? 'hidden' : '';
+        f.inert = o !== 0;
+        f.setAttribute('aria-hidden', String(o !== 0));
+        fullPrev.set(f, o);
       });
-      // Roda del ratolí o trackpad sobre el calendari
-      let wheelLock = 0;
-      // Darrer moviment de la cinta d'una finestra: si s'hi ha arribat al principi fa
-      // un moment, l'impuls de la mateixa roda no ha de tancar les finestres
+      weatherViewActive = !isCalendarFull();
+      refreshFullDots();
+      updateFullTitle();
+    }
+
+    function goFull(i, animate = true) {
+      const list = fullsList();
+      const N = list.length;
+      if (!N) return;
+      fullIndex = ((i % N) + N) % N;
+      hideHolidayTip();
+      positionFulls(animate);
+      const f = list[fullIndex];
+      const sc = currentScroller();
+      if (sc) sc.scrollTop = 0;   // cada finestra s'obre pel principi
+      if (f.dataset.key === 'noticies' && typeof loadNews === 'function') loadNews(false);
+      if (f.dataset.key === 'ubicacio') requestAnimationFrame(fitLocation);
+    }
+
+    function goFullKey(key) {
+      const i = fullsList().findIndex(f => f.dataset.key === key);
+      if (i >= 0) goFull(i);
+    }
+
+    function shiftFull(dir) { goFull(fullIndex + dir); }
+
+    // Quan apareixen o desapareixen finestres (llengua), es manté l'actual
+    function refreshFulls() {
+      const cur = currentFull();
+      const list = fullsList();
+      fullIndex = Math.max(0, list.indexOf(cur));
+      positionFulls(false);
+    }
+
+    // ---- Subpanells laterals dins d'una finestra (dit de costat, roda o punts) ----
+    function makeSlider(full) {
+      const root = full.querySelector('.lliscador');
+      if (!root) return null;
+      const track = root.querySelector('.ll-pista');
+      const panes = [...track.children];
+      const dots = root.querySelector('.ll-punts');
+      let i = 0;
+      dots.innerHTML = '';
+      panes.forEach((p, k) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.addEventListener('click', (e) => { e.stopPropagation(); go(k); });
+        dots.appendChild(b);
+      });
+      function go(k, animate = true) {
+        i = Math.max(0, Math.min(panes.length - 1, k));
+        track.style.transition = animate ? 'transform 0.42s cubic-bezier(.22,.9,.3,1)' : 'none';
+        track.style.transform = `translate3d(${-i * 100}%, 0, 0)`;
+        panes.forEach((p, n) => { p.inert = n !== i; });
+        [...dots.children].forEach((b, n) => b.classList.toggle('on', n === i));
+        panes[i].scrollTop = 0;
+      }
+      go(0, false);
+      return {
+        go,
+        shift(d) { const n = i + d; if (n < 0 || n >= panes.length) return false; go(n); return true; },
+        current: () => panes[i]
+      };
+    }
+    [...fullsBox.children].forEach(f => { f._ll = makeSlider(f); });
+
+    // Gest de costat: mes (calendari) o subpanell
+    function sideStep(dir) {
+      if (isCalendarFull()) { shiftCalendarMonth(dir); return; }
+      const ll = currentFull()._ll;
+      if (ll) ll.shift(dir);
+    }
+
+    (function setupFullsControls() {
+      // Darrer moviment d'una cinta: l'impuls de la mateixa roda no ha de canviar de finestra
       let lastPageScroll = 0;
-      document.querySelectorAll('.fin-pag').forEach(page => {
-        page.addEventListener('scroll', () => { lastPageScroll = Date.now(); }, { passive: true });
-      });
+      document.getElementById('cal-views').addEventListener('scroll', () => { lastPageScroll = Date.now(); }, true);
+      let wheelLock = 0;
       document.getElementById('cal-views').addEventListener('wheel', (e) => {
         const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
         const amount = horizontal ? e.deltaX : e.deltaY;
         const now = Date.now();
-        if (weatherViewActive && !horizontal) {
-          // A les finestres la roda desplaça la cinta; al principi, roda amunt torna al calendari
-          const page = currentFinPage();
-          const atTop = !page || page.scrollTop <= 0;
-          if (!(amount < 0 && atTop)) return;
-          e.preventDefault();
-          if (Math.abs(amount) < 25 || now < wheelLock || now - lastPageScroll < 400) return;
-          wheelLock = now + 700;
-          setWeatherView(false, 'down');
-          return;
+        if (!horizontal) {
+          const sc = currentScroller();
+          if (sc && sc.scrollHeight - sc.clientHeight > 2) {
+            const atTop = sc.scrollTop <= 0;
+            const atBottom = sc.scrollTop >= sc.scrollHeight - sc.clientHeight - 2;
+            if ((amount < 0 && !atTop) || (amount > 0 && !atBottom)) return;   // desplaça la cinta
+            if (now - lastPageScroll < 400) { e.preventDefault(); return; }
+          }
         }
-        if (Math.abs(amount) < 25) return;
         e.preventDefault();
-        if (now < wheelLock) return;
+        if (Math.abs(amount) < 25 || now < wheelLock) return;
         wheelLock = now + 700;
-        if (horizontal) {
-          if (weatherViewActive) shiftFinPage(amount > 0 ? 1 : -1);
-          return;
-        }
-        if (amount > 0) setWeatherView(true, 'up');
+        if (horizontal) sideStep(amount > 0 ? 1 : -1);
+        else shiftFull(amount > 0 ? 1 : -1);
       }, { passive: false });
 
-      // Teclat: ↓ obre les finestres, ↑ o Esc tornen al calendari, ← → passen finestres o mesos
+      // Teclat: ↑ ↓ finestres, ← → mesos o subpanells, Esc torna al calendari
       document.addEventListener('keydown', (e) => {
         if (e.metaKey || e.ctrlKey || e.altKey) return;
-        if (e.target && e.target.closest && e.target.closest('input, select, textarea, .alarm-overlay')) return;
-        if (weatherViewActive) {
-          if (e.key === 'ArrowRight') shiftFinPage(1);
-          else if (e.key === 'ArrowLeft') shiftFinPage(-1);
-          else if (e.key === 'Escape' || e.key === 'ArrowUp') {
-            const page = currentFinPage();
-            if (e.key === 'ArrowUp' && page && page.scrollTop > 0) return; // desplaça la cinta
-            setWeatherView(false, 'down');
-          } else return;
-        } else {
-          if (e.key === 'ArrowDown') setWeatherView(true, 'up');
-          else if (e.key === 'ArrowRight') shiftCalendarMonth(1);
-          else if (e.key === 'ArrowLeft') shiftCalendarMonth(-1);
-          else return;
-        }
+        if (e.target && e.target.closest && e.target.closest('input, select, textarea, .alarm-overlay, .dialeg')) return;
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') shiftFull(1);
+        else if (e.key === 'ArrowUp' || e.key === 'PageUp') shiftFull(-1);
+        else if (e.key === 'ArrowRight') sideStep(1);
+        else if (e.key === 'ArrowLeft') sideStep(-1);
+        else if (e.key === 'Escape') goFull(0);
+        else return;
         e.preventDefault();
       });
     })();
@@ -3807,80 +4728,63 @@
 
     // Torna directament al mes actual, des d'on sigui
     function goToCurrentMonth() {
-      setWeatherView(false, 'down');
+      goFull(0);
       if (calendarMonthOffset === 0) return;
       const direction = calendarMonthOffset > 0 ? -1 : 1;
       animateToMonth(0, direction);
     }
 
-    // Gestos de lliscament (tàctil i ratolí) sobre el calendari per canviar de mes
-    (function setupCalendarSwipe() {
+    // Gestos (dit i ratolí) a la zona del calendari i de les finestres:
+    //  - amunt / avall: finestra següent / anterior, en cercle. Si la finestra
+    //    té més contingut, primer es desplaça com una cinta; quan s'arriba al
+    //    final (o al principi), el gest passa de finestra.
+    //  - de costat: mes (calendari) o subpanell.
+    (function setupFullsSwipe() {
       const swipeTarget = document.querySelector('.calendar-section');
       if (!swipeTarget) return;
-
-      let startX = 0;
-      let startY = 0;
-      let startScrollTop = 0;
-      let tracking = false;
-
       const SWIPE_THRESHOLD = 40;
+      let startX = 0, startY = 0, startTop = 0, startMax = 0, tracking = false;
 
       function onStart(x, y, target) {
-        // La barra d'indicadors té el seu propi lliscament horitzontal natiu;
-        // no ha d'engegar mai el canvi de mes del calendari
-        if (target && target.closest && target.closest('.data-panel')) {
-          tracking = false;
-          return;
-        }
+        // La cinta de plaques té el seu propi lliscament natiu; el camp d'hora, el seu selector
+        if (target && target.closest && target.closest('.cinta, input, select, .lang-fila')) { tracking = false; return; }
         startX = x;
         startY = y;
-        const page = weatherViewActive ? currentFinPage() : null;
-        startScrollTop = page ? page.scrollTop : 0;
+        const sc = currentScroller();
+        startTop = sc ? sc.scrollTop : 0;
+        startMax = sc ? sc.scrollHeight - sc.clientHeight : 0;
         tracking = true;
       }
 
       function onEnd(x, y) {
         if (!tracking) return;
         tracking = false;
-        const deltaX = x - startX;
-        const deltaY = y - startY;
-        // Vertical, sempre amb el dit (o el ratolí) cap avall:
-        //  - al calendari, obre les finestres;
-        //  - a una finestra, el contingut es desplaça com una cinta; si ja era al
-        //    principi, torna al calendari.
-        if (Math.abs(deltaY) >= SWIPE_THRESHOLD && Math.abs(deltaY) > Math.abs(deltaX)) {
-          if (!weatherViewActive) {
-            if (deltaY > 0) setWeatherView(true, 'down');
-          } else if (deltaY > 0) {
-            const page = currentFinPage();
-            if (startScrollTop <= 0 && (!page || page.scrollTop <= 0)) setWeatherView(false, 'down');
+        const dx = x - startX;
+        const dy = y - startY;
+        if (Math.abs(dy) >= SWIPE_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
+          const sc = currentScroller();
+          if (sc && startMax > 2) {
+            const max = sc.scrollHeight - sc.clientHeight;
+            if (dy < 0 && !(startTop >= startMax - 2 && sc.scrollTop >= max - 2)) return;   // encara hi ha cinta avall
+            if (dy > 0 && !(startTop <= 0 && sc.scrollTop <= 0)) return;                   // encara hi ha cinta amunt
           }
+          shiftFull(dy < 0 ? 1 : -1);
           return;
         }
-        if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
-        // Horitzontal: a les finestres, canvia de finestra; al calendari, de mes
-        if (weatherViewActive) shiftFinPage(deltaX < 0 ? 1 : -1);
-        else shiftCalendarMonth(deltaX < 0 ? 1 : -1);
+        if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+        sideStep(dx < 0 ? 1 : -1);
       }
 
       swipeTarget.addEventListener('touchstart', (e) => {
-        const t = e.changedTouches[0];
-        onStart(t.clientX, t.clientY, e.target);
+        const tp = e.changedTouches[0];
+        onStart(tp.clientX, tp.clientY, e.target);
       }, { passive: true });
-
       swipeTarget.addEventListener('touchend', (e) => {
-        const t = e.changedTouches[0];
-        onEnd(t.clientX, t.clientY);
+        const tp = e.changedTouches[0];
+        onEnd(tp.clientX, tp.clientY);
       }, { passive: true });
-
-      // Suport per a ratolí (arrossegar), útil en escriptori
-      swipeTarget.addEventListener('mousedown', (e) => {
-        onStart(e.clientX, e.clientY, e.target);
-      });
-
-      swipeTarget.addEventListener('mouseup', (e) => {
-        onEnd(e.clientX, e.clientY);
-      });
+      swipeTarget.addEventListener('mousedown', (e) => { onStart(e.clientX, e.clientY, e.target); });
+      swipeTarget.addEventListener('mouseup', (e) => { onEnd(e.clientX, e.clientY); });
     })();
 
     // Tornar al mes actual: botó "Avui" o doble toc/clic sobre el nom del mes
@@ -3994,68 +4898,19 @@
 
       // Comptador de girs: cada toc suma 180° més, mai es resta,
       // de manera que el gir sempre avança en el mateix sentit.
+      // En mode Zz, un toc canvia el to fosforescent i un doble toc gira l'esfera.
       let turns = 0;
-      watchFlip.addEventListener('click', () => {
+      let tapTimer = null;
+      const flip = () => {
         turns += 1;
         watchFlip.style.transform = `rotateY(${turns * 180}deg)`;
+      };
+      watchFlip.addEventListener('click', () => {
+        if (document.documentElement.getAttribute('data-theme') !== 'zz') { flip(); return; }
+        if (tapTimer) { clearTimeout(tapTimer); tapTimer = null; flip(); return; }
+        tapTimer = setTimeout(() => { tapTimer = null; cycleZzTint(); }, 300);
       });
     })();
-
-    // ------------------------------------------------------------------
-    // Finestres (a l'espai del calendari): Avisos (només si n'hi ha), El
-    // temps, Qualitat de l'aire, Pol·len, Ràdio, Podcasts i Notícies. Es
-    // passa de finestra lliscant a dreta o esquerra, o tocant els punts.
-    // ------------------------------------------------------------------
-    const finTrack = document.getElementById('fin-track');
-    const finDots = document.getElementById('fin-punts');
-    let finIndex = 0;
-
-    function finPages() {
-      return [...finTrack.querySelectorAll('.fin-pag')].filter(p => !p.hidden);
-    }
-
-    function currentFinPage() { return finPages()[finIndex]; }
-
-    function updateFinTitle() {
-      if (!weatherViewActive) return;
-      const page = currentFinPage();
-      document.getElementById('month-year-title').textContent = page ? page.dataset.nom : '';
-    }
-
-    function refreshFinDots() {
-      const pages = finPages();
-      finDots.innerHTML = '';
-      pages.forEach((page, i) => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = i === finIndex ? 'on' : '';
-        b.setAttribute('aria-label', page.dataset.nom);
-        b.title = page.dataset.nom;
-        b.addEventListener('click', (e) => { e.stopPropagation(); goToFinPage(i, true); });
-        finDots.appendChild(b);
-      });
-    }
-
-    function goToFinPage(i, animate = true) {
-      const pages = finPages();
-      if (!pages.length) return;
-      finIndex = Math.max(0, Math.min(pages.length - 1, i));
-      if (!animate) finTrack.style.transition = 'none';
-      finTrack.style.transform = `translateX(${-finIndex * 100}%)`;
-      if (!animate) { void finTrack.offsetWidth; finTrack.style.transition = ''; }
-      pages.forEach((page, k) => page.setAttribute('aria-hidden', String(k !== finIndex)));
-      refreshFinDots();
-      updateFinTitle();
-      if (pages[finIndex].dataset.key === 'noticies' && typeof loadNews === 'function') loadNews(false);
-    }
-
-
-    function shiftFinPage(direction) {
-      const next = finIndex + direction;
-      if (next < 0 || next >= finPages().length) return;
-      goToFinPage(next, true);
-    }
-
 
     // Avís breu a la part de baix de la pantalla
     let toastEl = null;
@@ -4737,6 +5592,8 @@
         if (token !== newsToken) return;
         document.getElementById('noticies-titol').textContent = source.label;
         box.innerHTML = '';
+        const box2 = document.getElementById('llista-noticies2');
+        box2.innerHTML = '';
         headlines.forEach((n, i) => {
           const a = document.createElement('a');
           a.className = 'noticia';
@@ -4747,7 +5604,7 @@
           a.innerHTML = `<span class="num"></span><span class="txt"></span><span class="ext">${ICON_EXT}</span>`;
           a.querySelector('.num').textContent = i + 1;
           a.querySelector('.txt').textContent = nordor(n.titol);
-          box.appendChild(a);
+          (i < 5 ? box : box2).appendChild(a);   // cinc titulars per panell
         });
         const now = new Date();
         document.getElementById('noticies-peu').textContent = `${source.foot} · ${t('newsFoot', `${pad2(now.getHours())}:${pad2(now.getMinutes())}`)}`;
@@ -4765,7 +5622,6 @@
       }).then(() => { if (token === newsToken) newsBusy = false; });
     }
 
-    goToFinPage(0, false);
     loadPrograms(true);
     loadNews(true);
     // Es comprova cada 20 minuts (programes) i 10 minuts (notícies)
@@ -4930,6 +5786,7 @@
       const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 2);
       setTimeout(() => {
         renderCalendar();
+        if (typeof renderTodayAll === 'function') { renderTodayAll(); renderBirthdayPlaque(); }
         scheduleMidnightRefresh();
       }, nextMidnight - now);
     })();
@@ -5007,6 +5864,10 @@
         btn.innerHTML = THEME_ICONS[theme] + (stored ? '' : '<span class="theme-auto-badge">A</span>');
         btn.title = stored ? t('themeFixed', t('themeNames')[theme]) : t('themeAuto');
       }
+      // Pantalla sempre encesa només en mode Zz
+      if (window.__wakeSync) window.__wakeSync();
+      const avNum = document.getElementById('av-num');
+      if (avNum && typeof renderTodayDate === 'function' && avNum.textContent !== '–') renderTodayDate(new Date());
     }
 
     function cycleTheme() {
@@ -5050,9 +5911,9 @@
     async function fetchWeather(lat, lon) {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
         `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day,wind_speed_10m,wind_direction_10m,wind_gusts_10m` +
-        `&hourly=precipitation_probability,precipitation,snowfall,weather_code,wind_gusts_10m,visibility,temperature_2m` +
-        `&daily=sunrise,sunset` +
-        `&forecast_days=2&timezone=auto`;
+        `&hourly=precipitation_probability,precipitation,snowfall,weather_code,wind_gusts_10m,visibility,temperature_2m,is_day` +
+        `&daily=sunrise,sunset,weather_code,temperature_2m_max,temperature_2m_min` +
+        `&forecast_days=6&timezone=auto`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Error de meteo');
       return res.json();
@@ -5105,6 +5966,7 @@
 
     async function loadInstrumentData(lat, lon) {
       currentCoords = { lat, lon };
+      renderSunMoon(new Date());
       const [, elevation, locality] = await Promise.all([
         refreshWeather(lat, lon),
         fetchElevation(lat, lon).catch(() => null),
@@ -5115,6 +5977,7 @@
         const altitudeText = `${Math.round(elevation.elevation[0])} m`;
         document.getElementById('wx-altitude').textContent = altitudeText;
         document.getElementById('mondaine-alt-text').textContent = altitudeText;
+        document.getElementById('pl-alt').textContent = altitudeText;
       }
 
       renderCoords();
@@ -5133,10 +5996,12 @@
       locEl.removeAttribute('data-i18n');
       if (!locality) {
         locEl.textContent = t('unknownLoc');
+        document.getElementById('pl-lloc').textContent = t('unknownLoc');
         return;
       }
       const placeName = locality.city || locality.locality || locality.principalSubdivision || t('unknownLoc');
       locEl.textContent = nordor(placeName);
+      document.getElementById('pl-lloc').textContent = nordor(placeName);
       // Comunitat autònoma si és a l'Estat espanyol; el país, si és fora
       const code = (locality.countryCode || '').toUpperCase();
       const inSpain = !code || code === 'ES';
@@ -5497,7 +6362,10 @@
         if (currentCoords) refreshLocality(currentCoords.lat, currentCoords.lon);
         loadNews(true, true);
       }
-      goToFinPage(Math.min(finIndex, finPages().length - 1), false);
+      refreshFulls();
+      renderTodayAll();
+      renderBirthdayPlaque();
+      if (lastWeather) renderDataAlerts(computeAlerts(lastWeather));
       scheduleFit(0);
       if (fromUser && voiceEnabled) speak(t('hello'));
     }
@@ -5509,6 +6377,474 @@
         setLanguage(b.dataset.lang, true);
       });
     });
+
+    // ------------------------------------------------------------------
+    // Cinta de plaques: centrada si hi cap; arrossegable amb el ratolí;
+    // cada placa porta a la seva finestra.
+    // ------------------------------------------------------------------
+    (function setupCinta() {
+      const cinta = document.getElementById('cinta');
+      let drag = null, moved = false;
+      cinta.addEventListener('mousedown', (e) => { drag = { x: e.clientX, s: cinta.scrollLeft }; moved = false; });
+      window.addEventListener('mousemove', (e) => {
+        if (!drag) return;
+        const dx = e.clientX - drag.x;
+        if (Math.abs(dx) > 4) moved = true;
+        cinta.scrollLeft = drag.s - dx;
+      });
+      window.addEventListener('mouseup', () => { drag = null; });
+      // Un arrossegament no és un clic sobre una placa
+      cinta.addEventListener('click', (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+      function centra() {
+        cinta.style.justifyContent = cinta.scrollWidth - cinta.clientWidth > 2 ? 'flex-start' : 'center';
+      }
+      window.addEventListener('resize', centra);
+      new MutationObserver(centra).observe(cinta, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+      centra();
+      cinta.querySelectorAll('.placa[data-go]').forEach(p => {
+        p.addEventListener('click', (e) => { e.stopPropagation(); goFullKey(p.dataset.go); });
+      });
+      // Població: un toc porta a la ubicació; dos tocs obren l'aniversari (secret)
+      const lloc = document.getElementById('placa-lloc');
+      let tapTimer = null;
+      lloc.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (tapTimer) { clearTimeout(tapTimer); tapTimer = null; openBirthday(); return; }
+        tapTimer = setTimeout(() => { tapTimer = null; goFullKey('ubicacio'); }, 300);
+      });
+      // Tancar la placa «Ara sona»: s'atura el so
+      document.getElementById('ara-sona-tanca').addEventListener('click', (e) => {
+        e.stopPropagation();
+        stopPlayback();
+      });
+    })();
+
+    function stopPlayback() {
+      if (typeof setSleep === 'function') setSleep(0);
+      stopHls();
+      player.pause();
+      player.removeAttribute('src');
+      try { player.load(); } catch (e) {}
+      nowPlaying = null;
+      updatePlayState();
+    }
+
+    // Valors de les plaques del temps
+    function renderWeatherPlaques(weather) {
+      const c = weather.current || {};
+      if (c.temperature_2m != null) document.getElementById('pl-temp').textContent = `${Math.round(c.temperature_2m)}°C`;
+      if (c.relative_humidity_2m != null) document.getElementById('pl-hum').textContent = `${Math.round(c.relative_humidity_2m)}%`;
+      if (c.apparent_temperature != null) document.getElementById('pl-sens').textContent = `${Math.round(c.apparent_temperature)}°C`;
+      const precip = precipitationNextHours(weather);
+      const plPluja = document.getElementById('placa-pluja');
+      plPluja.hidden = !precip || precip.prob < 20;
+      if (precip) document.getElementById('pl-pluja').textContent = `${precip.prob}% ${precip.snow ? t('snow') : t('rain')}`;
+    }
+
+    // ---- El temps: màxima i mínima d'avui, properes 12 hores i propers 5 dies ----
+    function renderForecast(weather) {
+      const d = weather.daily || {};
+      const mm = document.getElementById('wx-maxmin');
+      if (d.temperature_2m_max && d.temperature_2m_min) {
+        mm.textContent = t('maxMin', Math.round(d.temperature_2m_max[0]), Math.round(d.temperature_2m_min[0]));
+      }
+      const h = weather.hourly || {};
+      const box = document.getElementById('wx-h12');
+      box.innerHTML = '';
+      if (h.time) {
+        const currentHour = (weather.current && weather.current.time ? weather.current.time : '').slice(0, 13);
+        let start = h.time.findIndex(tm => tm.slice(0, 13) >= currentHour);
+        if (start < 0) start = 0;
+        for (let k = start; k < Math.min(start + 12, h.time.length); k++) {
+          const cell = document.createElement('div');
+          const pp = h.precipitation_probability ? h.precipitation_probability[k] : null;
+          const isDay = h.is_day ? h.is_day[k] !== 0 : true;
+          cell.innerHTML = `<span class="hh">${Number(h.time[k].slice(11, 13))} h</span>${weatherIconSvg(h.weather_code ? h.weather_code[k] : 3, isDay)}` +
+            `<span class="tt">${h.temperature_2m ? Math.round(h.temperature_2m[k]) + '°' : '--'}</span><span class="pp">${pp != null && pp >= 20 ? pp + '%' : ''}</span>`;
+          box.appendChild(cell);
+        }
+      }
+      const d5 = document.getElementById('wx-d5');
+      d5.innerHTML = '';
+      const days = (d.time || []).slice(1, 6);
+      if (!days.length || !d.temperature_2m_min) return;
+      const mins = d.temperature_2m_min.slice(1, 6), maxs = d.temperature_2m_max.slice(1, 6);
+      const lo = Math.min(...mins), hi = Math.max(...maxs), amp = Math.max(1, hi - lo);
+      days.forEach((tm, k) => {
+        const dt = new Date(tm + 'T12:00:00');
+        const row = document.createElement('div');
+        const a = (mins[k] - lo) / amp * 100, b = (maxs[k] - lo) / amp * 100;
+        const code = d.weather_code ? d.weather_code[k + 1] : 3;
+        row.title = `${t('longDays')[dt.getDay()]}: ${wmoText(code)}`;
+        row.innerHTML = `<span class="dd">${t('weekShort')[(dt.getDay() + 6) % 7]}</span>${weatherIconSvg(code, true)}` +
+          `<span class="mn">${Math.round(mins[k])}°</span><span class="barra"><i style="left:${a.toFixed(1)}%;right:${(100 - b).toFixed(1)}%"></i></span><span class="mx">${Math.round(maxs[k])}°</span>`;
+        d5.appendChild(row);
+      });
+    }
+
+    // ------------------------------------------------------------------
+    // Avui: data gran i fase lunar · sant i efemèride (Viquipèdia) · sol i lluna
+    // ------------------------------------------------------------------
+    const CURIOS = {
+      ca: ["A Barcelona, el rellotge va gairebé una hora per davant del sol a l'hivern, i gairebé dues a l'estiu.","La Lluna sempre ens mostra la mateixa cara: tarda el mateix a girar sobre si mateixa que a fer la volta a la Terra.","Per culpa de les marees, el dia terrestre s'allarga uns dos mil·lisegons cada segle.","El calendari gregorià va començar el 1582: aquell any, després del 4 d'octubre va venir directament el 15.","Molts rellotges antics escriuen el 4 com a IIII i no com a IV.","La Terra és més a prop del Sol al gener que al juliol: les estacions depenen de la inclinació de l'eix, no de la distància.","La llum de la Lluna tarda poc més d'un segon a arribar-nos; la del Sol, uns vuit minuts i vint segons.","Una «lluna blava» és la segona lluna plena d'un mateix mes; passa, de mitjana, cada dos anys i mig.","De tant en tant s'afegeix un segon al temps oficial perquè els rellotges no s'avancin a la rotació de la Terra.","Les 24 hores del dia vénen de l'antic Egipte, que dividia el dia i la nit en dotze parts cadascun."],
+      fr: ["À Barcelone, l'horloge avance de presque une heure sur le soleil en hiver, et de presque deux en été.","La Lune nous montre toujours la même face : elle met autant de temps à tourner sur elle-même qu'à faire le tour de la Terre.","À cause des marées, le jour terrestre s'allonge d'environ deux millisecondes par siècle.","Le calendrier grégorien a commencé en 1582 : cette année-là, le 4 octobre fut directement suivi du 15.","Beaucoup d'horloges anciennes écrivent le 4 IIII et non IV.","La Terre est plus proche du Soleil en janvier qu'en juillet : les saisons dépendent de l'inclinaison de l'axe, pas de la distance.","La lumière de la Lune met un peu plus d'une seconde à nous parvenir ; celle du Soleil, environ huit minutes et vingt secondes.","Une « lune bleue » est la deuxième pleine lune d'un même mois ; cela arrive en moyenne tous les deux ans et demi.","De temps en temps, on ajoute une seconde à l'heure officielle pour que les horloges ne devancent pas la rotation de la Terre.","Les 24 heures du jour viennent de l'Égypte ancienne, qui divisait le jour et la nuit en douze parties chacun."],
+      en: ["In Barcelona, clocks run almost an hour ahead of the sun in winter, and almost two in summer.","The Moon always shows us the same face: it takes as long to spin on its axis as to orbit the Earth.","Because of the tides, the Earth's day grows about two milliseconds longer every century.","The Gregorian calendar began in 1582: that year, 4 October was followed directly by the 15th.","Many old clocks write the number 4 as IIII rather than IV.","The Earth is closer to the Sun in January than in July: seasons depend on the tilt of its axis, not on distance.","Moonlight takes just over a second to reach us; sunlight, about eight minutes and twenty seconds.","A 'blue moon' is the second full moon in the same month; on average it happens every two and a half years.","Now and then a leap second is added to official time so clocks don't run ahead of the Earth's rotation.","The 24-hour day comes from ancient Egypt, which divided both day and night into twelve parts."],
+      de: ["In Barcelona geht die Uhr im Winter fast eine Stunde und im Sommer fast zwei Stunden der Sonne voraus.","Der Mond zeigt uns immer dieselbe Seite: Er dreht sich in derselben Zeit um sich selbst, in der er die Erde umrundet.","Wegen der Gezeiten wird ein Erdentag pro Jahrhundert etwa zwei Millisekunden länger.","Der gregorianische Kalender begann 1582: Damals folgte auf den 4. Oktober direkt der 15.","Viele alte Uhren schreiben die 4 als IIII und nicht als IV.","Die Erde ist im Januar näher an der Sonne als im Juli: Die Jahreszeiten hängen von der Neigung der Achse ab, nicht vom Abstand.","Mondlicht braucht gut eine Sekunde bis zu uns, Sonnenlicht etwa acht Minuten und zwanzig Sekunden.","Ein „blauer Mond“ ist der zweite Vollmond in einem Monat; im Schnitt alle zweieinhalb Jahre.","Ab und zu wird eine Schaltsekunde eingefügt, damit die Uhren der Erddrehung nicht vorauslaufen.","Die 24 Stunden des Tages stammen aus dem alten Ägypten, das Tag und Nacht in je zwölf Teile teilte."],
+      it: ["A Barcellona l'orologio è quasi un'ora avanti rispetto al sole d'inverno, e quasi due d'estate.","La Luna ci mostra sempre la stessa faccia: impiega lo stesso tempo a ruotare su se stessa e a girare attorno alla Terra.","A causa delle maree, il giorno terrestre si allunga di circa due millisecondi ogni secolo.","Il calendario gregoriano iniziò nel 1582: quell'anno, dopo il 4 ottobre venne direttamente il 15.","Molti orologi antichi scrivono il 4 come IIII e non come IV.","La Terra è più vicina al Sole a gennaio che a luglio: le stagioni dipendono dall'inclinazione dell'asse, non dalla distanza.","La luce della Luna impiega poco più di un secondo ad arrivare a noi; quella del Sole, circa otto minuti e venti secondi.","Una «luna blu» è la seconda luna piena dello stesso mese; capita in media ogni due anni e mezzo.","Ogni tanto si aggiunge un secondo all'ora ufficiale perché gli orologi non anticipino la rotazione terrestre.","Le 24 ore del giorno vengono dall'antico Egitto, che divideva il giorno e la notte in dodici parti ciascuno."]
+    };
+    const LUNAR_MONTH = 29.530588853;
+    function moonAge(d) { return (((d.getTime() - Date.UTC(2000, 0, 6, 18, 14)) / 864e5) % LUNAR_MONTH + LUNAR_MONTH) % LUNAR_MONTH; }
+    function isoWeek(d) {
+      const u = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      const day = u.getUTCDay() || 7;
+      u.setUTCDate(u.getUTCDate() + 4 - day);
+      const y0 = new Date(Date.UTC(u.getUTCFullYear(), 0, 1));
+      return Math.ceil(((u - y0) / 864e5 + 1) / 7);
+    }
+
+    function renderTodayDate(now) {
+      const year = now.getFullYear();
+      const dayOfYear = Math.round((new Date(year, now.getMonth(), now.getDate()) - new Date(year, 0, 1)) / 864e5) + 1;
+      const num = document.getElementById('av-num');
+      num.textContent = now.getDate();
+      const zz = document.documentElement.getAttribute('data-theme') === 'zz';
+      num.style.color = zz ? '' : (getFestiuColor(now) || '');
+      document.getElementById('av-dia').textContent = t('longDays')[now.getDay()];
+      document.getElementById('av-mes').textContent = t('ofMonth', now.getMonth());
+      document.getElementById('av-any').textContent = year;
+      document.getElementById('av-detall').textContent = t('dayOfYear', dayOfYear, isoWeek(now));
+      document.getElementById('av-fase').textContent = t('phases')[Math.floor(moonAge(now) / LUNAR_MONTH * 8 + 0.5) % 8];
+    }
+
+    // ---- Sol i lluna: càlcul astronòmic propi (sense internet) ----
+    const RD = Math.PI / 180, J1970 = 2440588, J2000 = 2451545, OBL = RD * 23.4397;
+    const toDays = dt => dt.valueOf() / 864e5 - 0.5 + J1970 - J2000;
+    const fromJ = j => new Date((j + 0.5 - J1970) * 864e5);
+    const rightAsc = (l, b) => Math.atan2(Math.sin(l) * Math.cos(OBL) - Math.tan(b) * Math.sin(OBL), Math.cos(l));
+    const declin = (l, b) => Math.asin(Math.sin(b) * Math.cos(OBL) + Math.cos(b) * Math.sin(OBL) * Math.sin(l));
+    function sunTimesFor(dt, lat, lon) {
+      const lw = RD * -lon, phi = RD * lat, d = toDays(dt), J0 = 0.0009;
+      const n = Math.round(d - J0 - lw / (2 * Math.PI));
+      const ds = J0 + lw / (2 * Math.PI) + n;
+      const M = RD * (357.5291 + 0.98560028 * ds);
+      const Lg = M + RD * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M)) + RD * 102.9372 + Math.PI;
+      const dec = declin(Lg, 0);
+      const Jnoon = J2000 + ds + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * Lg);
+      const w = Math.acos((Math.sin(-0.833 * RD) - Math.sin(phi) * Math.sin(dec)) / (Math.cos(phi) * Math.cos(dec)));
+      const a = J0 + (w + lw) / (2 * Math.PI) + n;
+      const Jset = J2000 + a + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * Lg);
+      return { rise: fromJ(Jnoon - (Jset - Jnoon)), set: fromJ(Jset) };
+    }
+    function moonAltitude(dt, lat, lon) {
+      const lw = RD * -lon, phi = RD * lat, d = toDays(dt);
+      const Lm = RD * (218.316 + 13.176396 * d), Mm = RD * (134.963 + 13.064993 * d), F = RD * (93.272 + 13.229350 * d);
+      const l = Lm + RD * 6.289 * Math.sin(Mm), b = RD * 5.128 * Math.sin(F);
+      const ra = rightAsc(l, b), dec = declin(l, b);
+      const H = RD * (280.16 + 360.9856235 * d) - lw - ra;
+      let h = Math.asin(Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.cos(H));
+      const hh = Math.max(h, 0);
+      h += 0.0002967 / Math.tan(hh + 0.00312536 / (hh + 0.08901179));
+      return h;
+    }
+    function moonTimesFor(dt, lat, lon) {
+      const t0 = new Date(dt); t0.setHours(0, 0, 0, 0);
+      const at = hh => new Date(t0.valueOf() + hh * 36e5), hc = 0.133 * RD;
+      let h0 = moonAltitude(t0, lat, lon) - hc, rise = null, set = null;
+      for (let i = 1; i <= 24; i += 2) {
+        const h1 = moonAltitude(at(i), lat, lon) - hc, h2 = moonAltitude(at(i + 1), lat, lon) - hc;
+        const a = (h0 + h2) / 2 - h1, b = (h2 - h0) / 2, xe = -b / (2 * a), ye = (a * xe + b) * xe + h1, disc = b * b - 4 * a * h1;
+        let roots = 0, x1 = 0, x2 = 0;
+        if (disc >= 0) { const dx = Math.sqrt(disc) / (Math.abs(a) * 2); x1 = xe - dx; x2 = xe + dx; if (Math.abs(x1) <= 1) roots++; if (Math.abs(x2) <= 1) roots++; if (x1 < -1) x1 = x2; }
+        if (roots === 1) { if (h0 < 0) rise = i + x1; else set = i + x1; }
+        else if (roots === 2) { rise = i + (ye < 0 ? x2 : x1); set = i + (ye < 0 ? x1 : x2); }
+        if (rise != null && set != null) break;
+        h0 = h2;
+      }
+      return { rise: rise != null ? at(rise) : null, set: set != null ? at(set) : null };
+    }
+    const hhmm = dt => (dt && !isNaN(dt) ? `${pad2(dt.getHours())}:${pad2(dt.getMinutes())}` : '--:--');
+    function moonPhasePath(f, waxing) {
+      const cx = 24, cy = 24, r = 15, x = Math.abs(r * (1 - 2 * f));
+      const s = waxing ? 1 : 0, s2 = waxing ? (f < 0.5 ? 0 : 1) : (f < 0.5 ? 1 : 0);
+      return `M ${cx} ${cy - r} A ${r} ${r} 0 0 ${s} ${cx} ${cy + r} A ${x.toFixed(2)} ${r} 0 0 ${s2} ${cx} ${cy - r} Z`;
+    }
+    function renderSunMoon(now) {
+      const lat = currentCoords ? currentCoords.lat : FALLBACK_COORDS.lat;
+      const lon = currentCoords ? currentCoords.lon : FALLBACK_COORDS.lon;
+      const s = sunTimesFor(now, lat, lon), y = sunTimesFor(new Date(now.valueOf() - 864e5), lat, lon);
+      const light = Math.round((s.set - s.rise) / 60000), lightY = Math.round((y.set - y.rise) / 60000);
+      document.getElementById('sl-sol-s').textContent = hhmm(s.rise);
+      document.getElementById('sl-sol-p').textContent = hhmm(s.set);
+      document.getElementById('sl-llum').textContent = isNaN(light) ? '—' : t('daylight', Math.floor(light / 60), light % 60);
+      document.getElementById('sl-dif').textContent = isNaN(light) ? '' : t('daylightDiff', light - lightY);
+      const m = moonTimesFor(now, lat, lon);
+      document.getElementById('sl-ll-s').textContent = hhmm(m.rise);
+      document.getElementById('sl-ll-p').textContent = hhmm(m.set);
+      const age = moonAge(now);
+      const f = (1 - Math.cos(2 * Math.PI * age / LUNAR_MONTH)) / 2;
+      document.getElementById('sl-fase').setAttribute('d', moonPhasePath(f, age < LUNAR_MONTH / 2));
+      document.getElementById('sl-il').textContent = t('illuminated', Math.round(f * 100));
+      const toFull = Math.round(((LUNAR_MONTH / 2 - age) % LUNAR_MONTH + LUNAR_MONTH) % LUNAR_MONTH);
+      const toNew = Math.round((LUNAR_MONTH - age) % LUNAR_MONTH);
+      document.getElementById('sl-prop').textContent = toFull <= toNew ? t('fullIn', toFull % 30) : t('newIn', toNew % 30);
+    }
+
+    // ---- Sant i efemèride del dia: la pàgina del dia a la Viquipèdia de cada llengua ----
+    const WIKI_TITLE = {
+      ca: dt => { const m = I18N.ca.months[dt.getMonth()].toLowerCase(); return `${dt.getDate()} ${/^[aeiou]/.test(m) ? "d'" : 'de '}${m}`; },
+      fr: dt => `${dt.getDate() === 1 ? '1er' : dt.getDate()} ${I18N.fr.months[dt.getMonth()].toLowerCase()}`,
+      de: dt => `${dt.getDate()}. ${I18N.de.months[dt.getMonth()]}`,
+      it: dt => `${dt.getDate() === 1 ? '1º' : dt.getDate()} ${I18N.it.months[dt.getMonth()].toLowerCase()}`,
+      en: dt => `${I18N.en.months[dt.getMonth()]} ${dt.getDate()}`
+    };
+    const RE_EVENTS = /^(esdeveniments|fets|[ée]v[ée]nements|events|ereignisse|eventi|avvenimenti)\b/i;
+    const RE_FEASTS = /(sant|commemora|festes|celebra|fêtes|saints|holidays|observances|feier|gedenk|namens|feste|ricorrenze|onom)/i;
+    const RE_SAINT = /(\bsant[ae]?s?\b|\bsaint|\bsanto|\bsanta|\bsan\b|\bheilige|\bonom)/i;
+    // Sants catalans que el calendari de la Viquipèdia no sempre posa al davant
+    const SANTS_CAT = {
+      '01-07': ['Sant Ramon de Penyafort', /penyafort/i], '02-12': ['Santa Eulàlia de Barcelona', /eul[àa]lia/i], '03-06': ['Sant Oleguer', /oleguer/i],
+      '03-23': ['Sant Josep Oriol', /oriol/i], '04-05': ['Sant Vicent Ferrer', /ferrer/i], '04-23': ['Sant Jordi', /jordi/i],
+      '04-27': ['Mare de Déu de Montserrat', /montserrat/i], '05-11': ['Sant Ponç', /pon[çc]/i], '07-25': ['Sant Jaume i sant Cugat', /\b(jaume|cugat)\b/i],
+      '08-19': ['Sant Magí', /mag[íi]\b/i], '09-08': ['Mare de Déu de Núria i de Meritxell', /(n[úu]ria|meritxell)/i], '09-09': ['Sant Pere Claver', /claver/i],
+      '09-24': ['Mare de Déu de la Mercè', /merc[èe]/i], '10-24': ['Sant Antoni Maria Claret', /claret/i], '10-29': ['Sant Narcís', /narc[íi]s/i],
+      '11-03': ['Sant Ermengol', /ermengol/i]
+    };
+    function cleanWiki(s) {
+      let x = s.replace(/<ref[^>]*\/>/g, '').replace(/<ref[\s\S]*?<\/ref>/g, '');
+      for (let k = 0; k < 3; k++) x = x.replace(/\{\{[^{}]*\}\}/g, '');
+      x = x.replace(/\[\[(?:Fitxer|File|Imatge|Image|Fichier|Datei|Immagine):[^\]]*\]\]/gi, '')
+        .replace(/\[\[[^\]|]*\|([^\]]*)\]\]/g, '$1').replace(/\[\[([^\]]*)\]\]/g, '$1')
+        .replace(/\[https?:\S+\s([^\]]*)\]/g, '$1').replace(/'{5}/g, '').replace(/'{4}/g, "'")
+        .replace(/(^|[^\p{L}])([ldnmstLDNMST])'{2,3}(?=\p{L})/gu, "$1$2'").replace(/'{2,3}/g, '')
+        .replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ');
+      return x.replace(/\s+/g, ' ').trim();
+    }
+    function wikiSections(wt) {
+      const out = [];
+      let cur = null;
+      wt.split('\n').forEach(ln => {
+        const m = /^==\s*([^=].*?)\s*==\s*$/.exec(ln);
+        if (m) { cur = { title: cleanWiki(m[1]), lines: [] }; out.push(cur); }
+        else if (cur) cur.lines.push(ln);
+      });
+      return out;
+    }
+    const wikiCache = {};
+    function wikiText(lang, title) {
+      const key = lang + '|' + title;
+      if (wikiCache[key]) return wikiCache[key];
+      const url = `https://${lang}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(title)}&prop=wikitext&redirects=1&format=json&formatversion=2&origin=*`;
+      wikiCache[key] = fetch(url).then(r => r.json()).then(j => (j && j.parse && j.parse.wikitext) || '').catch(() => { delete wikiCache[key]; return ''; });
+      return wikiCache[key];
+    }
+    function extractDay(wt, dt, lang) {
+      const sec = wikiSections(wt);
+      const events = sec.filter(s => RE_EVENTS.test(s.title)).flatMap(s => s.lines)
+        .filter(l => /^\*/.test(l)).map(l => cleanWiki(l.replace(/^\*+\s*/, '')))
+        .map(l => /^(\d{1,4})\s*(?:aC|a\. ?C\.)?\s*[-–—:,]\s*(.{25,260})$/.exec(l)).filter(Boolean);
+      const seed = dt.getMonth() * 31 + dt.getDate();
+      const short = events.filter(f => f[2].length <= 170), pool = short.length ? short : events;
+      const ev = pool.length ? pool[(seed * 7) % pool.length] : null;
+      const lines = sec.filter(s => RE_FEASTS.test(s.title)).flatMap(s => s.lines)
+        .map(l => cleanWiki(l.replace(/^[*:#]+\s*/, ''))).filter(l => RE_SAINT.test(l) && l.length > 4);
+      const PREFIX = /^(santoral|onomàstica|santi|saints|namenstage?|heilige)\s*:\s*/i;
+      let items = lines.map(l => l.replace(PREFIX, '')).flatMap(l => l.split(/\s*;\s*/))
+        .map(x => x.replace(/[.,;:\s]+$/, '').trim()).filter(x => x.length > 3);
+      const cat = lang === 'ca' ? SANTS_CAT[`${pad2(dt.getMonth() + 1)}-${pad2(dt.getDate())}`] : null;
+      if (cat) { items = items.filter(x => !cat[1].test(x)); items.unshift(cat[0]); }
+      const chosen = [];
+      for (const x of items) { if (chosen.length && (chosen.join(' · ').length + x.length > 120 || chosen.length >= 3)) break; chosen.push(x); }
+      let saint = chosen.join(' · ');
+      if (saint) saint = saint.charAt(0).toUpperCase() + saint.slice(1);
+      return { ev: ev ? { year: ev[1], text: ev[2] } : null, saint };
+    }
+    let saintToken = 0;
+    function renderSaint(now) {
+      const tok = ++saintToken, lang = currentLang;
+      const curio = () => { const list = CURIOS[lang] || CURIOS.ca; return list[(now.getMonth() * 31 + now.getDate()) % list.length]; };
+      const etq = document.getElementById('av-efem-etq'), efem = document.getElementById('av-efem');
+      etq.textContent = t('efem');
+      efem.textContent = t('loading');
+      wikiText(lang, WIKI_TITLE[lang](now)).then(wt => extractDay(wt, now, lang)).then(r => {
+        if (tok !== saintToken) return;
+        document.getElementById('av-sant-bloc').hidden = !r.saint;
+        document.getElementById('av-sant').textContent = nordor(r.saint);
+        if (r.ev) {
+          etq.textContent = t('efem');
+          efem.innerHTML = '';
+          const b = document.createElement('b');
+          b.textContent = r.ev.year + ' · ';
+          efem.append(b, document.createTextNode(nordor(r.ev.text)));
+        } else { etq.textContent = t('curio'); efem.textContent = curio(); }
+      }).catch(() => {
+        if (tok !== saintToken) return;
+        document.getElementById('av-sant-bloc').hidden = true;
+        etq.textContent = t('curio');
+        efem.textContent = curio();
+      });
+    }
+
+    // ---- Properament: les properes festes amb compte enrere (només en català) ----
+    function renderUpcomingHolidays(now) {
+      const box = document.getElementById('fe-llista');
+      box.innerHTML = '';
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let n = 0;
+      for (let k = 0; k < 400 && n < 6; k++) {
+        const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + k);
+        const info = getHolidayInfoSync(d.getFullYear());
+        const iso = isoOf(d);
+        if (!info.dates.has(iso)) continue;
+        n++;
+        const row = document.createElement('div');
+        row.className = 'fe-fila' + (k <= 1 ? ' prop' : '');
+        row.innerHTML = '<div><div class="fe-nom"></div><div class="fe-data"></div></div><div class="fe-dies"><b></b><span></span></div>';
+        row.querySelector('.fe-nom').textContent = holidayName(iso, info);
+        row.querySelector('.fe-data').textContent = `${t('longDays')[d.getDay()]}, ${d.getDate()}${currentLang === 'de' ? '.' : ''} ${t('ofMonth', d.getMonth())}`;
+        row.querySelector('.fe-dies b').textContent = k === 0 ? t('todayWord') : k === 1 ? t('tomorrowWord') : k;
+        row.querySelector('.fe-dies span').textContent = k > 1 ? t('daysWord') : '';
+        box.appendChild(row);
+      }
+    }
+
+    function renderTodayAll() {
+      const now = new Date();
+      renderTodayDate(now);
+      renderSunMoon(now);
+      renderSaint(now);
+      if (currentLang === 'ca') renderUpcomingHolidays(now);
+    }
+
+    // ------------------------------------------------------------------
+    // Aniversari (secret: doble toc a la placa de Població). Només es desa
+    // en aquest aparell. El dia de l'aniversari surt una placa a la cinta.
+    // ------------------------------------------------------------------
+    const BIRTHDAY_KEY = 'prs516_aniv';
+    function readBirthday() {
+      try { const v = JSON.parse(localStorage.getItem(BIRTHDAY_KEY)); return v && v.d && v.m ? v : null; } catch (e) { return null; }
+    }
+    function renderBirthdayPlaque() {
+      const b = readBirthday();
+      const now = new Date();
+      const plaque = document.getElementById('placa-aniv');
+      const isToday = b && b.d === now.getDate() && b.m === now.getMonth() + 1;
+      plaque.hidden = !isToday;
+      if (isToday) {
+        const age = b.y ? now.getFullYear() - b.y : null;
+        document.getElementById('pl-aniv').textContent = [b.nom, age ? `${age} ${t('years')}` : ''].filter(Boolean).join(' · ') || '🎂';
+      }
+    }
+    function openBirthday() {
+      const b = readBirthday() || {};
+      const dia = document.getElementById('aniv-dia'), mes = document.getElementById('aniv-mes');
+      dia.innerHTML = '<option value="">—</option>' + Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
+      mes.innerHTML = '<option value="">—</option>' + t('months').map((m, i) => `<option value="${i + 1}">${m}</option>`).join('');
+      document.getElementById('aniv-nom').value = b.nom || '';
+      dia.value = b.d || '';
+      mes.value = b.m || '';
+      document.getElementById('aniv-any').value = b.y || '';
+      document.getElementById('aniv-dialeg').hidden = false;
+    }
+    (function setupBirthday() {
+      const dlg = document.getElementById('aniv-dialeg');
+      const close = () => { dlg.hidden = true; };
+      document.getElementById('aniv-tanca').addEventListener('click', close);
+      dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+      document.getElementById('aniv-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const d = +document.getElementById('aniv-dia').value, m = +document.getElementById('aniv-mes').value;
+        const y = +document.getElementById('aniv-any').value || null;
+        const nom = document.getElementById('aniv-nom').value.trim();
+        try {
+          if (d && m) localStorage.setItem(BIRTHDAY_KEY, JSON.stringify({ nom, d, m, y }));
+          else localStorage.removeItem(BIRTHDAY_KEY);
+        } catch (err) {}
+        close();
+        renderBirthdayPlaque();
+      });
+      document.getElementById('aniv-esborra').addEventListener('click', () => {
+        try { localStorage.removeItem(BIRTHDAY_KEY); } catch (err) {}
+        close();
+        renderBirthdayPlaque();
+      });
+      // Tocar la placa: felicitació en veu alta
+      document.getElementById('placa-aniv').addEventListener('click', (e) => {
+        e.stopPropagation();
+        unlockSpeech();
+        const b = readBirthday();
+        const wait = chime();
+        setTimeout(() => speak(t('birthdaySpeech', b && b.nom)), wait);
+      });
+      renderBirthdayPlaque();
+    })();
+
+    // ------------------------------------------------------------------
+    // Mode Zz amb colors: tocar el rellotge canvia el to fosforescent
+    // (taronja, vermell, groc, verd, blau); un doble toc gira l'esfera.
+    // ------------------------------------------------------------------
+    const ZZ_TINTS = { orange: [255, 138, 43], red: [255, 90, 69], yellow: [242, 197, 61], green: [61, 220, 132], blue: [74, 166, 255] };
+    const ZZ_ORDER = ['orange', 'red', 'yellow', 'green', 'blue'];
+    const ZZ_KEY = 'prs516_zz_tint';
+    let zzTint = (() => { try { const v = localStorage.getItem(ZZ_KEY); return ZZ_ORDER.includes(v) ? v : 'orange'; } catch (e) { return 'orange'; } })();
+    function applyZzTint() {
+      document.documentElement.setAttribute('data-zz', zzTint);
+      const [r, g, b] = ZZ_TINTS[zzTint].map(v => v / 255);
+      const w = [0.2018, 0.6794, 0.0686];
+      const row = k => w.map(x => (x * k).toFixed(4)).join(' ');
+      const m = document.querySelector('#zz-tint feColorMatrix');
+      if (m) m.setAttribute('values', `${row(r)} 0 0  ${row(g)} 0 0  ${row(b)} 0 0  0 0 0 1 0`);
+    }
+    function cycleZzTint() {
+      zzTint = ZZ_ORDER[(ZZ_ORDER.indexOf(zzTint) + 1) % ZZ_ORDER.length];
+      try { localStorage.setItem(ZZ_KEY, zzTint); } catch (e) {}
+      applyZzTint();
+    }
+    applyZzTint();
+
+    // ------------------------------------------------------------------
+    // Alarmes al rellotge del mòbil: sonen amb el mòbil bloquejat i l'app
+    // tancada. A l'Android s'obre l'app Rellotge amb l'hora posada; a
+    // l'iPhone, una drecera (que cal crear un sol cop).
+    // ------------------------------------------------------------------
+    const IS_IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const IS_ANDROID = /Android/i.test(navigator.userAgent);
+    const SHORTCUT_NAME = 'Alarma PRS 516';
+    const SHORTCUT_KEY = 'prs516_drecera';
+    let pendingAlarm = null;
+    const openUrl = url => { window.location.href = url; };
+    function iosAlarm(time) { openUrl(`shortcuts://run-shortcut?name=${encodeURIComponent(SHORTCUT_NAME)}&input=text&text=${encodeURIComponent(time)}`); }
+    function alarmToPhone(a) {
+      if (IS_ANDROID) {
+        const [hh, mm] = a.time.split(':').map(Number);
+        openUrl(`intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${hh};i.android.intent.extra.alarm.MINUTES=${mm};S.android.intent.extra.alarm.MESSAGE=${encodeURIComponent('PRS 516')};end`);
+        return;
+      }
+      if (!IS_IOS) return;
+      let done = false;
+      try { done = localStorage.getItem(SHORTCUT_KEY) === '1'; } catch (e) {}
+      if (done) { iosAlarm(a.time); return; }
+      pendingAlarm = a;
+      document.getElementById('dr-titol').textContent = t('drTitle');
+      const ol = document.getElementById('dr-passos');
+      ol.innerHTML = '';
+      t('drSteps', SHORTCUT_NAME).forEach(p => { const li = document.createElement('li'); li.textContent = p; ol.appendChild(li); });
+      document.getElementById('dr-nota').textContent = t('drNote');
+      document.getElementById('dr-obre').textContent = t('drOpen');
+      document.getElementById('dr-feta').textContent = t('drDone');
+      document.getElementById('dr-dialeg').hidden = false;
+    }
+    (function setupShortcutDialog() {
+      const dlg = document.getElementById('dr-dialeg');
+      document.getElementById('dr-obre').addEventListener('click', () => openUrl('shortcuts://create-shortcut'));
+      document.getElementById('dr-feta').addEventListener('click', () => {
+        try { localStorage.setItem(SHORTCUT_KEY, '1'); } catch (e) {}
+        dlg.hidden = true;
+        if (pendingAlarm) iosAlarm(pendingAlarm.time);
+        pendingAlarm = null;
+      });
+      document.getElementById('dr-tanca').addEventListener('click', () => { dlg.hidden = true; pendingAlarm = null; });
+      dlg.addEventListener('click', (e) => { if (e.target === dlg) { dlg.hidden = true; pendingAlarm = null; } });
+    })();
 
     // ------------------------------------------------------------------
     // Alarmes: tres alarmes fixes, cadascuna amb interruptor, hora i dies.
@@ -5593,6 +6929,7 @@
           '<div class="alarm-fila">' +
             '<input type="time" class="alarm-hora" step="60" required>' +
             '<span class="alarm-resum"></span>' +
+            '<button type="button" class="alarm-mobil"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><circle cx="12" cy="12" r="3.6"/><path d="M12 10.2V12l1.2 1"/></svg></button>' +
             '<button type="button" class="alarm-switch" role="switch"><i></i></button>' +
           '</div>' +
           '<div class="alarm-dies"></div>';
@@ -5600,6 +6937,11 @@
         input.value = a.time;
         input.setAttribute('aria-label', `${t('alarmWord')} ${i + 1}`);
         card.querySelector('.alarm-resum').textContent = alarmDaysText(a);
+        const mob = card.querySelector('.alarm-mobil');
+        mob.hidden = !(IS_IOS || IS_ANDROID);
+        mob.title = t('alMobile');
+        mob.setAttribute('aria-label', t('alMobile'));
+        mob.addEventListener('click', (e) => { e.stopPropagation(); alarmToPhone(a); });
         const sw = card.querySelector('.alarm-switch');
         sw.setAttribute('aria-checked', String(a.on));
         sw.setAttribute('aria-label', `${t('alarmWord')} ${i + 1}`);
@@ -5750,29 +7092,36 @@
     }
 
     // ------------------------------------------------------------------
-    // Pantalla sempre encesa mentre l'app és oberta i visible (Screen Wake
+    // Pantalla sempre encesa en mode Zz, mentre l'app és oberta i visible (Screen Wake
     // Lock: Chrome, Edge, Android i Safari a partir d'iOS 16.4). El sistema
     // allibera el bloqueig quan l'app passa a segon pla o es bloqueja el
     // telèfon; es torna a demanar en tornar-hi i en cada toc, per si de cas.
     // ------------------------------------------------------------------
     let wakeLock = null;
     let wakeLockPending = false;
+    const wantWakeLock = () => document.documentElement.getAttribute('data-theme') === 'zz';
     async function requestWakeLock() {
-      if (!('wakeLock' in navigator) || wakeLock || wakeLockPending || document.visibilityState !== 'visible') return;
+      if (!wantWakeLock() || !('wakeLock' in navigator) || wakeLock || wakeLockPending || document.visibilityState !== 'visible') return;
       wakeLockPending = true;
       try {
         wakeLock = await navigator.wakeLock.request('screen');
         wakeLock.addEventListener('release', () => { wakeLock = null; });
+        if (!wantWakeLock()) releaseWakeLock();
       } catch (e) {
         wakeLock = null; // p. ex. bateria baixa o el navegador espera un toc
       } finally {
         wakeLockPending = false;
       }
     }
+    function releaseWakeLock() {
+      try { if (wakeLock) wakeLock.release(); } catch (e) {}
+      wakeLock = null;
+    }
+    window.__wakeSync = () => { if (wantWakeLock()) requestWakeLock(); else releaseWakeLock(); };
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') requestWakeLock(); });
     window.addEventListener('pageshow', requestWakeLock);
     ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, requestWakeLock, { passive: true }));
-    requestWakeLock();
+    window.__wakeSync();
 
     setLanguage(currentLang, false);
     initInstrumentData();
