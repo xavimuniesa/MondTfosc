@@ -129,11 +129,11 @@
        negra amb les marques clares) i tot plegat passa a un sol to taronja.
        El filtre va a cada cara i no al contenidor per no trencar el gir 3D. */
     html[data-theme="zz"] .watch-face-front {
-      filter: url(#zz-tint) brightness(0.9);
+      filter: url(#zz-tint) brightness(1.08);
     }
 
     html[data-theme="zz"] .watch-face-back {
-      filter: url(#zz-tint) brightness(0.72);
+      filter: url(#zz-tint) brightness(1.05);
     }
 
     html[data-theme="zz"] .dial,
@@ -3105,6 +3105,55 @@
       --rain-color: #3f8dd9;
     }
     html[data-theme="zz"][data-zz="blue"] .calendar-day-cell.holiday::before { background: #3578b8; }
+
+    /* ---- Lletra gruixuda i arrodonida per al temps i les finestres grans ---- */
+    :root { --rodona: ui-rounded, "SF Pro Rounded", "Nunito", "Arial Rounded MT Bold", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+    .fin-temps .wx-temp { font-family: var(--rodona); font-weight: 900; font-size: 25cqw; letter-spacing: -0.02em; line-height: 0.9; }
+    .fin-temps .wx-desc { font-family: var(--rodona); font-weight: 800; font-size: 4.8cqw; color: var(--month-title-color); opacity: 0.82; }
+    .fin-temps .wx-maxmin { font-family: var(--rodona); font-weight: 800; font-size: 3.8cqw; }
+    .fin-temps .wx-label { font-family: var(--rodona); font-weight: 900; letter-spacing: 0.1em; }
+    .fin-temps .wx-value { font-family: var(--rodona); font-weight: 900; font-size: 8cqw; }
+    .fin-temps .wx-value small { font-weight: 800; }
+    .fin-temps .wx-sub { font-family: var(--rodona); font-weight: 700; }
+    .fin-temps .wx-icon svg { width: 25cqw; height: 25cqw; stroke-width: 2.3; }
+    .fin-temps .wx-alert { font-family: var(--rodona); font-weight: 800; font-size: 4cqw; padding: 1.6cqw 4.2cqw; }
+    .fin-temps .wx-alert.none { font-weight: 800; }
+    .h12, .d5 { font-family: var(--rodona); }
+    .h12 .tt, .d5 .mx { font-weight: 900; }
+    .h12 svg, .d5 svg { stroke-width: 2; }
+
+    /* Finestres de la data i de la temperatura, en gran */
+    .fin-gran {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-left: 2px;
+      padding-right: 2px;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .gran-data {
+      font-family: var(--rodona);
+      font-weight: 900;
+      font-size: 15cqw;
+      line-height: 1.06;
+      color: var(--month-title-color);
+      text-wrap: balance;
+      overflow-wrap: break-word;
+    }
+
+    .gran-temp {
+      font-family: var(--rodona);
+      font-weight: 900;
+      font-size: 58cqw;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--month-title-color);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
   </style>
 </head>
 <body translate="no">
@@ -3175,19 +3224,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -3243,6 +3292,14 @@
               <div class="weekday-header">Dg</div>
             </div>
             <div class="calendar-grid" id="days-container"></div>
+          </section>
+
+          <section class="full fin-pag fin-gran" data-key="data" data-nom="Data">
+            <div class="gran-data" id="gran-data">—</div>
+          </section>
+
+          <section class="full fin-pag fin-gran" data-key="tgran" data-nom="Temperatura">
+            <div class="gran-temp" id="gran-temp">—</div>
           </section>
 
           <section class="full fin-pag amb-ll" data-key="temps" data-nom="El temps">
@@ -3494,9 +3551,9 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="zz-tint" color-interpolation-filters="sRGB">
       <feColorMatrix type="matrix" values="
-        0.2018 0.6794 0.0686 0 0
-        0.1063 0.3576 0.0361 0 0
-        0.0298 0.1001 0.0101 0 0
+        0.2220 0.7473 0.0755 0 0
+        0.1169 0.3934 0.0397 0 0
+        0.0328 0.1101 0.0111 0 0
         0      0      0      1 0"/>
     </filter>
   </svg>
@@ -3530,7 +3587,7 @@
         themeFixed: n => `Tema ${n} fix (toca per canviar)`,
         themeAuto: 'Tema automàtic: dia o nit segons el sol, i Zz quan es carrega de nit (toca per canviar)',
         viewDots: 'Llisca avall per veure les finestres', pausePlay: 'Pausar o reprendre',
-        pages: { calendari: 'Calendari', avui: 'Avui', festes: 'Properament', avisos: 'Avisos', ubicacio: 'Ubicació', temps: 'El temps', aire: "Qualitat de l'aire", alarmes: 'Alarmes', radio: 'Ràdio', podcasts: 'Podcasts', noticies: 'Notícies' },
+        pages: { calendari: 'Calendari', data: 'Data', tgran: 'Temperatura', avui: 'Avui', festes: 'Properament', avisos: 'Avisos', ubicacio: 'Ubicació', temps: 'El temps', aire: "Qualitat de l'aire", alarmes: 'Alarmes', radio: 'Ràdio', podcasts: 'Podcasts', noticies: 'Notícies' },
         next12: 'Properes 12 hores', locating: 'Localitzant…', unknownLoc: 'Ubicació desconeguda',
         altitude: 'Altitud', coords: 'Coordenades', loadingWx: 'Carregant el temps…', loading: 'Carregant…',
         feels: 'Sensació', humidity: 'Humitat', wind: 'Vent', precip6: 'Pluja 6 h', rain: 'pluja', snow: 'neu', gusts: 'ratxes',
@@ -3555,6 +3612,7 @@
         sleepOff: 'Temporitzador desactivat (toca per apagar la ràdio d\'aquí a 15, 30, 45, 60 o 90 minuts)',
         sleepOn: n => `La ràdio s'apagarà d'aquí a ${n} min (toca per canviar-ho)`,
         langGroup: 'Idioma',
+        fullDate: (d, m, y) => `${d} ${I18N.ca.ofMonth(m)} de ${y}`,
         araSona: 'Ara sona', plPoblacio: 'Població', plTemp: 'Temperatura', close: 'Tanca',
         t12: 'Properes 12 hores', t5: 'Propers 5 dies', maxMin: (a, b) => `Màx ${a}° · Mín ${b}°`,
         sant: 'Sant del dia', efem: 'Efemèride', curio: 'Curiositat', solT: 'Sol', llunaT: 'Lluna', surt: 'Surt', pon: 'Es pon',
@@ -3591,7 +3649,7 @@
         themeFixed: n => `Thème ${n} fixe (touchez pour changer)`,
         themeAuto: 'Thème automatique : jour ou nuit selon le soleil, et Zz en charge la nuit (touchez pour changer)',
         viewDots: 'Glissez vers le bas pour voir les fenêtres', pausePlay: 'Pause ou reprise',
-        pages: { calendari: 'Calendrier', avui: "Aujourd'hui", festes: 'Prochainement', avisos: 'Alertes', ubicacio: 'Lieu', temps: 'Météo', aire: "Qualité de l'air", alarmes: 'Réveils', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Actualités' },
+        pages: { calendari: 'Calendrier', data: 'Date', tgran: 'Température', avui: "Aujourd'hui", festes: 'Prochainement', avisos: 'Alertes', ubicacio: 'Lieu', temps: 'Météo', aire: "Qualité de l'air", alarmes: 'Réveils', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Actualités' },
         next12: '12 prochaines heures', locating: 'Localisation…', unknownLoc: 'Lieu inconnu',
         altitude: 'Altitude', coords: 'Coordonnées', loadingWx: 'Chargement de la météo…', loading: 'Chargement…',
         feels: 'Ressenti', humidity: 'Humidité', wind: 'Vent', precip6: 'Pluie 6 h', rain: 'pluie', snow: 'neige', gusts: 'rafales',
@@ -3616,6 +3674,7 @@
         sleepOff: 'Minuterie désactivée (touchez pour couper la radio dans 15, 30, 45, 60 ou 90 minutes)',
         sleepOn: n => `La radio s'arrêtera dans ${n} min (touchez pour changer)`,
         langGroup: 'Langue',
+        fullDate: (d, m, y) => `${d === 1 ? '1er' : d} ${I18N.fr.months[m].toLowerCase()} ${y}`,
         araSona: 'En écoute', plPoblacio: 'Localité', plTemp: 'Température', close: 'Fermer',
         t12: 'Les 12 prochaines heures', t5: 'Les 5 prochains jours', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
         sant: 'Saint du jour', efem: 'Éphéméride', curio: 'Curiosité', solT: 'Soleil', llunaT: 'Lune', surt: 'Lever', pon: 'Coucher',
@@ -3651,7 +3710,7 @@
         themeFixed: n => `Modus ${n} fest (tippen zum Ändern)`,
         themeAuto: 'Automatischer Modus: Tag oder Nacht je nach Sonnenstand, Zz beim nächtlichen Laden (tippen zum Ändern)',
         viewDots: 'Nach unten wischen, um die Fenster zu sehen', pausePlay: 'Pause oder fortsetzen',
-        pages: { calendari: 'Kalender', avui: 'Heute', festes: 'Demnächst', avisos: 'Warnungen', ubicacio: 'Standort', temps: 'Wetter', aire: 'Luftqualität', alarmes: 'Wecker', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Nachrichten' },
+        pages: { calendari: 'Kalender', data: 'Datum', tgran: 'Temperatur', avui: 'Heute', festes: 'Demnächst', avisos: 'Warnungen', ubicacio: 'Standort', temps: 'Wetter', aire: 'Luftqualität', alarmes: 'Wecker', radio: 'Radio', podcasts: 'Podcasts', noticies: 'Nachrichten' },
         next12: 'Nächste 12 Stunden', locating: 'Standort wird ermittelt…', unknownLoc: 'Unbekannter Standort',
         altitude: 'Höhe', coords: 'Koordinaten', loadingWx: 'Wetter wird geladen…', loading: 'Wird geladen…',
         feels: 'Gefühlt', humidity: 'Feuchte', wind: 'Wind', precip6: 'Regen 6 h', rain: 'Regen', snow: 'Schnee', gusts: 'Böen',
@@ -3676,6 +3735,7 @@
         sleepOff: 'Sleep-Timer aus (tippen, um das Radio in 15, 30, 45, 60 oder 90 Minuten auszuschalten)',
         sleepOn: n => `Das Radio geht in ${n} Min. aus (tippen zum Ändern)`,
         langGroup: 'Sprache',
+        fullDate: (d, m, y) => `${d}. ${I18N.de.months[m]} ${y}`,
         araSona: 'Läuft gerade', plPoblacio: 'Ort', plTemp: 'Temperatur', close: 'Schließen',
         t12: 'Nächste 12 Stunden', t5: 'Nächste 5 Tage', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
         sant: 'Tagesheilige', efem: 'An diesem Tag', curio: 'Wussten Sie?', solT: 'Sonne', llunaT: 'Mond', surt: 'Aufgang', pon: 'Untergang',
@@ -3711,7 +3771,7 @@
         themeFixed: n => `Tema ${n} fisso (tocca per cambiare)`,
         themeAuto: 'Tema automatico: giorno o notte secondo il sole, e Zz quando si ricarica di notte (tocca per cambiare)',
         viewDots: 'Scorri verso il basso per vedere le finestre', pausePlay: 'Pausa o riprendi',
-        pages: { calendari: 'Calendario', avui: 'Oggi', festes: 'Prossimamente', avisos: 'Allerte', ubicacio: 'Posizione', temps: 'Meteo', aire: "Qualità dell'aria", alarmes: 'Sveglie', radio: 'Radio', podcasts: 'Podcast', noticies: 'Notizie' },
+        pages: { calendari: 'Calendario', data: 'Data', tgran: 'Temperatura', avui: 'Oggi', festes: 'Prossimamente', avisos: 'Allerte', ubicacio: 'Posizione', temps: 'Meteo', aire: "Qualità dell'aria", alarmes: 'Sveglie', radio: 'Radio', podcasts: 'Podcast', noticies: 'Notizie' },
         next12: 'Prossime 12 ore', locating: 'Localizzazione…', unknownLoc: 'Posizione sconosciuta',
         altitude: 'Altitudine', coords: 'Coordinate', loadingWx: 'Caricamento meteo…', loading: 'Caricamento…',
         feels: 'Percepita', humidity: 'Umidità', wind: 'Vento', precip6: 'Pioggia 6 h', rain: 'pioggia', snow: 'neve', gusts: 'raffiche',
@@ -3736,6 +3796,7 @@
         sleepOff: 'Timer disattivato (tocca per spegnere la radio tra 15, 30, 45, 60 o 90 minuti)',
         sleepOn: n => `La radio si spegnerà tra ${n} min (tocca per cambiare)`,
         langGroup: 'Lingua',
+        fullDate: (d, m, y) => `${d === 1 ? '1º' : d} ${I18N.it.months[m].toLowerCase()} ${y}`,
         araSona: 'In ascolto', plPoblacio: 'Località', plTemp: 'Temperatura', close: 'Chiudi',
         t12: 'Prossime 12 ore', t5: 'Prossimi 5 giorni', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
         sant: 'Santo del giorno', efem: 'Ricorrenza', curio: 'Curiosità', solT: 'Sole', llunaT: 'Luna', surt: 'Sorge', pon: 'Tramonta',
@@ -3771,7 +3832,7 @@
         themeFixed: n => `Fixed ${n} theme (tap to change)`,
         themeAuto: 'Automatic theme: day or night by the sun, and Zz when charging at night (tap to change)',
         viewDots: 'Swipe down to see the panels', pausePlay: 'Pause or resume',
-        pages: { calendari: 'Calendar', avui: 'Today', festes: 'Coming up', avisos: 'Alerts', ubicacio: 'Location', temps: 'Weather', aire: 'Air quality', alarmes: 'Alarms', radio: 'Radio', podcasts: 'Podcasts', noticies: 'News' },
+        pages: { calendari: 'Calendar', data: 'Date', tgran: 'Temperature', avui: 'Today', festes: 'Coming up', avisos: 'Alerts', ubicacio: 'Location', temps: 'Weather', aire: 'Air quality', alarmes: 'Alarms', radio: 'Radio', podcasts: 'Podcasts', noticies: 'News' },
         next12: 'Next 12 hours', locating: 'Locating…', unknownLoc: 'Unknown location',
         altitude: 'Altitude', coords: 'Coordinates', loadingWx: 'Loading weather…', loading: 'Loading…',
         feels: 'Feels like', humidity: 'Humidity', wind: 'Wind', precip6: 'Rain 6 h', rain: 'rain', snow: 'snow', gusts: 'gusts',
@@ -3796,6 +3857,7 @@
         sleepOff: 'Sleep timer off (tap to turn the radio off in 15, 30, 45, 60 or 90 minutes)',
         sleepOn: n => `The radio will turn off in ${n} min (tap to change)`,
         langGroup: 'Language',
+        fullDate: (d, m, y) => `${d} ${I18N.en.months[m]} ${y}`,
         araSona: 'Now playing', plPoblacio: 'Town', plTemp: 'Temperature', close: 'Close',
         t12: 'Next 12 hours', t5: 'Next 5 days', maxMin: (a, b) => `High ${a}° · Low ${b}°`,
         sant: 'Saint of the day', efem: 'On this day', curio: 'Did you know?', solT: 'Sun', llunaT: 'Moon', surt: 'Rise', pon: 'Set',
@@ -4499,6 +4561,8 @@
       const isDay = c.is_day != null ? c.is_day === 1 : autoTheme() === 'day';
       document.getElementById('wx-icon').innerHTML = weatherIconSvg(code, isDay);
       document.getElementById('wx-temp').textContent = `${Math.round(c.temperature_2m)}°`;
+      document.getElementById('gran-temp').textContent = `${Math.round(c.temperature_2m)}°`;
+      if (typeof fitBigTexts === 'function') requestAnimationFrame(fitBigTexts);
       const descEl = document.getElementById('wx-desc');
       descEl.removeAttribute('data-i18n');
       descEl.textContent = wmoText(code);
@@ -4608,6 +4672,7 @@
       if (sc) sc.scrollTop = 0;   // cada finestra s'obre pel principi
       if (f.dataset.key === 'noticies' && typeof loadNews === 'function') loadNews(false);
       if (f.dataset.key === 'ubicacio') requestAnimationFrame(fitLocation);
+      if (f.dataset.key === 'data' || f.dataset.key === 'tgran') requestAnimationFrame(fitBigTexts);
     }
 
     function goFullKey(key) {
@@ -6523,7 +6588,31 @@
       return Math.ceil(((u - y0) / 864e5 + 1) / 7);
     }
 
+    // La lletra de les finestres grans s'encongeix fins que el text hi cap sencer
+    function fitBigText(el) {
+      if (!el) return;
+      const box = el.parentElement;
+      el.style.fontSize = '';
+      if (!box.clientHeight || !box.clientWidth) return;
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      const cs = getComputedStyle(box);
+      const availH = box.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 4;
+      const availW = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      let guard = 60;
+      while (guard-- > 0 && size > 12 && (el.scrollHeight > availH || el.scrollWidth > availW + 1)) {
+        size *= 0.94;
+        el.style.fontSize = `${size}px`;
+      }
+    }
+    function fitBigTexts() {
+      fitBigText(document.getElementById('gran-data'));
+      fitBigText(document.getElementById('gran-temp'));
+    }
+    window.addEventListener('resize', () => setTimeout(fitBigTexts, 120));
+
     function renderTodayDate(now) {
+      document.getElementById('gran-data').textContent = t('fullDate', now.getDate(), now.getMonth(), now.getFullYear());
+      requestAnimationFrame(fitBigTexts);
       const year = now.getFullYear();
       const dayOfYear = Math.round((new Date(year, now.getMonth(), now.getDate()) - new Date(year, 0, 1)) / 864e5) + 1;
       const num = document.getElementById('av-num');
@@ -6810,7 +6899,7 @@
     function applyZzTint() {
       document.documentElement.setAttribute('data-zz', zzTint);
       const [r, g, b] = ZZ_TINTS[zzTint].map(v => v / 255);
-      const w = [0.2018, 0.6794, 0.0686];
+      const w = [0.2018, 0.6794, 0.0686].map(x => x * 1.1);
       const row = k => w.map(x => (x * k).toFixed(4)).join(' ');
       const m = document.querySelector('#zz-tint feColorMatrix');
       if (m) m.setAttribute('values', `${row(r)} 0 0  ${row(g)} 0 0  ${row(b)} 0 0  0 0 0 1 0`);
