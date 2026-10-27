@@ -2626,7 +2626,6 @@
     .full {
       position: absolute;
       inset: 0 6px;
-      will-change: transform;
     }
 
     .full[hidden] { display: none; }
@@ -2664,6 +2663,8 @@
       flex: 1;
       min-height: 0;
       display: flex;
+      width: 100%;
+      align-self: flex-start;
     }
 
     .ll-pane {
@@ -3224,19 +3225,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5"></text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35"></text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c"></text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -4649,7 +4650,9 @@
         const prev = fullPrev.get(f);
         const jump = prev !== undefined && Math.abs(o - prev) > 1;   // passa per fora de la vista
         f.style.transition = animate && !jump ? 'transform 0.5s cubic-bezier(.22,.9,.3,1)' : 'none';
-        f.style.transform = o === 0 ? 'translate3d(0,0,0)' : `translate3d(0, calc(${o} * (100% + ${FULL_SEP}px)), 0)`;
+        // La finestra visible, sense cap transformació: Safari no aplica la reducció
+        // (zoom) del calendari als elements transformats i la graella sortiria tallada
+        f.style.transform = o === 0 ? 'none' : `translateY(calc(${o} * (100% + ${FULL_SEP}px)))`;
         f.style.visibility = Math.abs(o) > 1 ? 'hidden' : '';
         f.inert = o !== 0;
         f.setAttribute('aria-hidden', String(o !== 0));
@@ -4707,8 +4710,8 @@
       });
       function go(k, animate = true) {
         i = Math.max(0, Math.min(panes.length - 1, k));
-        track.style.transition = animate ? 'transform 0.42s cubic-bezier(.22,.9,.3,1)' : 'none';
-        track.style.transform = `translate3d(${-i * 100}%, 0, 0)`;
+        track.style.transition = animate ? 'margin-left 0.42s cubic-bezier(.22,.9,.3,1)' : 'none';
+        track.style.marginLeft = `${-i * 100}%`;
         panes.forEach((p, n) => { p.inert = n !== i; });
         [...dots.children].forEach((b, n) => b.classList.toggle('on', n === i));
         panes[i].scrollTop = 0;
@@ -4799,6 +4802,10 @@
             el.style.transform = 'translateX(0)';
             el.style.opacity = '1';
           });
+          // En acabar, sense transformació (Safari no redueix els elements transformats)
+          setTimeout(() => {
+            [daysContainer, titleEl].forEach(el => { el.style.transition = ''; el.style.transform = ''; });
+          }, 220);
         });
       }, 160);
     }
