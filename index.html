@@ -1227,6 +1227,7 @@
     .placa-lloc-slot .placa { padding-top: 3px; padding-bottom: 3px; max-width: 100%; min-width: 0; }
     .placa-lloc-slot .placa .txt { min-width: 0; }
     .placa-lloc-slot .placa .val { overflow: hidden; text-overflow: ellipsis; }
+    .placa-lloc-slot .placa .etq { overflow: hidden; text-overflow: ellipsis; }
     .placa-lloc-slot .placa .val.dues {
       white-space: normal;
       line-height: 1.08;
@@ -3232,19 +3233,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -6481,23 +6482,32 @@
     // ------------------------------------------------------------------
     // El nom de la població, sencer: primer s'encongeix la lletra (fins al 70%);
     // si encara no hi cap, passa a dues línies; i només si tampoc, «…»
-    function fitPlaqueName() {
-      const v = document.getElementById('pl-lloc');
-      if (!v || !v.clientWidth) return;
-      v.classList.remove('dues');
-      v.style.fontSize = '';
-      const base = parseFloat(getComputedStyle(v).fontSize);
+    function fitOneLine(el, minFactor, allowTwo) {
+      if (!el || !el.clientWidth) return;
+      el.classList.remove('dues');
+      el.style.fontSize = '';
+      el.style.letterSpacing = '';
+      const base = parseFloat(getComputedStyle(el).fontSize);
       let size = base;
-      const over = () => v.scrollWidth > v.clientWidth || v.getBoundingClientRect().width < v.scrollWidth - 0.5;
-      while (over() && size > base * 0.7) {
+      const over = () => el.scrollWidth > el.clientWidth || el.getBoundingClientRect().width < el.scrollWidth - 0.5;
+      if (over()) el.style.letterSpacing = '0.02em';
+      while (over() && size > base * minFactor) {
         size -= 0.5;
-        v.style.fontSize = `${size}px`;
+        el.style.fontSize = `${size}px`;
       }
-      if (!over() && size < base) v.style.fontSize = `${size - 0.5}px`;   // marge per als decimals de píxel
-      if (over()) {
-        v.style.fontSize = `${Math.max(base * 0.78, size)}px`;
-        v.classList.add('dues');
+      if (!over() && size < base) el.style.fontSize = `${size - 0.5}px`;   // marge per als decimals de píxel
+      if (over() && allowTwo) {
+        el.style.fontSize = `${Math.max(base * 0.78, size)}px`;
+        el.classList.add('dues');
       }
+    }
+    // Les plaques de la fila de baix, sempre dins la seva casella: el nom (població o
+    // aniversari) s'encongeix fins al 70% i, si cal, passa a dues línies; l'etiqueta
+    // de dalt s'encongeix fins al 65% i, només si encara no hi cap, es talla amb «…»
+    function fitPlaqueName() {
+      fitOneLine(document.getElementById('pl-lloc'), 0.7, true);
+      fitOneLine(document.getElementById('pl-aniv'), 0.7, true);
+      document.querySelectorAll('.placa-lloc-slot .placa:not([hidden]) .etq').forEach(e => fitOneLine(e, 0.65, false));
     }
     window.addEventListener('resize', () => setTimeout(fitPlaqueName, 80));
 
