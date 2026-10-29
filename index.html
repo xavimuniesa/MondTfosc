@@ -129,11 +129,11 @@
        negra amb les marques clares) i tot plegat passa a un sol to taronja.
        El filtre va a cada cara i no al contenidor per no trencar el gir 3D. */
     html[data-theme="zz"] .watch-face-front {
-      filter: url(#zz-tint) brightness(1.08);
+      filter: url(#zz-tint);
     }
 
     html[data-theme="zz"] .watch-face-back {
-      filter: url(#zz-tint) brightness(1.05);
+      filter: url(#zz-tint);
     }
 
     html[data-theme="zz"] .dial,
@@ -3163,6 +3163,19 @@
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
+
+    /* Intensitat del mode Zz: el mateix vel per al rellotge i les finestres */
+    .zz-velo {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: #000000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.12s linear;
+    }
+    html[data-theme="zz"] .zz-velo { opacity: var(--zz-dim, 0.1); }
+    html[data-theme="zz"] .watch-flip-wrap { touch-action: none; }
   </style>
 </head>
 <body translate="no">
@@ -3233,19 +3246,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -3509,6 +3522,9 @@
   </div>
 
   <div class="holiday-tip" id="holiday-tip" role="tooltip" hidden></div>
+
+  <!-- Intensitat del mode Zz: un vel negre igual per a tota la pantalla -->
+  <div class="zz-velo" aria-hidden="true"></div>
 
   <!-- Alarma sonant -->
   <div class="alarm-overlay" id="alarm-overlay" role="alertdialog" aria-live="assertive" hidden>
@@ -5003,6 +5019,7 @@
         watchFlip.style.transform = `rotateY(${turns * 180}deg)`;
       };
       watchFlip.addEventListener('click', () => {
+        if (window.__zzDragged && Date.now() - window.__zzDragged < 450) return;   // era un gest d'intensitat
         if (document.documentElement.getAttribute('data-theme') !== 'zz') { flip(); return; }
         if (tapTimer) { clearTimeout(tapTimer); tapTimer = null; flip(); return; }
         tapTimer = setTimeout(() => { tapTimer = null; cycleZzTint(); }, 300);
@@ -6923,7 +6940,7 @@
     function applyZzTint() {
       document.documentElement.setAttribute('data-zz', zzTint);
       const [r, g, b] = ZZ_TINTS[zzTint].map(v => v / 255);
-      const w = [0.2018, 0.6794, 0.0686].map(x => x * 1.1);
+      const w = [0.2126, 0.7152, 0.0722];   // el blanc dona exactament el color del to
       const row = k => w.map(x => (x * k).toFixed(4)).join(' ');
       const m = document.querySelector('#zz-tint feColorMatrix');
       if (m) m.setAttribute('values', `${row(r)} 0 0  ${row(g)} 0 0  ${row(b)} 0 0  0 0 0 1 0`);
@@ -6932,8 +6949,63 @@
       zzTint = ZZ_ORDER[(ZZ_ORDER.indexOf(zzTint) + 1) % ZZ_ORDER.length];
       try { localStorage.setItem(ZZ_KEY, zzTint); } catch (e) {}
       applyZzTint();
+      applyZzLum();
     }
     applyZzTint();
+
+    // Intensitat de cada color (de 25% a 100%): lliscar el dit amunt o avall
+    // damunt l'esfera (o la roda del ratolí). S'aplica igual a tota la pantalla.
+    const ZZ_LUM_KEY = 'prs516_zz_lum';
+    const ZZ_LUM_MIN = 0.25, ZZ_LUM_DEFAULT = 0.9;
+    let zzLum = (() => { try { return JSON.parse(localStorage.getItem(ZZ_LUM_KEY)) || {}; } catch (e) { return {}; } })();
+    const lumFor = tint => (typeof zzLum[tint] === 'number' ? zzLum[tint] : ZZ_LUM_DEFAULT);
+    function applyZzLum() {
+      document.documentElement.style.setProperty('--zz-dim', (1 - lumFor(zzTint)).toFixed(3));
+    }
+    function setZzLum(v) {
+      zzLum[zzTint] = Math.max(ZZ_LUM_MIN, Math.min(1, v));
+      applyZzLum();
+    }
+    function saveZzLum() {
+      try { localStorage.setItem(ZZ_LUM_KEY, JSON.stringify(zzLum)); } catch (e) {}
+      showToast(`${Math.round(lumFor(zzTint) * 100)}%`, 1200);
+    }
+    applyZzLum();
+    (function setupZzIntensity() {
+      const el = document.getElementById('watchFlip');
+      const isZz = () => document.documentElement.getAttribute('data-theme') === 'zz';
+      let start = null, dragging = false;
+      function begin(y) { if (!isZz()) return; start = { y, lum: lumFor(zzTint) }; dragging = false; }
+      function move(y, e) {
+        if (!start) return;
+        const dy = y - start.y;
+        if (!dragging && Math.abs(dy) > 8) dragging = true;
+        if (dragging) {
+          setZzLum(start.lum - dy / 260);   // amunt, més intens; avall, menys
+          if (e && e.cancelable) e.preventDefault();
+        }
+      }
+      function end() {
+        if (dragging) { window.__zzDragged = Date.now(); saveZzLum(); }
+        start = null;
+        dragging = false;
+      }
+      el.addEventListener('touchstart', (e) => begin(e.touches[0].clientY), { passive: true });
+      el.addEventListener('touchmove', (e) => move(e.touches[0].clientY, e), { passive: false });
+      el.addEventListener('touchend', end);
+      el.addEventListener('touchcancel', end);
+      el.addEventListener('mousedown', (e) => begin(e.clientY));
+      window.addEventListener('mousemove', (e) => { if (start) move(e.clientY, e); });
+      window.addEventListener('mouseup', () => { if (start) end(); });
+      let wheelSave = null;
+      el.addEventListener('wheel', (e) => {
+        if (!isZz()) return;
+        e.preventDefault();
+        setZzLum(lumFor(zzTint) - e.deltaY / 800);
+        clearTimeout(wheelSave);
+        wheelSave = setTimeout(saveZzLum, 300);
+      }, { passive: false });
+    })();
 
     // ------------------------------------------------------------------
     // Alarmes al rellotge del mòbil: sonen amb el mòbil bloquejat i l'app
