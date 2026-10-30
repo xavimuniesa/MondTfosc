@@ -874,7 +874,7 @@
 
     .weekday-header {
       min-width: 0;
-      font-size: 0.75rem;
+      font-size: 0.84rem;
       font-weight: 700;
       color: var(--weekday-color);
       padding-bottom: 4px;
@@ -890,7 +890,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.1rem;
+      font-size: 1.24rem;
       font-weight: 800;
       color: var(--cell-color);
       position: relative;
@@ -2226,12 +2226,12 @@
       }
 
       .weekday-header {
-        font-size: 0.68rem;
+        font-size: 0.76rem;
         padding-bottom: 3px;
       }
 
       .calendar-day-cell {
-        font-size: 1rem;
+        font-size: 1.12rem;
       }
 
       .calendar-day-cell.holiday::before {
@@ -2362,12 +2362,12 @@
       }
 
       .weekday-header {
-        font-size: 0.46rem;
+        font-size: 0.52rem;
         padding-bottom: 1px;
       }
 
       .calendar-day-cell {
-        font-size: 0.66rem;
+        font-size: 0.74rem;
       }
 
       .calendar-day-cell.holiday::before {
@@ -3025,6 +3025,21 @@
 
     .aniv-dates { display: grid; grid-template-columns: 1fr 1.8fr 1.3fr; gap: 8px; }
 
+    /* Modes Zz de dos colors: halo de llum que neix a la vora de l'esfera i
+       s'esvaeix cap a l'eix. És blanc translúcid; el filtre el pinta amb el
+       color de l'halo. */
+    .zz-halo { display: none; }
+    html[data-theme="zz"][data-zz^="duo"] .zz-halo {
+      display: block;
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 40;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,.07) 58%, rgba(255,255,255,.22) 78%, rgba(255,255,255,.46) 93%, rgba(255,255,255,.18) 99%, rgba(255,255,255,0) 100%);
+    }
+    html[data-theme="zz"] .watch-face-front .zz-halo { inset: 11.5%; }
+    html[data-theme="zz"] .watch-face-back .zz-halo { inset: 3.5%; }
+
     /* Mode Zz: altres tons fosforescents (tocar el rellotge els va canviant) */
     html[data-theme="zz"][data-zz="red"] {
       --text: #ff5a45;
@@ -3251,7 +3266,7 @@
         <div class="watch-container" id="watchFlip">
 
           <!-- Cara davantera: Tissot PRS 516 -->
-          <div class="watch-face-front">
+          <div class="watch-face-front"><div class="zz-halo" aria-hidden="true"></div>
             <div class="bezel" id="bezel">
               <div class="dial">
 
@@ -3288,7 +3303,7 @@
           </div>
 
           <!-- Cara posterior: Rellotge automàtic Mondaine -->
-          <div class="watch-face-back">
+          <div class="watch-face-back"><div class="zz-halo" aria-hidden="true"></div>
             <div class="mondaine-case">
               <svg id="mondaine-clock" viewBox="0 0 200 200" role="img" aria-label="Rellotge automàtic Mondaine">
                 <defs>
@@ -3310,19 +3325,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">ANT AVI ANA</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">ANT AVI ANA</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">ANT AVI ANA</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -3650,10 +3665,15 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <filter id="zz-tint" color-interpolation-filters="sRGB">
       <feColorMatrix type="matrix" values="
-        0.2220 0.7473 0.0755 0 0
-        0.1169 0.3934 0.0397 0 0
-        0.0328 0.1101 0.0111 0 0
+        0.2126 0.7152 0.0722 0 0
+        0.2126 0.7152 0.0722 0 0
+        0.2126 0.7152 0.0722 0 0
         0      0      0      1 0"/>
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0 1"/>
+        <feFuncG type="table" tableValues="0 0.541"/>
+        <feFuncB type="table" tableValues="0 0.169"/>
+      </feComponentTransfer>
     </filter>
   </svg>
 
@@ -7010,19 +7030,46 @@
 
     // ------------------------------------------------------------------
     // Mode Zz amb colors: tocar el rellotge canvia el to fosforescent
-    // (taronja, vermell, groc, verd, blau); un doble toc gira l'esfera.
+    // (taronja, vermell, groc, verd, blau i sis combinacions de dos colors amb
+    // halo); un doble toc gira l'esfera.
     // ------------------------------------------------------------------
     const ZZ_TINTS = { orange: [255, 138, 43], red: [255, 90, 69], yellow: [242, 197, 61], green: [61, 220, 132], blue: [74, 166, 255] };
-    const ZZ_ORDER = ['orange', 'red', 'yellow', 'green', 'blue'];
+    // Sis modes de dos colors: [color principal, color de l'halo]
+    const ZZ_DUOS = { duo1: ['green', 'yellow'], duo2: ['orange', 'green'], duo3: ['orange', 'yellow'], duo4: ['blue', 'red'], duo5: ['blue', 'yellow'], duo6: ['green', 'red'] };
+    const ZZ_ORDER = ['orange', 'red', 'yellow', 'green', 'blue', 'duo1', 'duo2', 'duo3', 'duo4', 'duo5', 'duo6'];
     const ZZ_KEY = 'prs516_zz_tint';
+    // Colors de la pantalla per als modes de dos colors (principal A, accent B)
+    (function zzDuoStyles() {
+      const hex = c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+      const sh = (c, k) => hex(c.map(v => Math.min(255, v * k)));
+      const rgba = (c, a) => `rgba(${c.join(',')},${a})`;
+      let css = '';
+      Object.entries(ZZ_DUOS).forEach(([k, [a, b]]) => {
+        const A = ZZ_TINTS[a], B = ZZ_TINTS[b];
+        const sel = `html[data-theme="zz"][data-zz="${k}"]`;
+        css += `${sel}{--text:${hex(A)};--cell-color:${hex(A)};--month-title-color:${hex(A)};--data-value-color:${hex(A)};` +
+          `--weekday-color:${sh(A, .6)};--data-label-color:${sh(A, .6)};--data-location-color:${sh(A, .65)};--weekend-color:${sh(B, .9)};` +
+          `--accent:${hex(B)};--today-ring:${hex(B)};--today-ring-glow:${rgba(B, .5)};--tip-bg:${hex(B)};--alert:${hex(B)};` +
+          `--data-item-border:${rgba(A, .16)};--panel-border:${rgba(A, .16)};--today-btn-border:${rgba(B, .35)};--theme-btn-border:${rgba(B, .35)};` +
+          `--btn-hover-bg:${rgba(B, .08)};--rain-color:${sh(B, .85)};}` +
+          `${sel} .calendar-day-cell.holiday::before{background:${sh(B, .72)};}`;
+      });
+      const st = document.createElement('style');
+      st.id = 'zz-duo-css';
+      st.textContent = css;
+      document.head.appendChild(st);
+    })();
     let zzTint = (() => { try { const v = localStorage.getItem(ZZ_KEY); return ZZ_ORDER.includes(v) ? v : 'orange'; } catch (e) { return 'orange'; } })();
     function applyZzTint() {
       document.documentElement.setAttribute('data-zz', zzTint);
-      const [r, g, b] = ZZ_TINTS[zzTint].map(v => v / 255);
-      const w = [0.2126, 0.7152, 0.0722];   // el blanc dona exactament el color del to
-      const row = k => w.map(x => (x * k).toFixed(4)).join(' ');
-      const m = document.querySelector('#zz-tint feColorMatrix');
-      if (m) m.setAttribute('values', `${row(r)} 0 0  ${row(g)} 0 0  ${row(b)} 0 0  0 0 0 1 0`);
+      // Un color: negre → color (el blanc dona exactament el to).
+      // Dos colors: negre → color de l'halo (tons mitjos) → color principal (clars).
+      const duo = ZZ_DUOS[zzTint];
+      const A = ZZ_TINTS[duo ? duo[0] : zzTint], B = duo ? ZZ_TINTS[duo[1]] : null;
+      ['R', 'G', 'B'].forEach((ch, k) => {
+        const f = document.querySelector('#zz-tint feFunc' + ch);
+        if (f) f.setAttribute('tableValues', B ? `0 ${(B[k] / 255 * 0.8).toFixed(3)} ${(A[k] / 255).toFixed(3)}` : `0 ${(A[k] / 255).toFixed(3)}`);
+      });
     }
     function cycleZzTint() {
       zzTint = ZZ_ORDER[(ZZ_ORDER.indexOf(zzTint) + 1) % ZZ_ORDER.length];
@@ -7147,50 +7194,50 @@
     };
     const HELP = {
       ca: { title: 'Com funciona', sections: [
-        ['watch', 'El rellotge', ["Un toc a l'esfera la gira: Tissot ↔ MONDAINE.", 'Totes dues cares marquen l\'hora real, amb el dia i la data a la finestreta.']],
+        ['watch', 'El rellotge', ["Un toc a l'esfera la gira: Tissot ↔ DOMAINE.", 'Totes dues cares marquen l\'hora real, amb el dia i la data a la finestreta.']],
         ['swipe', 'Les finestres', ['Dit amunt o avall al calendari: finestra següent o anterior (en cercle).', 'Calendari · Data · Temperatura · El temps · Avui · Properament · Ubicació · Avisos · Aire · Ràdio · Podcasts · Notícies · Alarmes.', 'Dit de costat: canvia de mes o de subpanell (punts a sota).', 'Si una finestra és llarga, primer es desplaça per dins.']],
         ['cal', 'El calendari', ['Festius en vermell: toca\'ls (o passa-hi el ratolí) per veure\'n el nom.', '«Avui» o doble toc al títol: torna al mes actual.', 'Les festes, només en català (amb les locals del municipi).']],
-        ['moon', 'Temes i mode Zz', ['Botó del sol: automàtic (A) → dia → nit → Zz.', 'Zz: negre i un sol color; la pantalla no s\'apaga.', 'En Zz: un toc al rellotge canvia el color, doble toc el gira, dit amunt o avall n\'ajusta la intensitat.']],
+        ['moon', 'Temes i mode Zz', ['Botó del sol: automàtic (A) → dia → nit → Zz.', 'Zz: negre i un color, o sis combinacions de dos colors amb halo a l\'esfera; la pantalla no s\'apaga.', 'En Zz: un toc al rellotge canvia el color, doble toc el gira, dit amunt o avall n\'ajusta la intensitat.']],
         ['row', 'La fila de baix', ['Idioma: CA · FR · DE · IT · EN.', 'Població: un toc porta a la ubicació (dos tocs: aniversari).', 'Quan sona la ràdio, «Ara sona»: pausa, temporitzador (15–90 min) i ✕.', 'Altaveu: un toc diu l\'hora; dos tocs apaguen el so. Diu les hores en punt.']],
         ['bell', 'Alarmes', ['Tres alarmes: toca l\'hora per canviar-la i tria els dies.', 'Sonen amb l\'app oberta. El botó del mòbil les passa al rellotge del telèfon.']],
         ['radio', 'Ràdio, podcasts i notícies', ['Emissores i notícies de l\'idioma triat.', 'Podcasts de RAC1 (en català).']],
         ['app', "Instal·lar l'app", ["iPhone: Safari › Compartir › Afegeix a la pantalla d'inici.", 'Android i ordinador: botó d\'instal·lar de la capçalera.']]
       ] },
       fr: { title: 'Mode d\'emploi', sections: [
-        ['watch', 'La montre', ['Touchez le cadran pour le retourner : Tissot ↔ MONDAINE.', 'Les deux faces indiquent l\'heure réelle, avec le jour et la date.']],
+        ['watch', 'La montre', ['Touchez le cadran pour le retourner : Tissot ↔ DOMAINE.', 'Les deux faces indiquent l\'heure réelle, avec le jour et la date.']],
         ['swipe', 'Les fenêtres', ['Doigt vers le haut ou le bas sur le calendrier : fenêtre suivante ou précédente (en boucle).', 'Calendrier · Date · Température · Météo · Aujourd\'hui · Lieu · Alertes · Air · Radio · Actualités · Réveils.', 'Doigt sur le côté : mois ou sous-panneau suivant (points en bas).', 'Une fenêtre longue défile d\'abord à l\'intérieur.']],
         ['cal', 'Le calendrier', ['« Auj. » ou double toucher sur le titre : retour au mois actuel.', 'Les jours fériés ne s\'affichent qu\'en catalan.']],
-        ['moon', 'Thèmes et mode Zz', ['Bouton soleil : automatique (A) → jour → nuit → Zz.', 'Zz : noir et une seule couleur ; l\'écran reste allumé.', 'En Zz : un toucher change la couleur, un double toucher retourne le cadran, glisser vers le haut ou le bas règle l\'intensité.']],
+        ['moon', 'Thèmes et mode Zz', ['Bouton soleil : automatique (A) → jour → nuit → Zz.', 'Zz : noir et une couleur, ou six combinaisons de deux couleurs avec halo sur le cadran ; l\'écran reste allumé.', 'En Zz : un toucher change la couleur, un double toucher retourne le cadran, glisser vers le haut ou le bas règle l\'intensité.']],
         ['row', 'La rangée du bas', ['Langue : CA · FR · DE · IT · EN.', 'Localité : un toucher ouvre le lieu (deux : anniversaire).', 'Radio en cours : pause, minuterie (15–90 min) et ✕.', 'Haut-parleur : un toucher dit l\'heure ; deux touchers coupent le son. Annonce les heures pile.']],
         ['bell', 'Réveils', ['Trois réveils : touchez l\'heure et choisissez les jours.', 'Ils sonnent avec l\'app ouverte. Le bouton téléphone les ajoute à l\'horloge du téléphone.']],
         ['radio', 'Radio et actualités', ['Stations et actualités de la langue choisie.']],
         ['app', 'Installer l\'app', ['iPhone : Safari › Partager › Sur l\'écran d\'accueil.', 'Android et ordinateur : bouton d\'installation dans l\'en-tête.']]
       ] },
       de: { title: 'So funktioniert es', sections: [
-        ['watch', 'Die Uhr', ['Ein Tippen auf das Zifferblatt dreht es: Tissot ↔ MONDAINE.', 'Beide Seiten zeigen die echte Zeit, mit Wochentag und Datum.']],
+        ['watch', 'Die Uhr', ['Ein Tippen auf das Zifferblatt dreht es: Tissot ↔ DOMAINE.', 'Beide Seiten zeigen die echte Zeit, mit Wochentag und Datum.']],
         ['swipe', 'Die Fenster', ['Finger nach oben oder unten auf dem Kalender: nächstes oder voriges Fenster (im Kreis).', 'Kalender · Datum · Temperatur · Wetter · Heute · Standort · Warnungen · Luft · Radio · Nachrichten · Wecker.', 'Finger zur Seite: Monat oder Unterseite wechseln (Punkte unten).', 'Lange Fenster scrollen zuerst innen.']],
         ['cal', 'Der Kalender', ['„Heute“ oder Doppeltippen auf den Titel: zurück zum aktuellen Monat.', 'Feiertage werden nur auf Katalanisch angezeigt.']],
-        ['moon', 'Modi und Zz-Modus', ['Sonnen-Taste: automatisch (A) → Tag → Nacht → Zz.', 'Zz: schwarz mit einer Farbe; der Bildschirm bleibt an.', 'In Zz: Tippen wechselt die Farbe, Doppeltippen dreht die Uhr, nach oben oder unten wischen ändert die Helligkeit.']],
+        ['moon', 'Modi und Zz-Modus', ['Sonnen-Taste: automatisch (A) → Tag → Nacht → Zz.', 'Zz: schwarz mit einer Farbe oder sechs Zweifarben-Modi mit Lichthof im Zifferblatt; der Bildschirm bleibt an.', 'In Zz: Tippen wechselt die Farbe, Doppeltippen dreht die Uhr, nach oben oder unten wischen ändert die Helligkeit.']],
         ['row', 'Die untere Leiste', ['Sprache: CA · FR · DE · IT · EN.', 'Ort: Tippen öffnet den Standort (zweimal: Geburtstag).', 'Läuft Radio: Pause, Sleep-Timer (15–90 Min.) und ✕.', 'Lautsprecher: Tippen sagt die Uhrzeit; zweimal tippen schaltet den Ton aus. Volle Stunden werden angesagt.']],
         ['bell', 'Wecker', ['Drei Wecker: Uhrzeit antippen und Tage wählen.', 'Sie klingeln bei geöffneter App. Die Handy-Taste überträgt sie in die Uhr des Telefons.']],
         ['radio', 'Radio und Nachrichten', ['Sender und Nachrichten der gewählten Sprache.']],
         ['app', 'App installieren', ['iPhone: Safari › Teilen › Zum Home-Bildschirm.', 'Android und Computer: Installieren-Taste in der Kopfzeile.']]
       ] },
       it: { title: 'Come funziona', sections: [
-        ['watch', "L'orologio", ['Un tocco sul quadrante lo gira: Tissot ↔ MONDAINE.', "Entrambe le facce segnano l'ora reale, con giorno e data."]],
+        ['watch', "L'orologio", ['Un tocco sul quadrante lo gira: Tissot ↔ DOMAINE.', "Entrambe le facce segnano l'ora reale, con giorno e data."]],
         ['swipe', 'Le finestre', ['Dito su o giù sul calendario: finestra successiva o precedente (in cerchio).', 'Calendario · Data · Temperatura · Meteo · Oggi · Posizione · Allerte · Aria · Radio · Notizie · Sveglie.', 'Dito di lato: cambia mese o sottopannello (punti in basso).', 'Una finestra lunga scorre prima al suo interno.']],
         ['cal', 'Il calendario', ['«Oggi» o doppio tocco sul titolo: torna al mese corrente.', 'Le feste si vedono solo in catalano.']],
-        ['moon', 'Temi e modalità Zz', ['Tasto del sole: automatico (A) → giorno → notte → Zz.', 'Zz: nero e un solo colore; lo schermo resta acceso.', "In Zz: un tocco cambia il colore, doppio tocco gira l'orologio, dito su o giù regola l'intensità."]],
+        ['moon', 'Temi e modalità Zz', ['Tasto del sole: automatico (A) → giorno → notte → Zz.', 'Zz: nero e un colore, o sei combinazioni di due colori con alone nel quadrante; lo schermo resta acceso.', "In Zz: un tocco cambia il colore, doppio tocco gira l'orologio, dito su o giù regola l'intensità."]],
         ['row', 'La fila in basso', ['Lingua: CA · FR · DE · IT · EN.', 'Località: un tocco apre la posizione (due: compleanno).', 'Radio in ascolto: pausa, timer (15–90 min) e ✕.', "Altoparlante: un tocco dice l'ora; due tocchi spengono l'audio. Annuncia le ore in punto."]],
         ['bell', 'Sveglie', ["Tre sveglie: tocca l'ora e scegli i giorni.", "Suonano con l'app aperta. Il tasto del telefono le passa all'orologio del telefono."]],
         ['radio', 'Radio e notizie', ['Emittenti e notizie della lingua scelta.']],
         ['app', "Installare l'app", ['iPhone: Safari › Condividi › Aggiungi alla schermata Home.', "Android e computer: tasto di installazione nell'intestazione."]]
       ] },
       en: { title: 'How it works', sections: [
-        ['watch', 'The watch', ['Tap the dial to flip it: Tissot ↔ MONDAINE.', 'Both faces show the real time, with the day and date.']],
+        ['watch', 'The watch', ['Tap the dial to flip it: Tissot ↔ DOMAINE.', 'Both faces show the real time, with the day and date.']],
         ['swipe', 'The panels', ['Finger up or down on the calendar: next or previous panel (in a loop).', 'Calendar · Date · Temperature · Weather · Today · Location · Alerts · Air · Radio · News · Alarms.', 'Finger sideways: change month or sub-panel (dots below).', 'A long panel scrolls inside first.']],
         ['cal', 'The calendar', ['“Today” or double-tap the title: back to the current month.', 'Holidays are shown in Catalan only.']],
-        ['moon', 'Themes and Zz mode', ['Sun button: automatic (A) → day → night → Zz.', 'Zz: black with a single colour; the screen stays on.', 'In Zz: tap changes the colour, double-tap flips the dial, finger up or down sets the brightness.']],
+        ['moon', 'Themes and Zz mode', ['Sun button: automatic (A) → day → night → Zz.', 'Zz: black with one colour, or six two-colour modes with a halo in the dial; the screen stays on.', 'In Zz: tap changes the colour, double-tap flips the dial, finger up or down sets the brightness.']],
         ['row', 'The bottom row', ['Language: CA · FR · DE · IT · EN.', 'Town: tap opens the location (twice: birthday).', 'While radio plays: pause, sleep timer (15–90 min) and ✕.', 'Speaker: tap says the time; double-tap mutes. It announces the hours.']],
         ['bell', 'Alarms', ['Three alarms: tap the time and pick the days.', 'They ring while the app is open. The phone button adds them to the phone\'s clock.']],
         ['radio', 'Radio and news', ['Stations and news in the chosen language.']],
