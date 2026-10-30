@@ -3176,6 +3176,70 @@
     }
     html[data-theme="zz"] .zz-velo { opacity: var(--zz-dim, 0.1); }
     html[data-theme="zz"] .watch-flip-wrap { touch-action: none; }
+
+    /* ---- Ajuda ---- */
+    .ajuda-btn {
+      min-width: 2rem;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      line-height: 1;
+      padding: 4px 0;
+    }
+    .ajuda-cara { width: min(100%, 460px); max-height: min(88dvh, 720px); gap: 6px; padding-bottom: 14px; }
+    .ajuda-cos {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      align-items: start;
+      padding: 4px 2px 2px;
+    }
+    .ajuda-sec {
+      border: 1px solid var(--data-item-border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .ajuda-cap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--month-title-color);
+    }
+    .ajuda-cap svg {
+      flex: none;
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .ajuda-sec ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .ajuda-sec li {
+      position: relative;
+      padding-left: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--cell-color);
+    }
+    .ajuda-sec li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    html[data-theme="zz"] .dialeg { z-index: 1100; }
   </style>
 </head>
 <body translate="no">
@@ -3246,19 +3310,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">XAV MUN LOP</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">XAV MUN LOP</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">XAV MUN LOP</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -3290,6 +3354,7 @@
       <div class="calendar-header">
         <div class="month-year-title" id="month-year-title" data-i18n-title="titleDbl" title="Toca 2 cops per tornar al mes actual">Octubre 2026</div>
         <div class="calendar-header-actions">
+          <button type="button" class="theme-toggle-btn ajuda-btn" id="ajuda-btn" data-i18n-title="helpBtn" data-i18n-aria="helpBtn" title="Com funciona" aria-label="Com funciona">?</button>
           <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Canvia entre tema diürn i nocturn" data-i18n-aria="themeAria" aria-label="Tema diürn o nocturn"></button>
           <button type="button" class="theme-toggle-btn" id="install-btn" data-i18n-title="install" data-i18n-aria="install" title="Instal·la com a app" aria-label="Instal·la com a app" hidden>
             <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>
@@ -3551,6 +3616,15 @@
     </div>
   </div>
 
+  <!-- Ajuda: què es pot fer amb l'app -->
+  <div class="dialeg" id="ajuda-dialeg" role="dialog" aria-modal="true" aria-labelledby="ajuda-titol" hidden>
+    <div class="dialeg-cara ajuda-cara">
+      <button type="button" class="dialeg-tanca" id="ajuda-tanca" data-i18n-aria="close" aria-label="Tanca"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg></button>
+      <div class="dialeg-titol" id="ajuda-titol">Com funciona</div>
+      <div class="ajuda-cos" id="ajuda-cos"></div>
+    </div>
+  </div>
+
   <!-- Aniversari (secret: doble toc a la placa de Població) -->
   <div class="dialeg" id="aniv-dialeg" role="dialog" aria-modal="true" hidden>
     <form class="dialeg-cara" id="aniv-form" autocomplete="off">
@@ -3638,6 +3712,7 @@
         sleepOn: n => `La ràdio s'apagarà d'aquí a ${n} min (toca per canviar-ho)`,
         langGroup: 'Idioma',
         fullDate: (d, m, y) => `${d} ${I18N.ca.ofMonth(m)} de ${y}`,
+        helpBtn: 'Com funciona',
         araSona: 'Ara sona', plPoblacio: 'Població', plTemp: 'Temperatura', close: 'Tanca',
         t12: 'Properes 12 hores', t5: 'Propers 5 dies', maxMin: (a, b) => `Màx ${a}° · Mín ${b}°`,
         sant: 'Sant del dia', efem: 'Efemèride', curio: 'Curiositat', solT: 'Sol', llunaT: 'Lluna', surt: 'Surt', pon: 'Es pon',
@@ -3700,6 +3775,7 @@
         sleepOn: n => `La radio s'arrêtera dans ${n} min (touchez pour changer)`,
         langGroup: 'Langue',
         fullDate: (d, m, y) => `${d === 1 ? '1er' : d} ${I18N.fr.months[m].toLowerCase()} ${y}`,
+        helpBtn: "Mode d'emploi",
         araSona: 'En écoute', plPoblacio: 'Localité', plTemp: 'Température', close: 'Fermer',
         t12: 'Les 12 prochaines heures', t5: 'Les 5 prochains jours', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
         sant: 'Saint du jour', efem: 'Éphéméride', curio: 'Curiosité', solT: 'Soleil', llunaT: 'Lune', surt: 'Lever', pon: 'Coucher',
@@ -3761,6 +3837,7 @@
         sleepOn: n => `Das Radio geht in ${n} Min. aus (tippen zum Ändern)`,
         langGroup: 'Sprache',
         fullDate: (d, m, y) => `${d}. ${I18N.de.months[m]} ${y}`,
+        helpBtn: 'So funktioniert es',
         araSona: 'Läuft gerade', plPoblacio: 'Ort', plTemp: 'Temperatur', close: 'Schließen',
         t12: 'Nächste 12 Stunden', t5: 'Nächste 5 Tage', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
         sant: 'Tagesheilige', efem: 'An diesem Tag', curio: 'Wussten Sie?', solT: 'Sonne', llunaT: 'Mond', surt: 'Aufgang', pon: 'Untergang',
@@ -3822,6 +3899,7 @@
         sleepOn: n => `La radio si spegnerà tra ${n} min (tocca per cambiare)`,
         langGroup: 'Lingua',
         fullDate: (d, m, y) => `${d === 1 ? '1º' : d} ${I18N.it.months[m].toLowerCase()} ${y}`,
+        helpBtn: 'Come funziona',
         araSona: 'In ascolto', plPoblacio: 'Località', plTemp: 'Temperatura', close: 'Chiudi',
         t12: 'Prossime 12 ore', t5: 'Prossimi 5 giorni', maxMin: (a, b) => `Max ${a}° · Min ${b}°`,
         sant: 'Santo del giorno', efem: 'Ricorrenza', curio: 'Curiosità', solT: 'Sole', llunaT: 'Luna', surt: 'Sorge', pon: 'Tramonta',
@@ -3883,6 +3961,7 @@
         sleepOn: n => `The radio will turn off in ${n} min (tap to change)`,
         langGroup: 'Language',
         fullDate: (d, m, y) => `${d} ${I18N.en.months[m]} ${y}`,
+        helpBtn: 'How it works',
         araSona: 'Now playing', plPoblacio: 'Town', plTemp: 'Temperature', close: 'Close',
         t12: 'Next 12 hours', t5: 'Next 5 days', maxMin: (a, b) => `High ${a}° · Low ${b}°`,
         sant: 'Saint of the day', efem: 'On this day', curio: 'Did you know?', solT: 'Sun', llunaT: 'Moon', surt: 'Rise', pon: 'Set',
@@ -7050,6 +7129,99 @@
       });
       document.getElementById('dr-tanca').addEventListener('click', () => { dlg.hidden = true; pendingAlarm = null; });
       dlg.addEventListener('click', (e) => { if (e.target === dlg) { dlg.hidden = true; pendingAlarm = null; } });
+    })();
+
+    // ------------------------------------------------------------------
+    // Ajuda: botó «?» de la capçalera. Explica, per seccions i de manera
+    // esquemàtica, què es pot fer amb l'app (en l'idioma triat).
+    // ------------------------------------------------------------------
+    const HELP_ICONS = {
+      watch: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>',
+      swipe: '<svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"/></svg>',
+      cal: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+      moon: '<svg viewBox="0 0 24 24"><path d="M20 14.6A8.4 8.4 0 0 1 9.4 4a8.4 8.4 0 1 0 10.6 10.6z"/></svg>',
+      row: '<svg viewBox="0 0 24 24"><rect x="2.5" y="8" width="5" height="8" rx="2.5"/><rect x="9.5" y="7" width="7" height="10" rx="3"/><rect x="18.5" y="8" width="3" height="8" rx="1.5"/></svg>',
+      bell: '<svg viewBox="0 0 24 24"><path d="M6 17h12l-1.6-2.2V10a4.4 4.4 0 0 0-8.8 0v4.8z"/><path d="M10.2 19.2a1.9 1.9 0 0 0 3.6 0"/></svg>',
+      radio: '<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M7 8l9-4"/><circle cx="15.5" cy="14" r="2.5"/><path d="M6.5 12.5h4M6.5 15.5h4"/></svg>',
+      app: '<svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></svg>'
+    };
+    const HELP = {
+      ca: { title: 'Com funciona', sections: [
+        ['watch', 'El rellotge', ["Un toc a l'esfera la gira: Tissot ↔ DOMAINE.", 'Totes dues cares marquen l\'hora real, amb el dia i la data a la finestreta.']],
+        ['swipe', 'Les finestres', ['Dit amunt o avall al calendari: finestra següent o anterior (en cercle).', 'Calendari · Data · Temperatura · El temps · Avui · Properament · Ubicació · Avisos · Aire · Ràdio · Podcasts · Notícies · Alarmes.', 'Dit de costat: canvia de mes o de subpanell (punts a sota).', 'Si una finestra és llarga, primer es desplaça per dins.']],
+        ['cal', 'El calendari', ['Festius en vermell: toca\'ls (o passa-hi el ratolí) per veure\'n el nom.', '«Avui» o doble toc al títol: torna al mes actual.', 'Les festes, només en català (amb les locals del municipi).']],
+        ['moon', 'Temes i mode Zz', ['Botó del sol: automàtic (A) → dia → nit → Zz.', 'Zz: negre i un sol color; la pantalla no s\'apaga.', 'En Zz: un toc al rellotge canvia el color, doble toc el gira, dit amunt o avall n\'ajusta la intensitat.']],
+        ['row', 'La fila de baix', ['Idioma: CA · FR · DE · IT · EN.', 'Població: un toc porta a la ubicació (dos tocs: aniversari).', 'Quan sona la ràdio, «Ara sona»: pausa, temporitzador (15–90 min) i ✕.', 'Altaveu: un toc diu l\'hora; dos tocs apaguen el so. Diu les hores en punt.']],
+        ['bell', 'Alarmes', ['Tres alarmes: toca l\'hora per canviar-la i tria els dies.', 'Sonen amb l\'app oberta. El botó del mòbil les passa al rellotge del telèfon.']],
+        ['radio', 'Ràdio, podcasts i notícies', ['Emissores i notícies de l\'idioma triat.', 'Podcasts de RAC1 (en català).']],
+        ['app', "Instal·lar l'app", ["iPhone: Safari › Compartir › Afegeix a la pantalla d'inici.", 'Android i ordinador: botó d\'instal·lar de la capçalera.']]
+      ] },
+      fr: { title: 'Mode d\'emploi', sections: [
+        ['watch', 'La montre', ['Touchez le cadran pour le retourner : Tissot ↔ DOMAINE.', 'Les deux faces indiquent l\'heure réelle, avec le jour et la date.']],
+        ['swipe', 'Les fenêtres', ['Doigt vers le haut ou le bas sur le calendrier : fenêtre suivante ou précédente (en boucle).', 'Calendrier · Date · Température · Météo · Aujourd\'hui · Lieu · Alertes · Air · Radio · Actualités · Réveils.', 'Doigt sur le côté : mois ou sous-panneau suivant (points en bas).', 'Une fenêtre longue défile d\'abord à l\'intérieur.']],
+        ['cal', 'Le calendrier', ['« Auj. » ou double toucher sur le titre : retour au mois actuel.', 'Les jours fériés ne s\'affichent qu\'en catalan.']],
+        ['moon', 'Thèmes et mode Zz', ['Bouton soleil : automatique (A) → jour → nuit → Zz.', 'Zz : noir et une seule couleur ; l\'écran reste allumé.', 'En Zz : un toucher change la couleur, un double toucher retourne le cadran, glisser vers le haut ou le bas règle l\'intensité.']],
+        ['row', 'La rangée du bas', ['Langue : CA · FR · DE · IT · EN.', 'Localité : un toucher ouvre le lieu (deux : anniversaire).', 'Radio en cours : pause, minuterie (15–90 min) et ✕.', 'Haut-parleur : un toucher dit l\'heure ; deux touchers coupent le son. Annonce les heures pile.']],
+        ['bell', 'Réveils', ['Trois réveils : touchez l\'heure et choisissez les jours.', 'Ils sonnent avec l\'app ouverte. Le bouton téléphone les ajoute à l\'horloge du téléphone.']],
+        ['radio', 'Radio et actualités', ['Stations et actualités de la langue choisie.']],
+        ['app', 'Installer l\'app', ['iPhone : Safari › Partager › Sur l\'écran d\'accueil.', 'Android et ordinateur : bouton d\'installation dans l\'en-tête.']]
+      ] },
+      de: { title: 'So funktioniert es', sections: [
+        ['watch', 'Die Uhr', ['Ein Tippen auf das Zifferblatt dreht es: Tissot ↔ DOMAINE.', 'Beide Seiten zeigen die echte Zeit, mit Wochentag und Datum.']],
+        ['swipe', 'Die Fenster', ['Finger nach oben oder unten auf dem Kalender: nächstes oder voriges Fenster (im Kreis).', 'Kalender · Datum · Temperatur · Wetter · Heute · Standort · Warnungen · Luft · Radio · Nachrichten · Wecker.', 'Finger zur Seite: Monat oder Unterseite wechseln (Punkte unten).', 'Lange Fenster scrollen zuerst innen.']],
+        ['cal', 'Der Kalender', ['„Heute“ oder Doppeltippen auf den Titel: zurück zum aktuellen Monat.', 'Feiertage werden nur auf Katalanisch angezeigt.']],
+        ['moon', 'Modi und Zz-Modus', ['Sonnen-Taste: automatisch (A) → Tag → Nacht → Zz.', 'Zz: schwarz mit einer Farbe; der Bildschirm bleibt an.', 'In Zz: Tippen wechselt die Farbe, Doppeltippen dreht die Uhr, nach oben oder unten wischen ändert die Helligkeit.']],
+        ['row', 'Die untere Leiste', ['Sprache: CA · FR · DE · IT · EN.', 'Ort: Tippen öffnet den Standort (zweimal: Geburtstag).', 'Läuft Radio: Pause, Sleep-Timer (15–90 Min.) und ✕.', 'Lautsprecher: Tippen sagt die Uhrzeit; zweimal tippen schaltet den Ton aus. Volle Stunden werden angesagt.']],
+        ['bell', 'Wecker', ['Drei Wecker: Uhrzeit antippen und Tage wählen.', 'Sie klingeln bei geöffneter App. Die Handy-Taste überträgt sie in die Uhr des Telefons.']],
+        ['radio', 'Radio und Nachrichten', ['Sender und Nachrichten der gewählten Sprache.']],
+        ['app', 'App installieren', ['iPhone: Safari › Teilen › Zum Home-Bildschirm.', 'Android und Computer: Installieren-Taste in der Kopfzeile.']]
+      ] },
+      it: { title: 'Come funziona', sections: [
+        ['watch', "L'orologio", ['Un tocco sul quadrante lo gira: Tissot ↔ DOMAINE.', "Entrambe le facce segnano l'ora reale, con giorno e data."]],
+        ['swipe', 'Le finestre', ['Dito su o giù sul calendario: finestra successiva o precedente (in cerchio).', 'Calendario · Data · Temperatura · Meteo · Oggi · Posizione · Allerte · Aria · Radio · Notizie · Sveglie.', 'Dito di lato: cambia mese o sottopannello (punti in basso).', 'Una finestra lunga scorre prima al suo interno.']],
+        ['cal', 'Il calendario', ['«Oggi» o doppio tocco sul titolo: torna al mese corrente.', 'Le feste si vedono solo in catalano.']],
+        ['moon', 'Temi e modalità Zz', ['Tasto del sole: automatico (A) → giorno → notte → Zz.', 'Zz: nero e un solo colore; lo schermo resta acceso.', "In Zz: un tocco cambia il colore, doppio tocco gira l'orologio, dito su o giù regola l'intensità."]],
+        ['row', 'La fila in basso', ['Lingua: CA · FR · DE · IT · EN.', 'Località: un tocco apre la posizione (due: compleanno).', 'Radio in ascolto: pausa, timer (15–90 min) e ✕.', "Altoparlante: un tocco dice l'ora; due tocchi spengono l'audio. Annuncia le ore in punto."]],
+        ['bell', 'Sveglie', ["Tre sveglie: tocca l'ora e scegli i giorni.", "Suonano con l'app aperta. Il tasto del telefono le passa all'orologio del telefono."]],
+        ['radio', 'Radio e notizie', ['Emittenti e notizie della lingua scelta.']],
+        ['app', "Installare l'app", ['iPhone: Safari › Condividi › Aggiungi alla schermata Home.', "Android e computer: tasto di installazione nell'intestazione."]]
+      ] },
+      en: { title: 'How it works', sections: [
+        ['watch', 'The watch', ['Tap the dial to flip it: Tissot ↔ DOMAINE.', 'Both faces show the real time, with the day and date.']],
+        ['swipe', 'The panels', ['Finger up or down on the calendar: next or previous panel (in a loop).', 'Calendar · Date · Temperature · Weather · Today · Location · Alerts · Air · Radio · News · Alarms.', 'Finger sideways: change month or sub-panel (dots below).', 'A long panel scrolls inside first.']],
+        ['cal', 'The calendar', ['“Today” or double-tap the title: back to the current month.', 'Holidays are shown in Catalan only.']],
+        ['moon', 'Themes and Zz mode', ['Sun button: automatic (A) → day → night → Zz.', 'Zz: black with a single colour; the screen stays on.', 'In Zz: tap changes the colour, double-tap flips the dial, finger up or down sets the brightness.']],
+        ['row', 'The bottom row', ['Language: CA · FR · DE · IT · EN.', 'Town: tap opens the location (twice: birthday).', 'While radio plays: pause, sleep timer (15–90 min) and ✕.', 'Speaker: tap says the time; double-tap mutes. It announces the hours.']],
+        ['bell', 'Alarms', ['Three alarms: tap the time and pick the days.', 'They ring while the app is open. The phone button adds them to the phone\'s clock.']],
+        ['radio', 'Radio and news', ['Stations and news in the chosen language.']],
+        ['app', 'Install the app', ['iPhone: Safari › Share › Add to Home Screen.', 'Android and computer: install button in the header.']]
+      ] }
+    };
+
+    function renderHelp() {
+      const h = HELP[currentLang] || HELP.ca;
+      document.getElementById('ajuda-titol').textContent = h.title;
+      const box = document.getElementById('ajuda-cos');
+      box.innerHTML = '';
+      h.sections.forEach(([icon, title, items]) => {
+        const sec = document.createElement('section');
+        sec.className = 'ajuda-sec';
+        sec.innerHTML = `<div class="ajuda-cap">${HELP_ICONS[icon]}<span></span></div><ul></ul>`;
+        sec.querySelector('span').textContent = title;
+        const ul = sec.querySelector('ul');
+        items.forEach(txt => { const li = document.createElement('li'); li.textContent = txt; ul.appendChild(li); });
+        box.appendChild(sec);
+      });
+    }
+
+    (function setupHelp() {
+      const dlg = document.getElementById('ajuda-dialeg');
+      const open = () => { renderHelp(); dlg.hidden = false; document.getElementById('ajuda-cos').scrollTop = 0; };
+      const close = () => { dlg.hidden = true; };
+      document.getElementById('ajuda-btn').addEventListener('click', (e) => { e.stopPropagation(); open(); });
+      document.getElementById('ajuda-tanca').addEventListener('click', close);
+      dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !dlg.hidden) close(); });
     })();
 
     // ------------------------------------------------------------------
