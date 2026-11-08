@@ -3359,19 +3359,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">SBB CFF FFS</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">SBB CFF FFS</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">SBB CFF FFS</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -4469,6 +4469,21 @@
     const hourHandEl = document.getElementById('hour-hand');
     let lastSecondStep = -1;
 
+    // Quina cara es veu: el Tissot (davant), el DOMAINE (darrere) o totes dues
+    // mentre gira. Només es mou la cara que es veu, i res amb la pantalla
+    // amagada: estalvia bateria sense canviar res del que es veu.
+    window.__face = { back: false, flipUntil: 0 };
+    const faceVisible = (back) => document.visibilityState === 'visible' &&
+      (window.__face.back === back || Date.now() < window.__face.flipUntil);
+    let watchTimer = null;
+    function scheduleWatch() {
+      clearTimeout(watchTimer);
+      if (!faceVisible(false)) { watchTimer = null; return; }
+      // següent salt de la segonera (cada 1/8 s), sense despertar-se a cada fotograma
+      const ms = Date.now() % (1000 / BEATS_PER_SECOND);
+      watchTimer = setTimeout(updateWatch, 1000 / BEATS_PER_SECOND - ms + 2);
+    }
+
     function updateWatch() {
       const now = new Date();
       const ms = now.getMilliseconds();
@@ -4485,7 +4500,7 @@
         checkDateChange(now);
       }
 
-      requestAnimationFrame(updateWatch);
+      scheduleWatch();
     }
 
     // ------------------------------------------------------------------
@@ -4843,6 +4858,7 @@
       const sc = currentScroller();
       if (sc) sc.scrollTop = 0;   // cada finestra s'obre pel principi
       if (f.dataset.key === 'noticies' && typeof loadNews === 'function') loadNews(false);
+      if (f.dataset.key === 'podcasts' && typeof loadPrograms === 'function') loadPrograms(false);
       if (f.dataset.key === 'ubicacio') requestAnimationFrame(fitLocation);
       if (f.dataset.key === 'data' || f.dataset.key === 'tgran') requestAnimationFrame(fitBigTexts);
     }
@@ -5128,12 +5144,37 @@
       const mAngle = m * 6;
       const hAngle = (h + m / 60) * 30;
 
-      mondaineHourEl.setAttribute('transform', `rotate(${hAngle} 100 100)`);
-      mondaineMinEl.setAttribute('transform', `rotate(${mAngle} 100 100)`);
-      mondaineSecEl.setAttribute('transform', `rotate(${sAngle} 100 100)`);
+      // Només es redibuixa quan l'agulla s'ha mogut de debò (a les 12 s'atura
+      // dos segons i aleshores no cal fer res).
+      const key = `${hAngle.toFixed(2)}|${mAngle}|${sAngle.toFixed(2)}`;
+      if (key !== mondaineLastKey) {
+        mondaineLastKey = key;
+        mondaineHourEl.setAttribute('transform', `rotate(${hAngle} 100 100)`);
+        mondaineMinEl.setAttribute('transform', `rotate(${mAngle} 100 100)`);
+        mondaineSecEl.setAttribute('transform', `rotate(${sAngle} 100 100)`);
+      }
 
-      requestAnimationFrame(updateMondaine);
+      if (!faceVisible(true)) { mondaineRaf = null; return; }
+      // En Zz, el filtre de color s'ha de recalcular sobre tota l'esfera a cada
+      // pas de la segonera. A 60 passos per segon gasta molta bateria; amb
+      // MONDAINE_ZZ_FPS passos el moviment es veu igual de continu (a la punta
+      // de l'agulla cada pas és de menys d'un píxel).
+      if (document.documentElement.getAttribute('data-theme') === 'zz') {
+        mondaineRaf = setTimeout(() => { mondaineRaf = requestAnimationFrame(updateMondaine); }, 1000 / MONDAINE_ZZ_FPS - 4);
+      } else {
+        mondaineRaf = requestAnimationFrame(updateMondaine);
+      }
     }
+    const MONDAINE_ZZ_FPS = 20;
+    let mondaineRaf = null;
+    let mondaineLastKey = '';
+    // Torna a posar en marxa les agulles de la cara que es veu
+    function wakeWatches() {
+      if (faceVisible(false) && !watchTimer) updateWatch();
+      if (faceVisible(true) && !mondaineRaf) mondaineRaf = requestAnimationFrame(updateMondaine);
+    }
+    document.addEventListener('visibilitychange', wakeWatches);
+    window.addEventListener('pageshow', wakeWatches);
 
     // ------------------------------------------------------------------
     // Mecanisme de gir: tocar l'esfera fa girar el rellotge 180°, revelant
@@ -5163,6 +5204,11 @@
       const flip = () => {
         turns += 1;
         watchFlip.style.transform = `rotateY(${turns * 180}deg)`;
+        // durant el gir (5 s) es mouen totes dues cares; després, només la visible
+        window.__face.back = turns % 2 === 1;
+        window.__face.flipUntil = Date.now() + 5600;
+        wakeWatches();
+        setTimeout(wakeWatches, 5700);
       };
       watchFlip.addEventListener('click', () => {
         if (window.__zzDragged && Date.now() - window.__zzDragged < 450) return;   // era un gest d'intensitat
@@ -5886,8 +5932,11 @@
     loadPrograms(true);
     loadNews(true);
     // Es comprova cada 20 minuts (programes) i 10 minuts (notícies)
-    setInterval(() => { if (document.visibilityState === 'visible') loadPrograms(true); }, 20 * 60 * 1000);
-    setInterval(() => { if (document.visibilityState === 'visible') loadNews(true); }, 10 * 60 * 1000);
+    // En mode Zz (de nit) no es descarreguen notícies ni podcasts en segon pla:
+    // es posen al dia quan s'obre la seva finestra.
+    const isZzTheme = () => document.documentElement.getAttribute('data-theme') === 'zz';
+    setInterval(() => { if (document.visibilityState === 'visible' && !isZzTheme()) loadPrograms(true); }, 20 * 60 * 1000);
+    setInterval(() => { if (document.visibilityState === 'visible' && !isZzTheme()) loadNews(true); }, 10 * 60 * 1000);
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') loadNews(false); });
 
     // ------------------------------------------------------------------
@@ -6052,8 +6101,8 @@
       }, nextMidnight - now);
     })();
 
-    requestAnimationFrame(updateWatch);
-    requestAnimationFrame(updateMondaine);
+    updateWatch();
+    updateMondaine();   // situa les agulles del DOMAINE encara que no es vegi
 
     // ------------------------------------------------------------------
     // Temes: diürn, nocturn i Zz (nocturn negre i taronja, com el mode
@@ -7084,7 +7133,7 @@
     // Modes de dos colors: [color principal, color de l'halo, variant]. Sense
     // variant, tot l'esfera fa servir els dos colors per lluminositat; amb
     // variant (B, C, D, E), agulles, marques i segonera van amb un color o
-    // l'altre, al Tissot i al MONDAINE.
+    // l'altre, al Tissot i al DOMAINE.
     const ZZ_DUOS = {};
     [
       ['orange', 'yellow'], ['orange', 'green'],
@@ -7262,7 +7311,7 @@
     };
     const HELP = {
       ca: { title: 'Com funciona', sections: [
-        ['watch', 'El rellotge', ["Un toc a l'esfera la gira: Tissot ↔ MONDAINE.", 'Totes dues cares marquen l\'hora real, amb el dia i la data a la finestreta.']],
+        ['watch', 'El rellotge', ["Un toc a l'esfera la gira: Tissot ↔ DOMAINE.", 'Totes dues cares marquen l\'hora real, amb el dia i la data a la finestreta.']],
         ['swipe', 'Les finestres', ['Dit amunt o avall al calendari: finestra següent o anterior (en cercle).', 'Calendari · Data · Temperatura · El temps · Avui · Properament · Ubicació · Avisos · Aire · Ràdio · Podcasts · Notícies · Alarmes.', 'Dit de costat: canvia de mes o de subpanell (punts a sota).', 'Si una finestra és llarga, primer es desplaça per dins.']],
         ['cal', 'El calendari', ['Festius en vermell: toca\'ls (o passa-hi el ratolí) per veure\'n el nom.', '«Avui» o doble toc al títol: torna al mes actual.', 'Les festes, només en català (amb les locals del municipi).']],
         ['moon', 'Temes i mode Zz', ['Botó del sol: automàtic (A) → dia → nit → Zz.', 'Zz: negre i un color, o 21 combinacions de dos colors amb halo a l\'esfera (en algunes, agulles, marques i segonera de colors diferents); la pantalla no s\'apaga.', 'En Zz: un toc al rellotge canvia el color, doble toc el gira, dit amunt o avall n\'ajusta la intensitat.']],
@@ -7272,7 +7321,7 @@
         ['app', "Instal·lar l'app", ["iPhone: Safari › Compartir › Afegeix a la pantalla d'inici.", 'Android i ordinador: botó d\'instal·lar de la capçalera.']]
       ] },
       fr: { title: 'Mode d\'emploi', sections: [
-        ['watch', 'La montre', ['Touchez le cadran pour le retourner : Tissot ↔ MONDAINE.', 'Les deux faces indiquent l\'heure réelle, avec le jour et la date.']],
+        ['watch', 'La montre', ['Touchez le cadran pour le retourner : Tissot ↔ DOMAINE.', 'Les deux faces indiquent l\'heure réelle, avec le jour et la date.']],
         ['swipe', 'Les fenêtres', ['Doigt vers le haut ou le bas sur le calendrier : fenêtre suivante ou précédente (en boucle).', 'Calendrier · Date · Température · Météo · Aujourd\'hui · Lieu · Alertes · Air · Radio · Actualités · Réveils.', 'Doigt sur le côté : mois ou sous-panneau suivant (points en bas).', 'Une fenêtre longue défile d\'abord à l\'intérieur.']],
         ['cal', 'Le calendrier', ['« Auj. » ou double toucher sur le titre : retour au mois actuel.', 'Les jours fériés ne s\'affichent qu\'en catalan.']],
         ['moon', 'Thèmes et mode Zz', ['Bouton soleil : automatique (A) → jour → nuit → Zz.', 'Zz : noir et une couleur, ou 21 combinaisons de deux couleurs avec halo sur le cadran (parfois aiguilles, index et trotteuse de couleurs différentes) ; l\'écran reste allumé.', 'En Zz : un toucher change la couleur, un double toucher retourne le cadran, glisser vers le haut ou le bas règle l\'intensité.']],
@@ -7282,7 +7331,7 @@
         ['app', 'Installer l\'app', ['iPhone : Safari › Partager › Sur l\'écran d\'accueil.', 'Android et ordinateur : bouton d\'installation dans l\'en-tête.']]
       ] },
       de: { title: 'So funktioniert es', sections: [
-        ['watch', 'Die Uhr', ['Ein Tippen auf das Zifferblatt dreht es: Tissot ↔ MONDAINE.', 'Beide Seiten zeigen die echte Zeit, mit Wochentag und Datum.']],
+        ['watch', 'Die Uhr', ['Ein Tippen auf das Zifferblatt dreht es: Tissot ↔ DOMAINE.', 'Beide Seiten zeigen die echte Zeit, mit Wochentag und Datum.']],
         ['swipe', 'Die Fenster', ['Finger nach oben oder unten auf dem Kalender: nächstes oder voriges Fenster (im Kreis).', 'Kalender · Datum · Temperatur · Wetter · Heute · Standort · Warnungen · Luft · Radio · Nachrichten · Wecker.', 'Finger zur Seite: Monat oder Unterseite wechseln (Punkte unten).', 'Lange Fenster scrollen zuerst innen.']],
         ['cal', 'Der Kalender', ['„Heute“ oder Doppeltippen auf den Titel: zurück zum aktuellen Monat.', 'Feiertage werden nur auf Katalanisch angezeigt.']],
         ['moon', 'Modi und Zz-Modus', ['Sonnen-Taste: automatisch (A) → Tag → Nacht → Zz.', 'Zz: schwarz mit einer Farbe oder 21 Zweifarben-Modi mit Lichthof im Zifferblatt (teils Zeiger, Indizes und Sekundenzeiger in verschiedenen Farben); der Bildschirm bleibt an.', 'In Zz: Tippen wechselt die Farbe, Doppeltippen dreht die Uhr, nach oben oder unten wischen ändert die Helligkeit.']],
@@ -7292,7 +7341,7 @@
         ['app', 'App installieren', ['iPhone: Safari › Teilen › Zum Home-Bildschirm.', 'Android und Computer: Installieren-Taste in der Kopfzeile.']]
       ] },
       it: { title: 'Come funziona', sections: [
-        ['watch', "L'orologio", ['Un tocco sul quadrante lo gira: Tissot ↔ MONDAINE.', "Entrambe le facce segnano l'ora reale, con giorno e data."]],
+        ['watch', "L'orologio", ['Un tocco sul quadrante lo gira: Tissot ↔ DOMAINE.', "Entrambe le facce segnano l'ora reale, con giorno e data."]],
         ['swipe', 'Le finestre', ['Dito su o giù sul calendario: finestra successiva o precedente (in cerchio).', 'Calendario · Data · Temperatura · Meteo · Oggi · Posizione · Allerte · Aria · Radio · Notizie · Sveglie.', 'Dito di lato: cambia mese o sottopannello (punti in basso).', 'Una finestra lunga scorre prima al suo interno.']],
         ['cal', 'Il calendario', ['«Oggi» o doppio tocco sul titolo: torna al mese corrente.', 'Le feste si vedono solo in catalano.']],
         ['moon', 'Temi e modalità Zz', ['Tasto del sole: automatico (A) → giorno → notte → Zz.', 'Zz: nero e un colore, o 21 combinazioni di due colori con alone nel quadrante (a volte lancette, indici e lancetta dei secondi di colori diversi); lo schermo resta acceso.', "In Zz: un tocco cambia il colore, doppio tocco gira l'orologio, dito su o giù regola l'intensità."]],
@@ -7302,7 +7351,7 @@
         ['app', "Installare l'app", ['iPhone: Safari › Condividi › Aggiungi alla schermata Home.', "Android e computer: tasto di installazione nell'intestazione."]]
       ] },
       en: { title: 'How it works', sections: [
-        ['watch', 'The watch', ['Tap the dial to flip it: Tissot ↔ MONDAINE.', 'Both faces show the real time, with the day and date.']],
+        ['watch', 'The watch', ['Tap the dial to flip it: Tissot ↔ DOMAINE.', 'Both faces show the real time, with the day and date.']],
         ['swipe', 'The panels', ['Finger up or down on the calendar: next or previous panel (in a loop).', 'Calendar · Date · Temperature · Weather · Today · Location · Alerts · Air · Radio · News · Alarms.', 'Finger sideways: change month or sub-panel (dots below).', 'A long panel scrolls inside first.']],
         ['cal', 'The calendar', ['“Today” or double-tap the title: back to the current month.', 'Holidays are shown in Catalan only.']],
         ['moon', 'Themes and Zz mode', ['Sun button: automatic (A) → day → night → Zz.', 'Zz: black with one colour, or 21 two-colour modes with a halo in the dial (some with hands, markers and seconds hand in different colours); the screen stays on.', 'In Zz: tap changes the colour, double-tap flips the dial, finger up or down sets the brightness.']],
@@ -7618,9 +7667,18 @@
 
     setLanguage(currentLang, false);
     initInstrumentData();
-    setInterval(() => {
-      if (currentCoords) refreshWeather(currentCoords.lat, currentCoords.lon);
-    }, WEATHER_REFRESH_MS);
+    // El temps es renova cada 20 minuts; en mode Zz, cada hora. Amb la
+    // pantalla amagada no es descarrega res (es posa al dia en tornar).
+    let weatherAt = Date.now();
+    function weatherTick() {
+      if (!currentCoords || document.visibilityState !== 'visible') return;
+      const every = document.documentElement.getAttribute('data-theme') === 'zz' ? 60 * 60 * 1000 : WEATHER_REFRESH_MS;
+      if (Date.now() - weatherAt < every - 30 * 1000) return;
+      weatherAt = Date.now();
+      refreshWeather(currentCoords.lat, currentCoords.lon);
+    }
+    setInterval(weatherTick, 5 * 60 * 1000);
+    document.addEventListener('visibilitychange', weatherTick);
   </script>
 </body>
 </html>
