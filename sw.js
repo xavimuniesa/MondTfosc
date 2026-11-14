@@ -1,73 +1,87 @@
-// Service worker de l'app PRS 516
-// - L'app (HTML, manifest, icones) queda desada perquè s'obri sense connexió.
-// - La pàgina es demana primer a la xarxa, així les actualitzacions arriben
-//   de seguida; si no hi ha connexió, es fa servir la còpia desada.
-// - Les APIs externes (Open-Meteo, Generalitat, BigDataCloud) no es toquen:
-//   sempre van a la xarxa i l'app ja té la seva pròpia memòria per als festius.
-// Canvia CACHE_VERSION quan modifiquis els fitxers per forçar una còpia nova.
+/* Service worker de l'app PRS 516: permet obrir-la sense connexió.
 
-const CACHE_VERSION = 'prs516-v33';
-const APP_SHELL = [
-  './',
-  './index.html',
-  './manifest.webmanifest',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-192.png',
-  './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/favicon-64.png'
-];
+   - La pàgina (index.html): primer la xarxa, perquè les versions noves arribin
+     de seguida; si no hi ha xarxa (o triga més de 4 s), la darrera còpia desada.
+     Per això JA NO cal canviar VERSIO cada cop que es puja un index.html nou.
+   - Fitxers propis (manifest, icones): còpia desada i renovació per darrere.
+   - hls.js (jsDelivr, per a algunes ràdios) i tipografies de Google, si n'hi ha: igual.
+   - Tota la resta va sempre directa a la xarxa i no es desa mai: el temps, la
+     ubicació, els festius, la Viquipèdia, les notícies, els podcasts i les ràdios
+     (l'app ja té la seva pròpia memòria per als festius).
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_VERSION)
-      .then((cache) => cache.addAll(APP_SHELL))
+   VERSIO només s'ha de canviar si es canvia aquest fitxer i es vol llençar tot el
+   que hi havia desat. El nom porta el prefix del projecte perquè la memòria
+   (Cache Storage) és compartida per totes les apps del mateix domini: cada app
+   només ha d'esborrar les seves pròpies versions velles, mai les de les altres
+   (abans, en activar-se, esborrava també les de Kasio, Antaviana, República, etc.). */
+const VERSIO = 'prs516-v34';
+const BASE = ['./', './index.html', './manifest.webmanifest',
+  './icons/icon-192.png', './icons/icon-512.png',
+  './icons/icon-maskable-192.png', './icons/icon-maskable-512.png',
+  './icons/apple-touch-icon.png', './icons/favicon-64.png'];
+const CDN = ['fonts.googleapis.com', 'fonts.gstatic.com', 'cdn.jsdelivr.net'];
+const ESPERA_PAGINA_MS = 4000;
+
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(VERSIO)
+      // un fitxer que falti no ha d'impedir la instal·lació (amb addAll, un sol 404 ho feia fallar tot)
+      .then(c => Promise.all(BASE.map(u => c.add(new Request(u, { cache: 'reload' })).catch(() => {}))))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
+// Només les versions velles d'aquesta app
+const esVella = k => k.startsWith('prs516-') && k !== VERSIO;
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_VERSION).map((k) => caches.delete(k))))
+      .then(ks => Promise.all(ks.filter(esVella).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  const request = event.request;
-  if (request.method !== 'GET') return;
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return; // APIs externes: sempre xarxa
+// Només es desen respostes bones (o opaques)
+const desable = r => r && (r.ok || r.type === 'opaque');
+const desa = (req, r) => desable(r) ? caches.open(VERSIO).then(c => c.put(req, r)).catch(() => {}) : Promise.resolve();
 
-  // Pàgina: primer xarxa, si falla la còpia desada
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_VERSION).then((cache) => cache.put('./index.html', copy));
-          return response;
-        })
-        .catch(() => caches.match('./index.html'))
-    );
+// Pàgina: xarxa primer, amb temps límit; si falla, la còpia desada
+function pagina(e){
+  const req = e.request;
+  const copia = () => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match('./index.html')).then(r => r || caches.match('./'));
+  const xarxa = fetch(req).then(r => {
+    // la versió nova es desa amb els dos noms de la pàgina («./» i «./index.html»): sense connexió surt sempre
+    // la darrera que s'ha vist. Una pàgina d'error (404, 500) no substitueix mai la bona.
+    if (desable(r)) e.waitUntil(Promise.all([desa('./', r.clone()), desa('./index.html', r.clone())]));
+    return r;
+  });
+  const lenta = new Promise(res => setTimeout(res, ESPERA_PAGINA_MS)).then(copia);
+  return Promise.race([xarxa.catch(() => null), lenta]).then(r => r || copia()).then(r => r || xarxa);
+}
+
+// Fitxers estàtics: còpia desada de seguida i renovació per darrere
+function copiaIRenova(e){
+  const req = e.request;
+  return caches.match(req).then(hit => {
+    const nova = fetch(req).then(r => desable(r) ? desa(req, r.clone()).then(() => r) : r);
+    if (hit){ e.waitUntil(nova.catch(() => {})); return hit; }
+    return nova;
+  });
+}
+
+self.addEventListener('fetch', e => {
+  const req = e.request;
+  if (req.method !== 'GET' || req.headers.has('range')) return;
+  let url;
+  try { url = new URL(req.url); } catch (err) { return; }
+  if (url.protocol !== 'https:' && url.protocol !== 'http:') return;
+
+  if (url.origin === self.location.origin){
+    const esPagina = req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('/index.html');
+    e.respondWith(esPagina ? pagina(e) : copiaIRenova(e));
     return;
   }
-
-  // Icones i manifest: còpia desada a l'instant i actualització en segon pla
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      const network = fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_VERSION).then((cache) => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
-  );
+  if (CDN.includes(url.hostname)) e.respondWith(copiaIRenova(e));
+  // qualsevol altre servidor (APIs, notícies, ràdios, podcasts): no s'intercepta
 });

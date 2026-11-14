@@ -3432,19 +3432,19 @@
                 </defs>
                 <circle cx="100" cy="100" r="96" fill="url(#mondaineFaceGrad)" stroke="#1c1c1c" stroke-width="2"/>
                 <g id="mondaine-ticks" filter="url(#mondaineSoftShadow)"></g>
-                <!-- MONDAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
-                <g id="mondaine-MONDAINE-text">
-                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">MONDAINE</text>
-                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">MONDAINE</text>
-                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">MONDAINE</text>
+                <!-- DOMAINE gravat: doble text desplaçat (clar a sota / fosc a sobre) per donar sensació de text picat per sota del pla de l'esfera -->
+                <g id="mondaine-domaine-text">
+                  <text x="100" y="51.85" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#ffffff" opacity="0.55">DOMAINE</text>
+                  <text x="100" y="51.15" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#000000" opacity="0.4">DOMAINE</text>
+                  <text x="100" y="51.5" text-anchor="middle" font-family="'Mondaine Helvetica', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.8" font-weight="500" letter-spacing="1.03" fill="#1c1c1c">DOMAINE</text>
                 </g>
                 <g id="mondaine-brand-logo">
                   <rect x="73.25" y="53.65" width="11.2" height="7.7" fill="#d52b1e"/>
                   <polygon points="78.85,55.05 78.85,59.95 73.95,57.5" fill="#ffffff"/>
                   <polygon points="78.85,55.05 78.85,59.95 83.75,57.5" fill="#ffffff"/>
-                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PUT ESP AÑA</text>
-                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PUT ESP AÑA</text>
-                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PUT ESP AÑA</text>
+                  <text x="86.55" y="60.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#ffffff" opacity="0.5">PSS MNN XML</text>
+                  <text x="86.55" y="59.75" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#000000" opacity="0.35">PSS MNN XML</text>
+                  <text x="86.55" y="59.95" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="5.25" font-weight="700" letter-spacing="0.28" fill="#1c1c1c">PSS MNN XML</text>
                 </g>
                 <!-- Finestreta de dia i data curta, a les 3h -->
                 <g transform="translate(160, 100)" filter="url(#mondaineSoftShadow)">
@@ -4257,6 +4257,18 @@
     buildArcText('MADE', 'made-arc', 7, 2.44, -1, false);
 
     function pad2(n) { return String(n).padStart(2, '0'); }
+    // Petició amb temps límit: una connexió encallada no deixa res esperant per sempre
+    // (abans, si les dades de festius no responien, el calendari es quedava en blanc)
+    function fetchT(url, ms = 12000) {
+      const ctrl = ('AbortController' in window) ? new AbortController() : null;
+      const timer = setTimeout(() => { if (ctrl) ctrl.abort(); }, ms);
+      const done = () => clearTimeout(timer);
+      return fetch(url, ctrl ? { signal: ctrl.signal } : undefined).then(res => {
+        // el temps límit també cobreix la lectura del cos de la resposta
+        const wrap = fn => (...a) => fn.apply(res, a).finally(done);
+        return { ok: res.ok, status: res.status, json: wrap(res.json), text: wrap(res.text) };
+      }, err => { done(); throw err; });
+    }
     function isoOf(date) { return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`; }
     function normName(name) {
       return String(name || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().trim();
@@ -4283,8 +4295,18 @@
     function holidayKey(year, muni) { return `${year}|${normName(muni)}`; }
 
     function readHolidayCache() {
-      try { return JSON.parse(localStorage.getItem(HOLIDAYS_CACHE_KEY)) || {}; }
-      catch (e) { return {}; }
+      // Només s'accepten entrades amb bona forma: una dada malmesa trencava el calendari
+      try {
+        const raw = JSON.parse(localStorage.getItem(HOLIDAYS_CACHE_KEY)) || {};
+        const ok = {};
+        const strings = v => Array.isArray(v) && v.every(x => typeof x === 'string');
+        Object.keys(raw).forEach(k => {
+          const e = raw[k];
+          if (!e || !strings(e.dates) || typeof e.expiresAt !== 'number') return;
+          ok[k] = { dates: e.dates, local: strings(e.local) ? e.local : [], localMuni: typeof e.localMuni === 'string' ? e.localMuni : undefined, expiresAt: e.expiresAt };
+        });
+        return ok;
+      } catch (e) { return {}; }
     }
 
     function writeHolidayCache(cache) {
@@ -4327,7 +4349,7 @@
     }
 
     async function fetchJsonArray(url) {
-      const res = await fetch(url);
+      const res = await fetchT(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (!Array.isArray(data)) throw new Error('Resposta inesperada');
@@ -4400,7 +4422,7 @@
           ]);
           if (regional.length === 0) throw new Error(`Calendari ${year} encara no publicat`);
           const dates = new Set();
-          regional.forEach(r => { if (r.data) dates.add(r.data.slice(0, 10)); });
+          regional.forEach(r => { if (r && typeof r.data === 'string') dates.add(r.data.slice(0, 10)); });
           let localRows = local;
           let localMuni = muni;
           // Si el nom del municipi no coincideix amb el de les dades obertes, fem servir Barcelona
@@ -4408,7 +4430,7 @@
             localRows = await fetchJsonArray(localHolidaysUrl(year, DEFAULT_MUNICIPALITY));
             localMuni = DEFAULT_MUNICIPALITY;
           }
-          let localDates = localRows.filter(r => r.data).map(r => r.data.slice(0, 10));
+          let localDates = localRows.filter(r => r && typeof r.data === 'string').map(r => r.data.slice(0, 10));
           if (localDates.length === 0) {
             localDates = localMunicipalFallback(year, localMuni);
           }
@@ -4550,7 +4572,7 @@
     const hourHandEl = document.getElementById('hour-hand');
     let lastSecondStep = -1;
 
-    // Quina cara es veu: el Tissot (davant), el MONDAINE (darrere) o totes dues
+    // Quina cara es veu: el Tissot (davant), el DOMAINE (darrere) o totes dues
     // mentre gira. Només es mou la cara que es veu, i res amb la pantalla
     // amagada: estalvia bateria sense canviar res del que es veu.
     window.__face = { back: false, flipUntil: 0 };
@@ -4570,7 +4592,7 @@
       const ms = now.getMilliseconds();
       const step = now.getSeconds() * BEATS_PER_SECOND + Math.floor(ms * BEATS_PER_SECOND / 1000);
 
-      if (step !== lastSecondStep) {
+      if (step !== lastSecondStep) try {
         lastSecondStep = step;
         const seconds = step / BEATS_PER_SECOND;
         const minutes = now.getMinutes() + (now.getSeconds() + ms / 1000) / 60;
@@ -4579,7 +4601,7 @@
         minuteHandEl.style.transform = `rotate(${minutes * 6}deg)`;
         hourHandEl.style.transform = `rotate(${hours * 30}deg)`;
         checkDateChange(now);
-      }
+      } catch (e) { /* un error puntual no ha d'aturar el rellotge */ }
 
       scheduleWatch();
     }
@@ -4610,8 +4632,13 @@
       const month = target.getMonth();
       const isCurrentMonth = year === real.getFullYear() && month === real.getMonth();
 
-      const holidayInfo = await loadHolidays(year);
+      // Es pinta de seguida amb el que se sap (memòria o càlcul local). Si les dades obertes
+      // triguen més de 300 ms, el calendari no s'espera: es torna a pintar quan arriben.
+      const pending = loadHolidays(year);
+      let late = false;
+      const holidayInfo = await Promise.race([pending, new Promise(r => setTimeout(() => { late = true; r(null); }, 300))]) || getHolidayInfoSync(year);
       if (token !== calendarRenderToken) return;
+      if (late) pending.then(() => { if (token === calendarRenderToken) renderCalendar(); }).catch(() => {});
       hideHolidayTip();
 
       const frag = document.createDocumentFragment();
@@ -5027,6 +5054,8 @@
       document.addEventListener('keydown', (e) => {
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         if (e.target && e.target.closest && e.target.closest('input, select, textarea, .alarm-overlay, .dialeg')) return;
+        // amb una finestra oberta al damunt (ajuda, aniversari, alarma), les fletxes no mouen res per sota
+        if (document.querySelector('.dialeg:not([hidden]), .alarm-overlay:not([hidden])')) return;
         if (e.key === 'ArrowDown' || e.key === 'PageDown') shiftFull(1);
         else if (e.key === 'ArrowUp' || e.key === 'PageUp') shiftFull(-1);
         else if (e.key === 'ArrowRight') sideStep(1);
@@ -5228,12 +5257,17 @@
       // Només es redibuixa quan l'agulla s'ha mogut de debò (a les 12 s'atura
       // dos segons i aleshores no cal fer res).
       const key = `${hAngle.toFixed(2)}|${mAngle}|${sAngle.toFixed(2)}`;
-      if (key !== mondaineLastKey) {
-        mondaineLastKey = key;
-        mondaineHourEl.setAttribute('transform', `rotate(${hAngle} 100 100)`);
-        mondaineMinEl.setAttribute('transform', `rotate(${mAngle} 100 100)`);
-        mondaineSecEl.setAttribute('transform', `rotate(${sAngle} 100 100)`);
-      }
+      try {
+        if (key !== mondaineLastKey) {
+          mondaineLastKey = key;
+          mondaineHourEl.setAttribute('transform', `rotate(${hAngle} 100 100)`);
+          mondaineMinEl.setAttribute('transform', `rotate(${mAngle} 100 100)`);
+          mondaineSecEl.setAttribute('transform', `rotate(${sAngle} 100 100)`);
+        }
+        // Amb aquesta cara a la vista, el Tissot està aturat i no vigilava el canvi de dia:
+        // la finestreta de data es quedava en el dia anterior. Es mira un cop per minut.
+        if (m !== mondaineLastMin) { mondaineLastMin = m; checkDateChange(now); }
+      } catch (e) { /* un error puntual no ha d'aturar el rellotge */ }
 
       if (!faceVisible(true)) { mondaineRaf = null; return; }
       // En Zz, el filtre de color s'ha de recalcular sobre tota l'esfera a cada
@@ -5249,6 +5283,7 @@
     const MONDAINE_ZZ_FPS = 20;
     let mondaineRaf = null;
     let mondaineLastKey = '';
+    let mondaineLastMin = -1;
     // Torna a posar en marxa les agulles de la cara que es veu
     function wakeWatches() {
       if (faceVisible(false) && !watchTimer) updateWatch();
@@ -5550,10 +5585,12 @@
       renderSleepBtn();
     }
 
+    let sleepFadeStep = null;
     function fadeOutAndStop() {
       sleepVolume = player.volume || 1;
       const t0 = Date.now();
-      sleepFade = setInterval(() => {
+      sleepFadeStep = () => {
+        if (!sleepFade) return;
         const k = Math.min(1, (Date.now() - t0) / SLEEP_FADE_MS);
         try { player.volume = Math.max(0, sleepVolume * (1 - k) * (1 - k)); } catch (e) {}
         if (k >= 1) {
@@ -5563,9 +5600,16 @@
           try { player.volume = sleepVolume; } catch (e) {}
           renderSleepBtn();
         }
-      }, 100);
+      };
+      sleepFade = setInterval(sleepFadeStep, 100);
       renderSleepBtn();
     }
+    // Amb el mòbil bloquejat els temporitzadors de la pàgina es poden aturar, però el so continua
+    // i avisa del seu avanç: el temporitzador i l'esvaïment també es comproven aquí.
+    player.addEventListener('timeupdate', () => {
+      if (sleepFade) { if (sleepFadeStep) sleepFadeStep(); }
+      else if (sleepEnd) tickSleep();
+    });
 
     document.getElementById('ara-sona-temps').addEventListener('click', (e) => {
       e.stopPropagation();
@@ -5692,7 +5736,7 @@
     }
 
     function omnyClips(prog) {
-      return fetch(`https://api.omny.fm/orgs/${OMNY_ORG}/programs/${prog.omny}/clips?pageSize=${prog.n}`)
+      return fetchT(`https://api.omny.fm/orgs/${OMNY_ORG}/programs/${prog.omny}/clips?pageSize=${prog.n}`)
         .then(r => { if (!r.ok) throw new Error('omny'); return r.json(); })
         .then(j => (j.Clips || []).map(cl => ({ id: cl.Id, titol: (cl.Title || '').trim(), data: new Date(cl.PublishedUtc), audio: cl.AudioUrl, web: cl.PublishedUrl })));
     }
@@ -5751,7 +5795,7 @@
         playItem({ id: cl.id, titol: program, sub: `${dayName} ${cl.m.dia}/${cl.m.mes}`, audio: cl.audio, web: cl.web, tipus: 'podcast' });
       });
       row.appendChild(b);
-      if (withTitle && cl.web) {
+      if (withTitle && /^https?:\/\//i.test(cl.web || '')) {
         const a = document.createElement('a');
         a.className = 'prog-ext';
         a.href = cl.web;
@@ -5954,7 +5998,12 @@
     function loadNewsFrom(sources, i = 0) {
       if (i >= sources.length) return Promise.reject(new Error('cap'));
       return sources[i].load()
-        .then(list => { if (!list || !list.length) throw new Error('buit'); return { source: sources[i], headlines: list }; })
+        .then(list => {
+          // només titulars amb enllaç web de debò (http o https): res de «javascript:» ni similars
+          list = (list || []).filter(n => n && n.titol && /^https?:\/\//i.test(n.url || ''));
+          if (!list.length) throw new Error('buit');
+          return { source: sources[i], headlines: list };
+        })
         .catch(() => loadNewsFrom(sources, i + 1));
     }
 
@@ -6037,7 +6086,7 @@
       const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}` +
         `&current=european_aqi,pm10,pm2_5,nitrogen_dioxide,ozone` +
         `&forecast_days=2&timezone=auto`;
-      const res = await fetch(url);
+      const res = await fetchT(url);
       if (!res.ok) throw new Error('Error de qualitat de l\'aire');
       return res.json();
     }
@@ -6176,14 +6225,17 @@
       const now = new Date();
       const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 2);
       setTimeout(() => {
-        renderCalendar();
-        if (typeof renderTodayAll === 'function') { renderTodayAll(); renderBirthdayPlaque(); }
+        try {
+          renderCalendar();
+          checkDateChange(new Date());   // finestretes de data, es vegi la cara que es vegi
+          if (typeof renderTodayAll === 'function') { renderTodayAll(); renderBirthdayPlaque(); }
+        } catch (e) {}
         scheduleMidnightRefresh();
       }, nextMidnight - now);
     })();
 
     updateWatch();
-    updateMondaine();   // situa les agulles del MONDAINE encara que no es vegi
+    updateMondaine();   // situa les agulles del DOMAINE encara que no es vegi
 
     // ------------------------------------------------------------------
     // Temes: diürn, nocturn i Zz (nocturn negre i taronja, com el mode
@@ -6312,21 +6364,21 @@
         `&hourly=precipitation_probability,precipitation,snowfall,weather_code,wind_gusts_10m,visibility,temperature_2m,is_day` +
         `&daily=sunrise,sunset,weather_code,temperature_2m_max,temperature_2m_min` +
         `&forecast_days=6&timezone=auto`;
-      const res = await fetch(url);
+      const res = await fetchT(url);
       if (!res.ok) throw new Error('Error de meteo');
       return res.json();
     }
 
     async function fetchElevation(lat, lon) {
       const url = `https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`;
-      const res = await fetch(url);
+      const res = await fetchT(url);
       if (!res.ok) throw new Error('Error d\'altitud');
       return res.json();
     }
 
     async function fetchLocality(lat, lon) {
       const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=${currentLang}`;
-      const res = await fetch(url);
+      const res = await fetchT(url);
       if (!res.ok) throw new Error('Error de geocodificació');
       return res.json();
     }
@@ -6352,9 +6404,14 @@
     async function refreshWeather(lat, lon) {
       refreshAir(lat, lon);
       const weather = await fetchWeather(lat, lon).catch(() => null);
-      if (!weather) return;
+      if (!weather) {
+        // sense resposta: es torna a provar al tick següent (5 min), no d'aquí a 20 min o una hora
+        weatherAt = 0;
+        return;
+      }
 
-      renderWeatherView(weather);
+      // un error en pintar el temps no ha d'impedir que surtin el lloc i l'altitud
+      try { renderWeatherView(weather); } catch (e) { console.warn('Temps:', e); }
 
       if (weather.daily && weather.daily.sunrise && weather.daily.sunset) {
         sunTimes = { sunrise: new Date(weather.daily.sunrise[0]), sunset: new Date(weather.daily.sunset[0]) };
@@ -6427,10 +6484,13 @@
         loadInstrumentData(FALLBACK_COORDS.lat, FALLBACK_COORDS.lon);
         return;
       }
+      // Si el permís d'ubicació es queda sense resposta (ni sí ni no), al cap de 10 s es
+      // mostren les dades de Barcelona; si després s'accepta, es canvien per les del lloc.
+      const guard = setTimeout(() => { if (!currentCoords) loadInstrumentData(FALLBACK_COORDS.lat, FALLBACK_COORDS.lon); }, 10000);
       navigator.geolocation.getCurrentPosition(
-        (pos) => loadInstrumentData(pos.coords.latitude, pos.coords.longitude),
-        () => loadInstrumentData(FALLBACK_COORDS.lat, FALLBACK_COORDS.lon),
-        { timeout: 8000 }
+        (pos) => { clearTimeout(guard); loadInstrumentData(pos.coords.latitude, pos.coords.longitude); },
+        () => { clearTimeout(guard); if (!currentCoords) loadInstrumentData(FALLBACK_COORDS.lat, FALLBACK_COORDS.lon); },
+        { timeout: 8000, maximumAge: 10 * 60 * 1000 }
       );
     }
 
@@ -6820,6 +6880,10 @@
     }
     (function setupPlaques() {
       const lloc = document.getElementById('placa-lloc');
+      // Les plaques fan de botó: també amb Retorn o Espai
+      ['placa-lloc', 'placa-aniv'].forEach(id => document.getElementById(id).addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); e.currentTarget.click(); }
+      }));
       let tapTimer = null;
       lloc.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -6877,7 +6941,7 @@
       const d5 = document.getElementById('wx-d5');
       d5.innerHTML = '';
       const days = (d.time || []).slice(1, 6);
-      if (!days.length || !d.temperature_2m_min) return;
+      if (!days.length || !d.temperature_2m_min || !d.temperature_2m_max) return;
       const mins = d.temperature_2m_min.slice(1, 6), maxs = d.temperature_2m_max.slice(1, 6);
       const lo = Math.min(...mins), hi = Math.max(...maxs), amp = Math.max(1, hi - lo);
       days.forEach((tm, k) => {
@@ -7068,7 +7132,7 @@
       const key = lang + '|' + title;
       if (wikiCache[key]) return wikiCache[key];
       const url = `https://${lang}.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(title)}&prop=wikitext&redirects=1&format=json&formatversion=2&origin=*`;
-      wikiCache[key] = fetch(url).then(r => r.json()).then(j => (j && j.parse && j.parse.wikitext) || '').catch(() => { delete wikiCache[key]; return ''; });
+      wikiCache[key] = fetchT(url).then(r => r.json()).then(j => (j && j.parse && j.parse.wikitext) || '').catch(() => { delete wikiCache[key]; return ''; });
       return wikiCache[key];
     }
     function extractDay(wt, dt, lang) {
@@ -7221,7 +7285,7 @@
     // Modes de dos colors: [color principal, color de l'halo, variant]. Sense
     // variant, tot l'esfera fa servir els dos colors per lluminositat; amb
     // variant (B, C, D, E), agulles, marques i segonera van amb un color o
-    // l'altre, al Tissot i al MONDAINE.
+    // l'altre, al Tissot i al DOMAINE.
     const ZZ_DUOS = {};
     [
       ['orange', 'yellow'], ['orange', 'green'],
@@ -7402,7 +7466,7 @@
     };
     const HELP = {
       ca: { title: 'Com funciona', sections: [
-        ['watch', 'El rellotge', ["Un toc a l'esfera la gira: Tissot ↔ MONDAINE.", 'Totes dues cares marquen l\'hora real, amb el dia i la data a la finestreta.']],
+        ['watch', 'El rellotge', ["Un toc a l'esfera la gira: Tissot ↔ DOMAINE.", 'Totes dues cares marquen l\'hora real, amb el dia i la data a la finestreta.']],
         ['swipe', 'Les finestres', ['Dit amunt o avall al calendari: finestra següent o anterior (en cercle).', 'Calendari · Data · Temperatura · El temps · Avui · Properament · Ubicació · Avisos · Aire · Ràdio · Podcasts · Notícies · Alarmes.', 'Dit de costat: canvia de mes o de subpanell (punts a sota).', 'Si una finestra és llarga, primer es desplaça per dins.']],
         ['cal', 'El calendari', ['Festius en vermell: toca\'ls (o passa-hi el ratolí) per veure\'n el nom.', '«Avui» o doble toc al títol: torna al mes actual.', 'Les festes, només en català (amb les locals del municipi).']],
         ['moon', 'Temes i mode Zz', ['Botó del sol: automàtic (A) → dia → nit → nit lume (crema) → Zz. La nit lume funciona com el Zz, però d\'un sol to crema.', 'Zz: negre i un color, o 21 combinacions de dos colors amb halo a l\'esfera (en algunes, agulles, marques i segonera de colors diferents); la pantalla no s\'apaga.', 'En Zz: un toc al rellotge canvia el color, doble toc el gira, dit amunt o avall n\'ajusta la intensitat.']],
@@ -7412,7 +7476,7 @@
         ['app', "Instal·lar l'app", ["iPhone: Safari › Compartir › Afegeix a la pantalla d'inici.", 'Android i ordinador: botó d\'instal·lar de la capçalera.']]
       ] },
       fr: { title: 'Mode d\'emploi', sections: [
-        ['watch', 'La montre', ['Touchez le cadran pour le retourner : Tissot ↔ MONDAINE.', 'Les deux faces indiquent l\'heure réelle, avec le jour et la date.']],
+        ['watch', 'La montre', ['Touchez le cadran pour le retourner : Tissot ↔ DOMAINE.', 'Les deux faces indiquent l\'heure réelle, avec le jour et la date.']],
         ['swipe', 'Les fenêtres', ['Doigt vers le haut ou le bas sur le calendrier : fenêtre suivante ou précédente (en boucle).', 'Calendrier · Date · Température · Météo · Aujourd\'hui · Lieu · Alertes · Air · Radio · Actualités · Réveils.', 'Doigt sur le côté : mois ou sous-panneau suivant (points en bas).', 'Une fenêtre longue défile d\'abord à l\'intérieur.']],
         ['cal', 'Le calendrier', ['« Auj. » ou double toucher sur le titre : retour au mois actuel.', 'Les jours fériés ne s\'affichent qu\'en catalan.']],
         ['moon', 'Thèmes et mode Zz', ['Bouton soleil : automatique (A) → jour → nuit → nuit lume (crème) → Zz. La nuit lume fonctionne comme Zz, en un seul ton crème.', 'Zz : noir et une couleur, ou 21 combinaisons de deux couleurs avec halo sur le cadran (parfois aiguilles, index et trotteuse de couleurs différentes) ; l\'écran reste allumé.', 'En Zz : un toucher change la couleur, un double toucher retourne le cadran, glisser vers le haut ou le bas règle l\'intensité.']],
@@ -7422,7 +7486,7 @@
         ['app', 'Installer l\'app', ['iPhone : Safari › Partager › Sur l\'écran d\'accueil.', 'Android et ordinateur : bouton d\'installation dans l\'en-tête.']]
       ] },
       de: { title: 'So funktioniert es', sections: [
-        ['watch', 'Die Uhr', ['Ein Tippen auf das Zifferblatt dreht es: Tissot ↔ MONDAINE.', 'Beide Seiten zeigen die echte Zeit, mit Wochentag und Datum.']],
+        ['watch', 'Die Uhr', ['Ein Tippen auf das Zifferblatt dreht es: Tissot ↔ DOMAINE.', 'Beide Seiten zeigen die echte Zeit, mit Wochentag und Datum.']],
         ['swipe', 'Die Fenster', ['Finger nach oben oder unten auf dem Kalender: nächstes oder voriges Fenster (im Kreis).', 'Kalender · Datum · Temperatur · Wetter · Heute · Standort · Warnungen · Luft · Radio · Nachrichten · Wecker.', 'Finger zur Seite: Monat oder Unterseite wechseln (Punkte unten).', 'Lange Fenster scrollen zuerst innen.']],
         ['cal', 'Der Kalender', ['„Heute“ oder Doppeltippen auf den Titel: zurück zum aktuellen Monat.', 'Feiertage werden nur auf Katalanisch angezeigt.']],
         ['moon', 'Modi und Zz-Modus', ['Sonnen-Taste: automatisch (A) → Tag → Nacht → Lume-Nacht (creme) → Zz. Die Lume-Nacht funktioniert wie Zz, nur in Creme.', 'Zz: schwarz mit einer Farbe oder 21 Zweifarben-Modi mit Lichthof im Zifferblatt (teils Zeiger, Indizes und Sekundenzeiger in verschiedenen Farben); der Bildschirm bleibt an.', 'In Zz: Tippen wechselt die Farbe, Doppeltippen dreht die Uhr, nach oben oder unten wischen ändert die Helligkeit.']],
@@ -7432,7 +7496,7 @@
         ['app', 'App installieren', ['iPhone: Safari › Teilen › Zum Home-Bildschirm.', 'Android und Computer: Installieren-Taste in der Kopfzeile.']]
       ] },
       it: { title: 'Come funziona', sections: [
-        ['watch', "L'orologio", ['Un tocco sul quadrante lo gira: Tissot ↔ MONDAINE.', "Entrambe le facce segnano l'ora reale, con giorno e data."]],
+        ['watch', "L'orologio", ['Un tocco sul quadrante lo gira: Tissot ↔ DOMAINE.', "Entrambe le facce segnano l'ora reale, con giorno e data."]],
         ['swipe', 'Le finestre', ['Dito su o giù sul calendario: finestra successiva o precedente (in cerchio).', 'Calendario · Data · Temperatura · Meteo · Oggi · Posizione · Allerte · Aria · Radio · Notizie · Sveglie.', 'Dito di lato: cambia mese o sottopannello (punti in basso).', 'Una finestra lunga scorre prima al suo interno.']],
         ['cal', 'Il calendario', ['«Oggi» o doppio tocco sul titolo: torna al mese corrente.', 'Le feste si vedono solo in catalano.']],
         ['moon', 'Temi e modalità Zz', ['Tasto del sole: automatico (A) → giorno → notte → notte lume (crema) → Zz. La notte lume funziona come Zz, in un solo tono crema.', 'Zz: nero e un colore, o 21 combinazioni di due colori con alone nel quadrante (a volte lancette, indici e lancetta dei secondi di colori diversi); lo schermo resta acceso.', "In Zz: un tocco cambia il colore, doppio tocco gira l'orologio, dito su o giù regola l'intensità."]],
@@ -7442,7 +7506,7 @@
         ['app', "Installare l'app", ['iPhone: Safari › Condividi › Aggiungi alla schermata Home.', "Android e computer: tasto di installazione nell'intestazione."]]
       ] },
       en: { title: 'How it works', sections: [
-        ['watch', 'The watch', ['Tap the dial to flip it: Tissot ↔ MONDAINE.', 'Both faces show the real time, with the day and date.']],
+        ['watch', 'The watch', ['Tap the dial to flip it: Tissot ↔ DOMAINE.', 'Both faces show the real time, with the day and date.']],
         ['swipe', 'The panels', ['Finger up or down on the calendar: next or previous panel (in a loop).', 'Calendar · Date · Temperature · Weather · Today · Location · Alerts · Air · Radio · News · Alarms.', 'Finger sideways: change month or sub-panel (dots below).', 'A long panel scrolls inside first.']],
         ['cal', 'The calendar', ['“Today” or double-tap the title: back to the current month.', 'Holidays are shown in Catalan only.']],
         ['moon', 'Themes and Zz mode', ['Sun button: automatic (A) → day → night → lume night (cream) → Zz. Lume night works like Zz, in a single cream tone.', 'Zz: black with one colour, or 21 two-colour modes with a halo in the dial (some with hands, markers and seconds hand in different colours); the screen stays on.', 'In Zz: tap changes the colour, double-tap flips the dial, finger up or down sets the brightness.']],
@@ -7598,6 +7662,7 @@
           unlockSpeech();
           a.on = !a.on;
           saveAlarms(); renderAlarms();
+          if (a.on) unlockAlarmSound();
         });
         // Canviar l'hora ja activa l'alarma
         input.addEventListener('change', () => {
@@ -7610,12 +7675,80 @@
         box.appendChild(card);
       });
       renderNextAlarm();
+      if (window.__wakeSync) window.__wakeSync();   // pantalla encesa mentre hi hagi alguna alarma activa
     }
 
     // ---- So de l'alarma: tres tocs que van pujant de volum ----
     let ringing = null;   // { index, started, timer, label }
     let snoozeUntil = 0;
     let snoozeIndex = -1;
+
+    /* So de l'alarma en un fitxer (WAV fet aquí mateix). A l'iPhone, el sintetitzador (Web Audio)
+       queda mut amb l'interruptor de silenci i no pot començar a sonar sol si abans no s'ha tocat
+       la pantalla; un fitxer de so, sí. Són els mateixos tres tocs (cicle d'1,5 s) i es repeteix.
+       Si el fitxer no pot sonar, es fa com abans, amb el sintetitzador. (A l'iPhone una pàgina no
+       pot canviar el volum d'un fitxer: allà sona fort des del primer toc, sense pujar de mica en mica.) */
+    const AL_SR = 16000, AL_CYCLE_S = 1.5;
+    function makeAlarmWav() {
+      const n = Math.round(AL_SR * AL_CYCLE_S), d = new Float32Array(n);
+      [[880, 0.03], [880, 0.25], [1046.5, 0.47]].forEach(([f, t0]) => {
+        const i0 = Math.floor(t0 * AL_SR), len = Math.floor(0.2 * AL_SR), att = Math.floor(0.02 * AL_SR), dec = Math.floor(0.16 * AL_SR);
+        for (let j = 0; j < len && i0 + j < n; j++) {
+          const env = j < att ? Math.pow(10000, j / att - 1) : Math.pow(0.0001, Math.min(1, (j - att) / dec));
+          // ona triangular feta d'harmònics senars, sense passar de la freqüència màxima del fitxer
+          let v = 0;
+          for (let h = 1, sign = 1; f * h < AL_SR * 0.45; h += 2, sign = -sign) v += sign * Math.sin(2 * Math.PI * f * h * j / AL_SR) / (h * h);
+          d[i0 + j] += env * v * 0.81;
+        }
+      });
+      let pk = 0; for (let i = 0; i < n; i++) pk = Math.max(pk, Math.abs(d[i]));
+      const g = 0.9 / (pk || 1);
+      const buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf), w = (o, x) => { for (let i = 0; i < x.length; i++) v.setUint8(o + i, x.charCodeAt(i)); };
+      w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+      v.setUint32(24, AL_SR, true); v.setUint32(28, AL_SR * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, n * 2, true);
+      for (let i = 0; i < n; i++) v.setInt16(44 + i * 2, Math.max(-1, Math.min(1, d[i] * g)) * 32767, true);
+      return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+    }
+    let alarmAudio = null, alarmUnlocked = false, alarmUnlocking = false, alarmFile = false;
+    // El fitxer només es calcula quan cal (hi ha alguna alarma activa), no en obrir l'app
+    function prepareAlarmSound() {
+      if (alarmAudio) return;
+      try { const a = new Audio(); a.preload = 'auto'; a.src = makeAlarmWav(); alarmAudio = a; } catch (e) { alarmAudio = null; }
+    }
+    // Un toc qualsevol amb alguna alarma activa deixa el fitxer a punt: després podrà sonar sol
+    function unlockAlarmSound() {
+      if (alarmUnlocked || alarmUnlocking || ringing || !alarms.some(a => a.on)) return;
+      prepareAlarmSound();
+      if (!alarmAudio) return;
+      alarmAudio.muted = true; alarmAudio.loop = false;
+      let p; try { p = alarmAudio.play(); } catch (e) { alarmAudio.muted = false; return; }
+      if (p && p.then) {
+        alarmUnlocking = true;
+        p.then(() => {
+          alarmUnlocking = false; alarmUnlocked = true;
+          if (alarmFile) return;   // ha començat a sonar mentrestant: no s'ha de tallar
+          alarmAudio.pause(); try { alarmAudio.currentTime = 0; } catch (e) {} alarmAudio.muted = false;
+        }).catch(() => { alarmUnlocking = false; if (!alarmFile) alarmAudio.muted = false; });
+      }
+    }
+    ['click', 'touchend'].forEach(ev => document.addEventListener(ev, unlockAlarmSound, { capture: true, passive: true }));
+    function startAlarmFile(level) {
+      alarmFile = false;
+      prepareAlarmSound();
+      if (!alarmAudio) return;
+      try {
+        alarmAudio.muted = false; alarmAudio.loop = true;
+        try { alarmAudio.currentTime = 0; } catch (e) {}
+        try { alarmAudio.volume = level; } catch (e) {}
+        const p = alarmAudio.play();
+        alarmFile = true;
+        if (p && p.then) p.then(() => { alarmUnlocked = true; }).catch(() => { alarmFile = false; });   // no pot: al toc següent, el sintetitzador
+      } catch (e) { alarmFile = false; }
+    }
+    function stopAlarmFile() {
+      alarmFile = false;
+      if (alarmAudio) { try { alarmAudio.pause(); alarmAudio.loop = false; alarmAudio.currentTime = 0; alarmAudio.volume = 1; } catch (e) {} }
+    }
 
     function alarmBeeps(level) {
       const ctx = ensureAudioCtx();
@@ -7650,6 +7783,7 @@
       if (ringing) return;
       const started = Date.now();
       ringing = { index, started };
+      if (window.__wakeSync) window.__wakeSync();
       showAlarmOverlay(index);
       if (navigator.vibrate) { try { navigator.vibrate([400, 200, 400, 200, 400]); } catch (e) {} }
       // Primer l'hora en veu alta (amb salutació a l'hora en punt), després el to
@@ -7664,7 +7798,11 @@
         document.getElementById('alarm-ov-hora').textContent = `${pad2(nowT.getHours())}:${pad2(nowT.getMinutes())}`;
         tick++;
         if (tick < 3) return;   // deixa acabar la frase
-        alarmBeeps(Math.min(0.6, 0.12 + elapsed / 60000 * 0.5));
+        const level = Math.min(0.6, 0.12 + elapsed / 60000 * 0.5);
+        // Primer, el fitxer de so (sona també amb l'iPhone en silenci); si no pot, el sintetitzador
+        if (tick === 3) startAlarmFile(level / 0.6);
+        if (alarmFile) { try { alarmAudio.volume = level / 0.6; } catch (e) {} }
+        else alarmBeeps(level);
         if (navigator.vibrate && tick % 4 === 0) { try { navigator.vibrate(300); } catch (e) {} }
         if (tick % 40 === 0) speak(timeAnnouncement(new Date()));
       }, 1500);
@@ -7675,6 +7813,7 @@
       clearInterval(ringing.timer);
       const index = ringing.index;
       ringing = null;
+      stopAlarmFile();
       document.getElementById('alarm-overlay').hidden = true;
       if (synth) synth.cancel();
       if (navigator.vibrate) { try { navigator.vibrate(0); } catch (e) {} }
@@ -7691,9 +7830,13 @@
 
     document.getElementById('alarm-ov-stop').addEventListener('click', (e) => { e.stopPropagation(); stopAlarm(false); });
     document.getElementById('alarm-ov-snooze').addEventListener('click', (e) => { e.stopPropagation(); stopAlarm(true); });
+    // Esc també atura l'alarma (abans que res més: no canvia de finestra)
+    document.addEventListener('keydown', (e) => { if (ringing && e.key === 'Escape') { e.stopImmediatePropagation(); e.preventDefault(); stopAlarm(false); } }, true);
 
-    // Comprovació cada segon (també recupera el minut si la pestanya s'ha alentit)
-    const alarmFired = {};
+    // Comprovació cada segon. Si la pàgina ha estat adormida (pestanya en segon pla, mòbil ocupat)
+    // i s'ha saltat el minut exacte, l'alarma encara sona si no han passat més d'ALARM_GRACE_MIN minuts.
+    const ALARM_GRACE_MIN = 3;
+    let alarmLastMin = Math.floor(Date.now() / 60000) - 1;
     function checkAlarms() {
       const now = new Date();
       if (snoozeUntil && Date.now() >= snoozeUntil && !ringing) {
@@ -7702,15 +7845,19 @@
         startAlarm(i);
         return true;
       }
-      const hm = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
-      const key = `${isoOf(now)} ${hm}`;
+      const minNow = Math.floor(now.getTime() / 60000);
+      if (minNow <= alarmLastMin) { alarmLastMin = minNow; return false; }
       let fired = false;
-      alarms.forEach((a, i) => {
-        if (!a.on || a.time !== hm || alarmFired[i] === key) return;
-        if (a.days.length && !a.days.includes(now.getDay())) return;
-        alarmFired[i] = key;
-        if (!ringing) { startAlarm(i); fired = true; }
-      });
+      for (let mi = Math.max(alarmLastMin + 1, minNow - ALARM_GRACE_MIN); mi <= minNow; mi++) {
+        const d = new Date(mi * 60000);
+        const hm = `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+        alarms.forEach((a, i) => {
+          if (!a.on || a.time !== hm) return;
+          if (a.days.length && !a.days.includes(d.getDay())) return;
+          if (!ringing) { startAlarm(i); fired = true; }
+        });
+      }
+      alarmLastMin = minNow;
       return fired;
     }
     setInterval(checkAlarms, 1000);
@@ -7732,7 +7879,9 @@
     // ------------------------------------------------------------------
     let wakeLock = null;
     let wakeLockPending = false;
-    const wantWakeLock = () => isZzLike();
+    // …i també mentre hi ha alguna alarma activa, posposada o sonant: la nota de les alarmes ja deia que
+    // «la pantalla no s'apaga», però només es feia en Zz; amb el mòbil bloquejat l'alarma no sonaria.
+    const wantWakeLock = () => isZzLike() || alarms.some(a => a.on) || !!ringing || snoozeUntil > 0;
     async function requestWakeLock() {
       if (!wantWakeLock() || !('wakeLock' in navigator) || wakeLock || wakeLockPending || document.visibilityState !== 'visible') return;
       wakeLockPending = true;
@@ -7760,7 +7909,7 @@
     initInstrumentData();
     // El temps es renova cada 20 minuts; en mode Zz, cada hora. Amb la
     // pantalla amagada no es descarrega res (es posa al dia en tornar).
-    let weatherAt = Date.now();
+    var weatherAt = Date.now();
     function weatherTick() {
       if (!currentCoords || document.visibilityState !== 'visible') return;
       const every = isZzLike() ? 60 * 60 * 1000 : WEATHER_REFRESH_MS;
@@ -7770,6 +7919,8 @@
     }
     setInterval(weatherTick, 5 * 60 * 1000);
     document.addEventListener('visibilitychange', weatherTick);
+    // En recuperar la connexió: el temps i les notícies, de seguida
+    window.addEventListener('online', () => { weatherAt = 0; weatherTick(); loadNews(false); });
   </script>
 </body>
 </html>
